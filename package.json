@@ -1,0 +1,25 @@
+{
+  "name": "pigpile-fire",
+  "private": true,
+  "version": "0.0.0",
+  "description": "pigpile-fire",
+  "main": "index.js",
+  "engines": {
+    "node": "6.11.x",
+    "npm": "3.10.x"
+  },
+  "scripts": {
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josulliv101/pigpile-fire.git"
+  },
+  "author": "Joe Sullivan",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/josulliv101/pigpile-fire/issues"
+  },
+  "homepage": "https://github.com/josulliv101/pigpile-fire#readme"
+  }
+}

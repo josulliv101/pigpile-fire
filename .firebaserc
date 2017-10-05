@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "next": "pigpile-next",
+    "default": "pigpile-next"
+  }
+}

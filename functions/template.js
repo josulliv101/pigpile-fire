@@ -15,11 +15,11 @@ const template = opts => {
     <script>
       window.__initialState = ${opts.initialState}
     </script>
-    <script src="/__/firebase/4.5.0/firebase-app.js"></script>
-    <script src="/__/firebase/4.5.0/firebase-database.js"></script>
-    <script src="/__/firebase/4.5.0/firebase-firestore.js"></script>
-    <script src="/__/firebase/init.js"></script>
-    <script src='${opts.assetsUrl || ''}/assets/client.bundle.js'></script>
+    <script src="/__/firebase/4.5.0/firebase-app.js" defer></script>
+    <script src="/__/firebase/4.5.0/firebase-database.js" defer></script>
+    <script src="/__/firebase/4.5.0/firebase-firestore.js" defer></script>
+    <script src="/__/firebase/init.js" defer></script>
+    <script src='${opts.assetsUrl || ''}/assets/client.bundle.js' defer></script>
   </html>
   `;
 };

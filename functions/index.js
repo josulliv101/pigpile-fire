@@ -12,7 +12,7 @@ const assetsUrl = functions.config().assets && functions.config().assets.url;
 
 console.log('config', functions.config())
 const renderApplication = (url, res, initialState = {}) => {
-  const html = ReactDOMServer.renderToString(ServerApp({JssProvider, url, context: {}, initialState}));
+  const html = ReactDOMServer.renderToString(ServerApp({context: {}, initialState, JssProvider, sheetsRegistry, url}));
   
   // Render needs to happen before this step
   const css = sheetsRegistry.toString()

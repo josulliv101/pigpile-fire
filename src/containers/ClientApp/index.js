@@ -7,8 +7,6 @@ import { MuiThemeProvider } from 'material-ui/styles'
 import {theme} from '../../style';
 import App from '../App';
 
-console.log('theme', theme)
-
 const render = (Component) => {
   hydrate(
     <AppContainer>
@@ -22,7 +20,6 @@ const render = (Component) => {
   )
 };
 
-console.log('render', App);
 render(App);
 
 if (module.hot) {

@@ -8,7 +8,7 @@ const ServerApp = React.createFactory(require('./build/server.bundle.js').defaul
 const template = require('./template');
 const assetsUrl = functions.config().assets && functions.config().assets.url;
 
-console.log('config', functions.config().assets.url)
+console.log('config', functions.config())
 const renderApplication = (url, res, initialState = {}) => {
   const html = ReactDOMServer.renderToString(ServerApp({url: url, context: {}, initialState}));
   const templatedHtml = template({assetsUrl, body: html, initialState: serialize(initialState)});

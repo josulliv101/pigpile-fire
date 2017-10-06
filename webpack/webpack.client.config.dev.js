@@ -25,7 +25,8 @@ module.exports = Object.assign({}, {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
         "process.env": {
-            "BUILD_TARGET": JSON.stringify("client")
+            "BUILD_TARGET": JSON.stringify("client"),
+            "NODE_ENV": JSON.stringify("development"),
         }
     })
   ],

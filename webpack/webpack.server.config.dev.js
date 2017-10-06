@@ -13,20 +13,11 @@ module.exports = Object.assign({}, {
     libraryTarget: 'commonjs2',
   },
   plugins: [
-  	// new webpack.optimize.DedupePlugin(),
-  	// new webpack.optimize.AggressiveMergingPlugin(),
-  	// new webpack.optimize.ModuleConcatenationPlugin(),
-  	new webpack.optimize.UglifyJsPlugin({
-  		compress: {
-  		  screw_ie8: true,
-  		  warnings: false
-  		}
-  	}),
     new webpack.DefinePlugin({
-        "process.env": {
-            "BUILD_TARGET": JSON.stringify("node"),
-            "NODE_ENV": JSON.stringify("production"),
-        }
+      "process.env": {
+          "BUILD_TARGET": JSON.stringify("node"),
+          "NODE_ENV": JSON.stringify("development"),
+      }
     })
   ],
 }, baseConfig);

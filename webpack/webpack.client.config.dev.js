@@ -8,6 +8,7 @@ const PORT = 3001
 module.exports = Object.assign({}, {
 	devtool: 'inline-source-map',
 	entry: [
+    'babel-polyfill',
   	'react-hot-loader/patch',
   	`webpack-dev-server/client?http://${HOST}:${PORT}`,
   	'webpack/hot/only-dev-server',
@@ -24,10 +25,10 @@ module.exports = Object.assign({}, {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
-        "process.env": {
-            "BUILD_TARGET": JSON.stringify("client"),
-            "NODE_ENV": JSON.stringify("development"),
-        }
+      "process.env": {
+        "BUILD_TARGET": JSON.stringify("client"),
+        "NODE_ENV": JSON.stringify("development"),
+      }
     })
   ],
   devServer: {

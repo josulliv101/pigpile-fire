@@ -5,12 +5,16 @@ const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const { JssProvider, SheetsRegistry } = require('react-jss')
 
+const appConfig = functions.config().firebase;
+const admin = require('firebase-admin');
+admin.initializeApp(appConfig);
+
 const ServerApp = React.createFactory(require('./build/server.bundle.js').default);
 const template = require('./template');
 const sheetsRegistry = new SheetsRegistry();
 const assetsUrl = functions.config().assets && functions.config().assets.url;
 
-console.log('config', functions.config())
+console.log('config', process.env.NODE_ENV)
 const renderApplication = (url, res, initialState = {}) => {
   const html = ReactDOMServer.renderToString(ServerApp({context: {}, initialState, JssProvider, sheetsRegistry, url}));
   
@@ -24,12 +28,23 @@ const renderApplication = (url, res, initialState = {}) => {
 const state = {foo: "bar"};
 
 app.get('/favicon.ico', function(req, res) {
-  res.send(204);
+  res.sendStatus(204)
 });
 
 app.get('/:userId?', (req, res) => {
-  res.set('Cache-Control', 'public, max-age=60, s-maxage=180');
-  renderApplication(req.url, res, state);
+	admin
+	  .firestore()
+	  .collection("piles")
+	  .get()
+	  .then(function (snapshot) {
+	  	const trending = snapshot.docs.map(doc => doc.data());
+	    console.log('snapshot', snapshot.size)
+	    res.set('Cache-Control', 'public, max-age=60, s-maxage=180');
+	    renderApplication(req.url, res, {piles: {trending}});
+	  }, function(e) {
+	    console.log('err', e)
+	    renderApplication(req.url, res, {});
+	  })
 });
 
 exports.app = functions.https.onRequest(app);

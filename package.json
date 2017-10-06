@@ -21,11 +21,14 @@
   "scripts": {
     "buildClient": "./node_modules/.bin/webpack --config ./webpack/webpack.client.config.js",
     "buildServer": "./node_modules/.bin/webpack --config ./webpack/webpack.server.config.js",
+    "buildServerDev": "./node_modules/.bin/webpack --config ./webpack/webpack.server.config.dev.js",
     "build": "yarn run buildClient && yarn run buildServer",
-    "start:client": "./node_modules/.bin/webpack-dev-server  --config ./webpack/webpack.client.config.dev.js"
+    "build:server:dev": "yarn run buildServerDev",
+    "start:client:dev": "./node_modules/.bin/webpack-dev-server  --config ./webpack/webpack.client.config.dev.js"
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "firebase": "^4.5.0",
     "material-ui": "next",
     "material-ui-icons": "1.0.0-beta.15",
     "react": "^16.0.0",
@@ -36,11 +39,14 @@
     "react-router-dom": "^4.2.2",
     "recompose": "^0.25.1",
     "redux": "^3.7.2",
+    "redux-actions": "^2.2.1",
+    "redux-form": "^7.1.0",
     "redux-saga": "^0.15.6"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",

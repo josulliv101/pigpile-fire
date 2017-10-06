@@ -7,8 +7,8 @@ env:
 script:
   - echo "Deploying"
 install:
-  - yarn install -g firebase-tools
-  - yarn --production=false install && yarn run build && cd functions && yarn install
+  - yarn global add firebase-tools
+  - yarn --production=false && yarn run build && cd functions && yarn
 after_success:
   - firebase use default
   - firebase deploy --token $FIREBASE_TOKEN

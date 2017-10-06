@@ -20,7 +20,7 @@
   "homepage": "https://github.com/josulliv101/pigpile-fire#readme",
   "scripts": {
     "buildClient": "./node_modules/.bin/webpack --config ./webpack/webpack.client.config.js",
-    "buildServer": "./node_modules/.bin/webpack --config ./webpack/webpack.server.config.js",
+    "buildServer": "./node_modules/.bin/webpack -p --config ./webpack/webpack.server.config.js",
     "build": "npm run buildClient && npm run buildServer",
     "start:client": "./node_modules/.bin/webpack-dev-server  --config ./webpack/webpack.client.config.dev.js"
   },

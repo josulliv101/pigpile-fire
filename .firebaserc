@@ -1,6 +1,8 @@
 {
   "projects": {
     "next": "pigpile-next",
-    "default": "pigpile-next"
+    "default": "pigpile-next",
+    "dev": "pigpile-next",
+    "prod": "pigpile-next"
   }
 }

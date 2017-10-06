@@ -1,5 +1,3 @@
 import React from 'react'
 
-export default function() {
-	return <div>foobar</div>
-}
+export default () => <div>foobar...</div>

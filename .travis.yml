@@ -5,7 +5,7 @@ env:
   global:
     - NODE_ENV=production
 script:
-  - echo "Deploying"
+  - echo "Deploying..."
 install:
   - yarn global add firebase-tools
   - yarn --production=false && yarn run build && cd functions && yarn

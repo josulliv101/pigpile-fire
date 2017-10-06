@@ -3,15 +3,21 @@ var serialize = require('serialize-javascript');
 const app = require('express')();
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
+const { JssProvider, SheetsRegistry } = require('react-jss')
 
 const ServerApp = React.createFactory(require('./build/server.bundle.js').default);
 const template = require('./template');
+const sheetsRegistry = new SheetsRegistry();
 const assetsUrl = functions.config().assets && functions.config().assets.url;
 
 console.log('config', functions.config())
 const renderApplication = (url, res, initialState = {}) => {
-  const html = ReactDOMServer.renderToString(ServerApp({url: url, context: {}, initialState}));
-  const templatedHtml = template({assetsUrl, body: html, initialState: serialize(initialState)});
+  const html = ReactDOMServer.renderToString(ServerApp({JssProvider, url, context: {}, initialState}));
+  
+  // Render needs to happen before this step
+  const css = sheetsRegistry.toString()
+
+  const templatedHtml = template({assetsUrl, body: html, css, initialState: serialize(initialState)});
   res.send(templatedHtml);
 };
 

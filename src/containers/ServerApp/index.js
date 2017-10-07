@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { StaticRouter } from 'react-router';
 import { Provider } from 'react-redux';
+import { JssProvider, SheetsRegistry } from 'react-jss';
 import { MuiThemeProvider } from 'material-ui/styles';
 //
 import configureStore from '../../redux/createStore'
@@ -12,15 +13,17 @@ import App from '../App';
 // const store = configureStore(initialState)
 
 
-export default class ServerApp extends React.Component {
+export class ServerApp extends React.Component {
   render() {
-    const {context, initialState, JssProvider, sheetsRegistry, url} = this.props;
+    const {context, initialState, sheets, url} = this.props;
     const jss = configureJss()
+
+    console.log('sheets', sheets)
     return (
       <Provider store={configureStore(initialState)}>
         <StaticRouter location={url} context={context}>
-        	<JssProvider registry={sheetsRegistry} jss={jss}>
-          	<MuiThemeProvider theme={theme()} sheetsManager={new WeakMap()}>
+        	<JssProvider registry={sheets} jss={jss}>
+          	<MuiThemeProvider theme={theme()} sheetsManager={new Map()}>
             	<App />
           	</MuiThemeProvider>
         	</JssProvider>
@@ -28,4 +31,10 @@ export default class ServerApp extends React.Component {
       </Provider>
     );
   }
+}
+
+// Avoid warning in cloud function by exposing SheetRegistry from server
+// bundle instead of importing dup of react-jss in cloud function
+export function getSheetsRegistry() {
+  return SheetsRegistry;
 }

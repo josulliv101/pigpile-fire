@@ -42,7 +42,8 @@
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-form": "^7.1.0",
-    "redux-saga": "^0.15.6"
+    "redux-saga": "^0.15.6",
+    "request": "^2.83.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

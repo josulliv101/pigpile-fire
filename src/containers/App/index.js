@@ -1,8 +1,9 @@
 import React, {PureComponent} from 'react'
 import {connect} from 'react-redux'
 import Button from 'material-ui/Button'
+import firebase from 'firebase'
 
-const firebase = require("firebase");
+// const firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
 
@@ -17,7 +18,7 @@ const config = {
 };
 
 class App extends PureComponent {
-  
+
   componentDidMount() {
     const {addTrending} = this.props;
 
@@ -43,7 +44,7 @@ class App extends PureComponent {
     	  <main>my main content</main>
     	  <footer>Pigpile Corporation</footer>
     	</div>
-  	)  	
+  	)
   }
 }
 const mapStateToProps = state => ({pilesCount: state.piles && state.piles.trending && state.piles.trending.length || 0})

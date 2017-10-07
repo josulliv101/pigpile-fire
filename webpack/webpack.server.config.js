@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const baseConfig = require('./webpack.config');
+const MinifyPlugin = require("babel-minify-webpack-plugin");
 const path = require('path');
 
 // Note that since this is for the server, it is important to
@@ -16,11 +17,8 @@ module.exports = Object.assign({}, {
   	// new webpack.optimize.DedupePlugin(),
   	// new webpack.optimize.AggressiveMergingPlugin(),
   	// new webpack.optimize.ModuleConcatenationPlugin(),
-  	new webpack.optimize.UglifyJsPlugin({
-  		compress: {
-  		  screw_ie8: true,
-  		  warnings: false
-  		}
+  	new MinifyPlugin({
+
   	}),
     new webpack.DefinePlugin({
         "process.env": {

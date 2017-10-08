@@ -1,28 +1,28 @@
 import React, {PureComponent} from 'react'
 import {connect} from 'react-redux'
-import Button from 'material-ui/Button'
-import firebase from 'firebase'
+// import Button from 'material-ui/Button'
+// import firebase from 'firebase'
 
 // const firebase = require("firebase");
 // Required for side-effects
-require("firebase/firestore");
+// require("firebase/firestore");
 
 import {addTrending} from '../../redux/modules/Piles'
-const config = {
+/*const config = {
     "apiKey": "AIzaSyDAv9TI_H1JcGX0LqdL_hQLtgDbmpCNDUg",
     "databaseURL": "https://pigpile-next.firebaseio.com",
     "storageBucket": "pigpile-next.appspot.com",
     "authDomain": "pigpile-next.firebaseapp.com",
     "messagingSenderId": "565862273054",
     "projectId": "pigpile-next"
-};
+};*/
 
 class App extends PureComponent {
 
   componentDidMount() {
     const {addTrending} = this.props;
 
-    if (firebase.apps.length === 0) {
+/*    if (firebase.apps.length === 0) {
       firebase.initializeApp(config);
     }
     firebase
@@ -34,13 +34,15 @@ class App extends PureComponent {
           // addTrending({id: 'foo', title: 'foo bar'})
       }, function(e) {
         console.log('err', e)
-      })
+      })*/
   }
 
   render() {
   	return (
     	<div>
-    	  <header><Button>foo</Button><Button>bar</Button><Button>count {this.props.pilesCount}</Button></header>
+    	  <header>
+          {/*<Button>foo</Button><Button>bar</Button><Button>count {this.props.pilesCount}</Button>*/}
+        </header>
     	  <main>my main content</main>
     	  <footer>Pigpile Corporation</footer>
     	</div>

@@ -12,6 +12,9 @@ import App from '../App';
 
 const store = configureStore(window.__initialState);
 
+// firebase required as global
+if (!firebase) throw(new Error('firebase is required.'))
+
 const render = (Component) => {
   hydrate(
     <AppContainer>
@@ -27,7 +30,7 @@ const render = (Component) => {
   )
 };
 
-store.runSaga(rootSaga);
+store.runSaga(rootSaga, firebase);
 render(App);
 
 if (module.hot) {

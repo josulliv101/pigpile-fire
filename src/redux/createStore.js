@@ -5,7 +5,7 @@ import {reducer as formReducer} from 'redux-form'
 //
 // import {reducer as authReducer} from './modules/Auth'
 // import {reducer as alertReducer} from './modules/Alert'
-import {reducer as pilesReducer} from './modules/Piles'
+import {reducer as pilesReducer} from './modules/Pile'
 
 export default function configureStore(initialState, ...enhancerAddOns) {
 
@@ -16,7 +16,7 @@ export default function configureStore(initialState, ...enhancerAddOns) {
 
   const reducer = combineReducers({
     form: formReducer,
-    piles: pilesReducer,
+    pile: pilesReducer,
   })
 
   const middlewares = [

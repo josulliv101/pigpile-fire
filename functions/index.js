@@ -16,7 +16,7 @@ app.get('/:userId?', (req, res) => {
     	const trending = snapshot.docs.map(doc => doc.data());
       console.log('snapshot', snapshot.size)
       res.set('Cache-Control', 'public, max-age=60, s-maxage=180');
-      render(req.url, res, {piles: {trending}});
+      render(req.url, res, {pile: {trending}});
     }, function(e) {
       console.log('err', e)
       render(req.url, res, {});

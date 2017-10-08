@@ -1,11 +1,11 @@
 import {all} from 'redux-saga/effects'
 // import {watchAsyncWork} from '@josulliv101/connect-async-work'
 //
-// import authWatchers from './modules/Auth/sagas'
+import pileWatchers from './modules/Pile/sagas'
 
-export default function* rootSaga(api) {
+export default function* rootSaga(firebase) {
   yield all([
-    // ...authWatchers.map(fn => fn(api)),
+    ...pileWatchers.map(fn => fn(firebase)),
     // watchAsyncWork(),
   ])
 }

@@ -1,11 +1,13 @@
 import React, {PureComponent} from 'react'
+import {Link} from 'react-router-dom'
 //
 import withSubscriptionToTrending from '../../../hocs/withSubscriptionToTrending'
 
 class Home extends PureComponent {
 
   render() {
-    const piles = this.props.piles.map(p => <li key={p.id}>{p.id}</li>)
+    console.log('piles', this.props.piles)
+    const piles = this.props.piles.map(p => <li key={p.id}><Link to={`/pile-${p.id}`}>{p.id}</Link></li>)
   	return (
     	<div>
         <h1>This is the homepage.</h1>

@@ -12,14 +12,15 @@ class App extends Component {
   	return (
     	<div>
     	  <nav>
-          <Link to="/">foo</Link>
+          <Link to="/">home</Link>
+          {' '}
           <Link to="/pile">pile</Link>
         </nav>
         {/*<Button>count {this.props.pilesCount}</Button>*/}
     	  <main>
           <Switch>
             <Route path='/' exact={true} component={Home} />
-            <Route path='/pile' component={Pile} />
+            <Route path='/pile-:id' component={Pile} />
           </Switch>
         </main>
     	  <footer>Pigpile Corporation</footer>

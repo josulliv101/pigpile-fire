@@ -1,35 +1,25 @@
-import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-//
+import withSubscription from './withSubscription'
 import {update} from '../redux/modules/Pile'
 import {subscribeToTrendingPiles} from '../../functions/db-firestore'
+
+export default () => withSubscription(
+  subscribeToTrendingPiles,
+  onSuccess,
+  onError,
+  mapStateToProps,
+  {update},
+)
 
 const mapStateToProps = state => ({
   piles: state.pile && state.pile.trending,
 });
 
-export default function withSubscriptionToTrending() {
-  return function(WrappedComponent) {
+// Avoid arrow-function here to avoid auto binding for 'this'
+function onSuccess(props, snapshot) {
+  console.log('args', props, snapshot)
+  props.update('trending', snapshot.docs.map(doc => doc.data()))
+}
 
-    class Enhanced extends PureComponent {
-
-      componentDidMount() {
-        this.unsubscribe = subscribeToTrendingPiles(
-          firebase, // global on client
-          snapshot => this.props.update('trending', snapshot.docs.map(doc => doc.data())),
-          e => console.log('err', e),
-        )
-      }
-
-      componentWillUnmount() {
-        if (this.unsubscribe) this.unsubscribe();
-      }
-
-      render() {
-        return <WrappedComponent {...this.props} />
-      }
-    }
-    return connect(mapStateToProps, {update})(Enhanced)
-  }
+function onError(e) {
+  console.log('err', e)
 }

@@ -20,7 +20,7 @@ class App extends Component {
     	  <main>
           <Switch>
             <Route path='/' exact={true} component={Home} />
-            <Route path='/pile-:id' component={Pile} />
+            <Route path='/:id' component={Pile} />
           </Switch>
         </main>
     	  <footer>Pigpile Corporation</footer>

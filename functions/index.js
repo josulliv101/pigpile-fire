@@ -11,7 +11,7 @@ app.get('/favicon.ico', function(req, res) {
   res.sendStatus(204)
 });
 
-app.get('/pile-:userId?', (req, res) => {
+app.get('/:userId?', (req, res) => {
 
   const id = req.params && req.params.userId;
   res.set('Cache-Control', 'public, max-age=60, s-maxage=180');

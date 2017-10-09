@@ -1,9 +1,10 @@
 import withSubscription from './withSubscription'
 import {update} from '../redux/modules/Pile'
+import {subscribeToPileDonations as subscribe, unsubscribe} from '../redux/modules/Subscription'
 import {subscribeToPileDonations} from '../../functions/db-firestore'
 
 export default (key = 'donations') => withSubscription({
-  actions: {update},
+  actions: {subscribe, unsubscribe, update},
   onError,
   onSuccess,
   mapStateToProps: (state, {match}) => ({

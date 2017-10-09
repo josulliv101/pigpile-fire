@@ -19,44 +19,69 @@ function getPile(firebase, id) {
     .get()
 }
 
+function getPileDonations(firebase, id) {
 
-const subscribeToPile = ({firebase, id, onSuccess = noop, onError = noop}) => {
-
-  if (!firebase || !id) return;
-
-  return firebase
-    .firestore()
-    .collection("piles")
-    .doc(id)
-    .onSnapshot(onSuccess, onError)
-}
-
-const subscribeToPileDonations = ({firebase, id, onSuccess = noop, onError = noop}) => {
-
-  if (!firebase) return;
+  if (!firebase || !id) return
 
   return firebase
     .firestore()
     .collection("piles")
     .doc(id)
     .collection("donations")
-    .onSnapshot(onSuccess, onError)
+    .get()
 }
 
-const subscribeToTrendingPiles = ({firebase, onSuccess = noop, onError = noop}) => {
 
-  if (!firebase) return;
+const subscribeToPile = ({api, id, onSuccess = noop, onError = noop}) => {
 
-  return firebase
+  if (!api || !id) return;
+
+  console.log('subscribeToPile', id, api);
+
+  const unsubscribe = api
+    .firestore()
+    .collection("piles")
+    .doc(id)
+    .onSnapshot(onSuccess, onError)
+
+  return Promise.resolve(unsubscribe)
+}
+
+const subscribeToPileDonations = ({api, id, onSuccess = noop, onError = noop}) => {
+
+  if (!api) return;
+
+  console.log('subscribeToPileDonations', id, api);
+
+  const unsubscribe = api
+    .firestore()
+    .collection("piles")
+    .doc(id)
+    .collection("donations")
+    .onSnapshot(onSuccess, onError)
+
+  return Promise.resolve(unsubscribe)
+}
+
+const subscribeToTrendingPiles = ({api, onSuccess = noop, onError = noop}) => {
+
+  if (!api) return;
+
+  console.log('subscribeToTrendingPiles', api);
+
+  const unsubscribe = api
     .firestore()
     .collection("piles")
     .onSnapshot(onSuccess, onError)
+
+  return Promise.resolve(unsubscribe)
 }
 
 function noop () {}
 
 module.exports = {
   getPile,
+  getPileDonations,
   getTrending,
   subscribeToPile,
   subscribeToPileDonations,

@@ -1,18 +1,17 @@
 import withSubscription from './withSubscription'
 import {update} from '../redux/modules/Pile'
+import {subscribeToTrending as subscribe, unsubscribe} from '../redux/modules/Subscription'
 import {subscribeToTrendingPiles} from '../../functions/db-firestore'
 
-export default () => withSubscription({
+export default (key = 'trending') => withSubscription({
   subscription: subscribeToTrendingPiles,
   onSuccess,
   onError,
-  mapStateToProps,
-  actions: {update},
+  mapStateToProps: state => ({
+    [key]: state.pile && state.pile.trending,
+  }),
+  actions: {subscribe, unsubscribe, update},
 })
-
-const mapStateToProps = state => ({
-  piles: state.pile && state.pile.trending,
-});
 
 // Avoid arrow-function here to avoid auto binding for 'this'
 function onSuccess(props, snapshot) {

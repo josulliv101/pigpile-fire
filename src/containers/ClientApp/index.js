@@ -10,10 +10,12 @@ import rootSaga from '../../redux/rootSaga'
 import {theme} from '../../style';
 import App from '../App';
 
+// Firebase is a global on client in order to streamline build process.
+const api = firebase;
 const store = configureStore(window.__initialState);
 
 // firebase required as global
-if (!firebase) throw(new Error('firebase is required.'))
+if (!api) throw(new Error('An api is required.'))
 
 const render = (Component) => {
   hydrate(
@@ -30,7 +32,7 @@ const render = (Component) => {
   )
 };
 
-store.runSaga(rootSaga, firebase);
+store.runSaga(rootSaga, api);
 render(App);
 
 if (module.hot) {

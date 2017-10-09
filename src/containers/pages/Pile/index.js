@@ -6,6 +6,10 @@ import withSubscriptionToPileDonations from '../../../hocs/withSubscriptionToPil
 
 class Pile extends PureComponent {
 
+  componentDidCatch(error, errorInfo) {
+    console.log('ERROR CAUGHT', error, errorInfo)
+  }
+
   getDonations = (items) => items.map((d, i) => <li key={i}>{d.name} / ${d.amount}</li>)
 
   render() {

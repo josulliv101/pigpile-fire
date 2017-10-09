@@ -17,12 +17,24 @@ app.get('/:userId?', (req, res) => {
   res.set('Cache-Control', 'public, max-age=60, s-maxage=180');
 
   if (id) {
-    db.getPile(admin, id).then(function (doc) {
-        render(req.url, res, {pile: {[`pile-${id}`]: doc.data()}});
-      }, function(e) {
+
+    Promise.all([
+      db.getPile(admin, id),
+      db.getPileDonations(admin, id),
+    ]).then(
+      function ([doc, snapshot]) {
+        render(req.url, res, {
+          pile: {
+            [`pile-${id}`]: doc.data(),
+            [`pile-${id}-donations`]: snapshot.docs.map(doc => doc.data()),
+          }
+        });
+      },
+      function(e) {
         console.log('err', e)
         render(req.url, res, {});
-      })
+      }
+    )
   } else {
     db.getTrending(admin).then(function (snapshot) {
         const trending = snapshot.docs.map(doc => doc.data());

@@ -2,13 +2,13 @@ import withSubscription from './withSubscription'
 import {update} from '../redux/modules/Pile'
 import {subscribeToTrendingPiles} from '../../functions/db-firestore'
 
-export default () => withSubscription(
-  subscribeToTrendingPiles,
+export default () => withSubscription({
+  subscription: subscribeToTrendingPiles,
   onSuccess,
   onError,
   mapStateToProps,
-  {update},
-)
+  actions: {update},
+})
 
 const mapStateToProps = state => ({
   piles: state.pile && state.pile.trending,

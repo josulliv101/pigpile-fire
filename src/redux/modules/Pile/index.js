@@ -1,7 +1,7 @@
 import { createAction, handleActions } from 'redux-actions'
 
 export const trending = createAction('@pigpile/PILE_TRENDING')
-export const update = createAction('@pigpile/PILE_UPDATE', (id, val = []) => ({id, val}))
+export const update = createAction('@pigpile/PILE_UPDATE', (id, val = null) => ({id, val}))
 export const watchTrendingPiles = createAction('@pigpile/PILE_WATCH_TRENDING')
 export const unwatchTrendingPiles = createAction('@pigpile/PILE_UNWATCH_TRENDING')
 export const addTrending = createAction('@pigpile/PILE_TRENDING_ADD')
@@ -9,6 +9,8 @@ export const addTrending = createAction('@pigpile/PILE_TRENDING_ADD')
 
 const initialState = {
   trending: [],
+  // pile-foo
+  // pile-bar
 }
 
 export const reducer = handleActions({

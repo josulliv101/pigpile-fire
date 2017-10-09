@@ -5,14 +5,16 @@ import withSubscriptionToTrending from '../../../hocs/withSubscriptionToTrending
 
 class Home extends PureComponent {
 
+  getPiles = piles => piles.map(p => <li key={p.id}><Link to={`/pile-${p.id}`}>{p.id}</Link></li>)
+
   render() {
+    const {piles = []} = this.props
     console.log('piles', this.props.piles)
-    const piles = this.props.piles.map(p => <li key={p.id}><Link to={`/pile-${p.id}`}>{p.id}</Link></li>)
   	return (
     	<div>
         <h1>This is the homepage.</h1>
         <ul>
-          {piles}
+          {this.getPiles(piles)}
         </ul>
     	</div>
   	)

@@ -3,22 +3,33 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 //
 
-export default function withSubscription(subscription, onSuccess = noop, onError = noop, mapStateToProps, actions = {}) {
+export default function withSubscription({
+  subscription,
+  onSuccess = noop,
+  onError = noop,
+  mapStateToProps,
+  actions = {},
+  passedOnProps = noop,
+}) {
 
   return function(WrappedComponent) {
 
     class Enhanced extends PureComponent {
 
       componentDidMount() {
-        this.unsubscribe = subscription(
+
+        const selectedProps = passedOnProps(this.props);
+
+        this.unsubscribe = subscription({
           firebase, // global on client
-          onSuccess.bind(this, this.props),
+          onSuccess: onSuccess.bind(this, this.props),
           onError,
-        )
+          ...selectedProps,
+        })
       }
 
       componentWillUnmount() {
-        console.log('attempt unsubscribe to Trending');
+        console.log('attempt unsubscribe');
         if (this.unsubscribe) this.unsubscribe();
       }
 

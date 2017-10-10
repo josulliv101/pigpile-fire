@@ -21,6 +21,10 @@ export default function globalStyle(theme) {
       WebkitFontSmoothing: 'antialiased',
       MozOsxFontSmoothing: 'grayscale',
     },
+    'h1,h2,h3,h4,h5,h6': {
+      margin: 0,
+      padding: 0,
+    },
     ul: {
       listStyle: 'none',
       margin: 0,
@@ -31,10 +35,10 @@ export default function globalStyle(theme) {
     },
 
     [theme.breakpoints.up(948)]: {
-      'main': {
+      main: {
         // padding: `${theme.spacing.unit * 3}px 0`,
-        // maxWidth: theme.layout.width,
-        // margin: '0 auto',
+        maxWidth: theme.layout.page.width,
+        margin: '0 auto',
       },
     },
   })

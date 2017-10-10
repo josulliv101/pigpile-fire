@@ -7,6 +7,7 @@ import Grid from 'material-ui/Grid'
 //
 import {Body1, Body2, Caption, Subheading, Title, Display1} from '../Text'
 import LinksGrid from './LinksGrid'
+import CategoryGrid from './CategoryGrid'
 import Brand from './Brand'
 import Copyright from './Copyright'
 
@@ -15,7 +16,7 @@ const styles = (theme) => ({
     color: theme.palette.common.white,
     margin: '0 auto',
     maxWidth: theme.layout.page.width,
-    padding: `${theme.spacing.unit * 6}px ${theme.spacing.unit * 2}px`,
+    padding: `${theme.spacing.unit * 6}px 0`,
     '& hr': {
       marginBottom: theme.spacing.unit * 3,
       opacity: .3,
@@ -32,10 +33,11 @@ const styles = (theme) => ({
     },
   },
   blank: {
-    marginBottom: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 1,
     opacity: .6,
   },
   blurb: {
+    marginBottom: theme.spacing.unit * 2,
     position: 'relative',
     top: -4,
   },
@@ -46,10 +48,11 @@ const styles = (theme) => ({
   },
   chester: {
     background: 'rgba(255,255,255,.4)',
+    border: '10px rgb(104, 111, 122) solid',
     borderRadius: '50%',
-    height: 200,
+    height: 240,
     margin: `0 auto ${theme.spacing.unit * 6}px`,
-    width: 200,
+    width: 240,
     '&>div': {
       backgroundImage: `url(${theme.components.img.chester})`,
       backgroundRepeat: 'no-repeat',
@@ -57,7 +60,7 @@ const styles = (theme) => ({
       backgroundPosition: 'center',
       height: 136,
       opacity: .7,
-      transform: 'translate(36%,24%)',
+      transform: 'translate(40%,30%)',
       width: 136,
     },
   },
@@ -71,6 +74,10 @@ const styles = (theme) => ({
   tagline: {
     fontSize: 17.5,
     marginBottom: theme.spacing.unit * 4,
+    opacity: .6,
+  },
+  title: {
+    marginBottom: theme.spacing.unit * 2,
     opacity: .6,
   },
   bekind: {
@@ -88,23 +95,22 @@ function AppFooter(props) {
     <section className={cls.full}>
       <Grid align="flex-start" className={classNames(cls.root, className)} container spacing={0}>
 
-        <Grid item xs={7}>
+        <Grid item xs={8}>
+          <Title className={cls.title} heavy>Pigpile's the trusted source in online fundraising.</Title>
           <Subheading className={cls.blurb}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
           </Subheading>
-          <br/>
           <Subheading className={cls.blurb}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+            Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
           </Subheading>
-          <br/>
           <Subheading className={cls.blurb}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
           </Subheading>
         </Grid>
-        <Grid item xs={5}>
-          <Title align="center" className={cls.tagline} xlheavy>
+        <Grid item xs={4}>
+          {/*<Title align="center" className={cls.tagline} xlheavy>
             Pigpile's the trusted source in online fundraising.
-          </Title>
+          </Title>*/}
           <div className={cls.chester}><div/></div>
         </Grid>
         <Grid item xs={12}>
@@ -116,13 +122,19 @@ function AppFooter(props) {
         <Grid item xs={12}>
           <hr className={cls.first}/>
         </Grid>
-        <Grid item xs={7}>
+        <Grid item xs={8}>
           <LinksGrid spacing={24} />
+          <CategoryGrid spacing={24} />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={4}>
           <Subheading className={cls.blurb}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
           </Subheading>
+          <br/>
+          <Subheading className={cls.blurb}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+          </Subheading>
+          <br/>
         </Grid>
 
         <Grid item xs={12}>

@@ -17,14 +17,14 @@ class Pile extends PureComponent {
     console.log('donations', donations)
     console.log('pile', pile)
   	return (
-    	<div>
+    	<main>
         <h1>Pile page here. {match.params.id}</h1>
         <h3>{pile.title}</h3>
         <hr/>
         <ul>
           {this.getDonations(donations)}
         </ul>
-    	</div>
+    	</main>
   	)
   }
 }

@@ -21,7 +21,7 @@ class App extends Component {
   render() {
     const {classes: cls} = this.props;
   	return (
-    	<AppFrame drawer={true}>
+    	<AppFrame drawer={false}>
         <AppContent />
       </AppFrame>
   	)

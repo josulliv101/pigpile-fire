@@ -33,7 +33,7 @@ const styles = (theme, {primary, common: {white}} = theme.palette) => ({
 class AppBar extends Component {
 
   render() {
-    const {children, classes: cls, drawer = false} = this.props;
+    const {children, classes: cls, drawer} = this.props;
   	return (
       <header className={classNames(cls.root, {[cls.withDrawer]: drawer})}>
         <Brand />

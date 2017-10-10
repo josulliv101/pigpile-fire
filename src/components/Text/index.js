@@ -101,3 +101,7 @@ export const Body1 = withStyles(styles)(
   props => <Base {...props} type="body1" />
 )
 
+export const Caption = withStyles(styles)(
+  props => <Base {...props} type="caption" />
+)
+

@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom'
 import { withStyles } from 'material-ui/styles'
 import Grid from 'material-ui/Grid'
 //
-import {Body2, Subheading, Title, Display1} from '../Text'
+import {Body1, Body2, Caption, Subheading, Title, Display1} from '../Text'
 import LinksGrid from './LinksGrid'
 import Brand from './Brand'
 import Copyright from './Copyright'
@@ -17,7 +17,7 @@ const styles = (theme) => ({
     maxWidth: theme.layout.page.width,
     padding: `${theme.spacing.unit * 6}px ${theme.spacing.unit * 2}px`,
     '& hr': {
-      marginBottom: theme.spacing.unit * 2.5,
+      marginBottom: theme.spacing.unit * 3,
       opacity: .3,
       '&$first': {
         marginBottom: theme.spacing.unit * 6,
@@ -31,9 +31,18 @@ const styles = (theme) => ({
       },
     },
   },
+  blank: {
+    marginBottom: theme.spacing.unit * 2,
+    opacity: .6,
+  },
   blurb: {
     position: 'relative',
     top: -4,
+  },
+  caption: {
+    marginBottom: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit * 1,
+    opacity: .6,
   },
   chester: {
     background: 'rgba(255,255,255,.4)',
@@ -99,6 +108,12 @@ function AppFooter(props) {
           <div className={cls.chester}><div/></div>
         </Grid>
         <Grid item xs={12}>
+          <hr className={cls.last}/>
+        </Grid>
+        <Grid item xs={12}>
+          <Display1 align="center" heavy className={cls.bekind}>Be kind. Pigpile on good causes.</Display1>
+        </Grid>
+        <Grid item xs={12}>
           <hr className={cls.first}/>
         </Grid>
         <Grid item xs={7}>
@@ -109,14 +124,13 @@ function AppFooter(props) {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
           </Subheading>
         </Grid>
-        <Grid item xs={12}>
-          <hr className={cls.last}/>
-        </Grid>
-        <Grid item xs={12}>
-          <Display1 align="center" heavy className={cls.bekind}>Be kind. Pigpile on good causes.</Display1>
-        </Grid>
+
         <Grid item xs={12}>
           <hr className={cls.last, cls.last2}/>
+        </Grid>
+        <Grid item xs={12}>
+          <Body1 className={cls.blank}>
+          </Body1>
         </Grid>
         <Grid item xs={7}>
           <Brand />
@@ -124,7 +138,12 @@ function AppFooter(props) {
         <Grid item  xs={5}>
           <Copyright />
         </Grid>
-
+        <Grid item xs={12}>
+          <Body1 className={cls.caption}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+          </Body1>
+        </Grid>
 
       </Grid>
 

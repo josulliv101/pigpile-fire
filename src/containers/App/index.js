@@ -1,32 +1,36 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {Link, Route, Switch} from 'react-router-dom'
-import { withStyles } from 'material-ui/styles'
-import Button from 'material-ui/Button'
+import {withStyles} from 'material-ui/styles'
 //
+import globalStyle from '../../style/global'
+import AppFrame from './AppFrame'
+import AppContent from './AppContent'
 import Home from '../pages/Home'
 import Pile from '../pages/Pile'
+
+const styles = (theme) => ({
+  '@global': globalStyle(theme),
+  root: {
+    display: 'flex',
+  },
+});
 
 class App extends Component {
 
   render() {
+    const {classes: cls} = this.props;
   	return (
-    	<div>
-    	  <nav>
-          <Link to="/">home</Link>
-          {' '}
-          <Link to="/pile">pile</Link>
-        </nav>
-        {/*<Button>count {this.props.pilesCount}</Button>*/}
-    	  <main>
-          <Switch>
-            <Route path='/' exact={true} component={Home} />
-            <Route path='/:id' component={Pile} />
-          </Switch>
-        </main>
-    	  <footer>Pigpile Corporation</footer>
-    	</div>
+    	<AppFrame>
+        <AppContent />
+      </AppFrame>
   	)
   }
 }
 
-export default withStyles()(App)
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
+};
+
+export default withStyles(styles)(App)

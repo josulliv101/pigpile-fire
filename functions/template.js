@@ -5,13 +5,16 @@ const template = ({assets = {}, host = assets.url || '', body = '', css = '', in
   <html>
     <head>
       <title>Pigpile</title>
+      <meta charset="utf8"/>
+      <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1"/>
       <meta name="description" content="Free online fundraising. Be kind. Pigpile on good causes.">
-      <!-- Custom CSS
-      <link rel="stylesheet" href="/assets/custom.css" />-->
-      <style>${css}</style>
+      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500"/>
+      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Caveat"/>
+      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Bungee"/>
+      <style>${''}</style>
     </head>
     <body>
-      <div id="root">${body}</div>
+      <div id="app">${body}</div>
     </body>
     <script>
       window.__initialState = ${initialState}

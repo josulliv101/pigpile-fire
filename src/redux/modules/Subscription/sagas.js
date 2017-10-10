@@ -4,7 +4,7 @@ import {subscribes} from './index'
 // Doing in saga to extract any reference to ajax or db layer from components.
 function* workSubscription(api, {payload: {instance, subscription, onSuccess, onError, ...rest}}) {
 
-  console.log('workSubscription', api, instance, subscription, onSuccess, onError, rest)
+  // console.log('workSubscription', api, instance, subscription, onSuccess, onError, rest)
   if (!api || !instance || !subscription) return;
 
   instance.unsubscribe = yield call(subscription, {
@@ -14,7 +14,6 @@ function* workSubscription(api, {payload: {instance, subscription, onSuccess, on
     ...rest,
   });
 }
-
 
 //=====================================
 //  WATCHERS

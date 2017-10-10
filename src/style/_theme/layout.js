@@ -1,5 +1,5 @@
 export default {
-  global: {
+  page: {
     width: 960,
   },
   pile: {

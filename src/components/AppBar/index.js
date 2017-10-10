@@ -6,6 +6,7 @@ import { withStyles } from 'material-ui/styles'
 //
 import Brand from './Brand'
 import Logo from './Logo'
+import LoginButton from './LoginButton'
 
 const styles = (theme, {primary, common: {white}} = theme.palette) => ({
   root: {
@@ -13,6 +14,8 @@ const styles = (theme, {primary, common: {white}} = theme.palette) => ({
     backgroundColor: primary[500],
     display: 'flex',
     justifyContent: 'space-between',
+    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
     '&$withDrawer': {
       '& $logo': {
         left: `calc(50% + ${theme.components.drawer.width/2}px)`,
@@ -30,16 +33,12 @@ const styles = (theme, {primary, common: {white}} = theme.palette) => ({
 class AppBar extends Component {
 
   render() {
-    const {children, classes: cls, drawer = true} = this.props;
+    const {children, classes: cls, drawer = false} = this.props;
   	return (
       <header className={classNames(cls.root, {[cls.withDrawer]: drawer})}>
         <Brand />
         <Logo className={cls.logo} />
-        <div>
-          <Link to="/">home</Link>
-          {' '}
-          <Link to="/pile">pile.</Link>
-        </div>
+        <LoginButton />
       </header>
   	)
   }

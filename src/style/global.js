@@ -21,15 +21,20 @@ export default function globalStyle(theme) {
       WebkitFontSmoothing: 'antialiased',
       MozOsxFontSmoothing: 'grayscale',
     },
+    ul: {
+      listStyle: 'none',
+      margin: 0,
+      padding: 0,
+    },
     '#app': {
       height: '100%',  // TODO flag as possible mobile issue
     },
 
     [theme.breakpoints.up(948)]: {
       'main': {
-        padding: `${theme.spacing.unit * 3}px 0`,
+        // padding: `${theme.spacing.unit * 3}px 0`,
         // maxWidth: theme.layout.width,
-        margin: '0 auto',
+        // margin: '0 auto',
       },
     },
   })

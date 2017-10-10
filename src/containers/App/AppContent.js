@@ -17,12 +17,10 @@ class AppContent extends Component {
   render() {
     const {classes: cls} = this.props;
   	return (
-  	  <main className={cls.root}>
-        <Switch>
-          <Route path='/' exact={true} component={Home} />
-          <Route path='/:id' component={Pile} />
-        </Switch>
-      </main>
+      <Switch>
+        <Route path='/' exact={true} component={Home} />
+        <Route path='/:id' component={Pile} />
+      </Switch>
   	)
   }
 }

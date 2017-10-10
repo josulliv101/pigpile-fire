@@ -7,6 +7,7 @@ import Button from 'material-ui/Button'
 //
 import globalStyle from '../../style/global'
 import AppBar from '../../components/AppBar'
+import AppFooter from '../../components/AppFooter'
 import Home from '../pages/Home'
 import Pile from '../pages/Pile'
 
@@ -43,14 +44,19 @@ const styles = (theme) => ({
 class AppFrame extends Component {
 
   render() {
-    const {children, classes: cls, drawer = true} = this.props;
+    const {children, classes: cls, ...props} = this.props;
   	return (
-    	<div className={classNames(cls.root, {[cls.withDrawer]: drawer})}>
-        <nav><div>drawer</div></nav>
+    	<div className={classNames(cls.root, {[cls.withDrawer]: props.drawer})}>
+        {
+          props.drawer &&
+          <nav>
+            <div>drawer</div>
+          </nav>
+        }
         <div>
-          <AppBar />
+          <AppBar {...props} />
           {children}
-          <footer>Pigpile Corporation</footer>
+          <AppFooter />
         </div>
     	</div>
   	)

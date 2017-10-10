@@ -16,7 +16,11 @@ const styles = (theme, {common: {white}} = theme.palette) => ({
     fontSize: 24,
     fontWeight: 300,
   },
-  tagline: {},
+  tagline: {
+    fontSize: 18,
+    fontWeight: 400,
+    textTransform: 'lowercase',
+  },
   [theme.breakpoints.up(748)]: {
 
   },

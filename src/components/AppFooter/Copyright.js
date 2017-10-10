@@ -29,9 +29,9 @@ const styles = (theme) => ({
 })
 
 function Copyright(props) {
-  const {className, classes: cls} = props
+  const {className, classes: cls, ...rest} = props
   return (
-    <Body2 align="right" className={cls.root}>
+    <Body2 align="right" className={cls.root} {...rest}>
       <Icon />2017 Pigpile Corporation. All Rights Reserved.
     </Body2>
   )

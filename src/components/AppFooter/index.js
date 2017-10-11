@@ -59,7 +59,7 @@ const styles = (theme) => ({
       backgroundSize: 'contain',
       backgroundPosition: 'center',
       height: 136,
-      opacity: .7,
+      opacity: .9,
       transform: 'translate(40%,30%)',
       width: 136,
     },

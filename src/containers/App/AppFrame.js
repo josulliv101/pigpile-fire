@@ -8,6 +8,7 @@ import Button from 'material-ui/Button'
 import globalStyle from '../../style/global'
 import AppBar from '../../components/AppBar'
 import AppFooter from '../../components/AppFooter'
+import BgImage from '../../components/BgImage'
 import Home from '../pages/Home'
 import Pile from '../pages/Pile'
 
@@ -54,6 +55,7 @@ class AppFrame extends Component {
           </nav>
         }
         <div>
+          <BgImage {...props} />
           <AppBar {...props} />
           {children}
           <AppFooter />

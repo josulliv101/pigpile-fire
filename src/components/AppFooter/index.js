@@ -47,7 +47,7 @@ const styles = (theme) => ({
     opacity: .6,
   },
   chester: {
-    background: 'rgba(255,255,255,.4)',
+    background: 'rgb(158, 162, 169)',
     border: '10px rgb(104, 111, 122) solid',
     borderRadius: '50%',
     height: 240,
@@ -68,6 +68,8 @@ const styles = (theme) => ({
   full: {
     background: theme.components.footer.bg,
     minHeight: '90vh',
+    position: 'relative',
+    zIndex: 1,
   },
   last: {},
   last2: {},

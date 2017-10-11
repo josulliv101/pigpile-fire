@@ -1,2 +1,3 @@
-export hp from './hp'
-export image from './image'
+export hp from './pageHome'
+export image from './layoutImage'
+export themeWaveGrey from './themeWaveGrey'

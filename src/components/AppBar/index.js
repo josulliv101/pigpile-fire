@@ -16,6 +16,9 @@ const styles = (theme, {primary, common: {white}} = theme.palette) => ({
     justifyContent: 'space-between',
     paddingLeft: theme.spacing.unit,
     paddingRight: theme.spacing.unit,
+    position: 'fixed',
+    width: '100%',
+    zIndex: 2,
     '&$withDrawer': {
       '& $logo': {
         left: `calc(50% + ${theme.components.drawer.width/2}px)`,

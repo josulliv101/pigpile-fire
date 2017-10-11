@@ -5,5 +5,8 @@ export default {
   pile: {
     default: {},
     image: {},
+  },
+  appTheme: {
+    default: 'themeWaveGrey',
   }
 }

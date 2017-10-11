@@ -4,13 +4,17 @@ import classNames from 'classnames'
 import compose from 'recompose/compose'
 import {connect} from 'react-redux'
 import {Route, Switch} from 'react-router-dom'
-import {withStyles} from 'material-ui/styles'
+import {withStyles, withTheme} from 'material-ui/styles'
 //
 import * as appThemes from '../../style/appThemes/'
 
 const styles = (theme, appThemes = transformAppThemes(theme), {black} = theme.palette.common, {hero} = theme.components, {up, values} = theme.breakpoints) => ({
   root: {
     backgroundColor: black,
+    position: 'fixed',
+    width: '100%',
+    willChange: 'transform',
+    zIndex: 0,
     '&:after': {
       // backgroundImage: 'linear-gradient(180deg,#4180d7,hsla(0,0%,48%,.7))', // linear-gradient(180deg,rgb(33, 150, 243),hsl(207, 83%, 71%))',
       bottom: 0,
@@ -64,14 +68,29 @@ function HomeBg(props) {
 }
 
 function PileBg(props) {
-  const {classes: cls, className, pile = {}} = props;
-  console.log('PileBg', props)
+  const {classes: cls, className, pile = {}, layout = pile.layout || {}, theme} = props;
+  console.log('PileBg', layout, props)
+  const idThemeDefault = theme.layout.appTheme.default
+  // If image layout, the pile should have an imageUrl
+  let src = layout['type-image'] && pile.imageUrl;
+
+  // Else use thw default appTheme image
+  if (!src) {
+    src = appThemes[idThemeDefault].img
+  }
+
   return (
-    <div className={classNames(cls.root, cls.image, className)}>
-     {pile.imageUrl && <img className={classNames(cls.bg)} src={pile.imageUrl} />}
+    <div className={classNames(
+      cls.root,
+      {[cls.image]: layout['type-image']},
+      {[cls[idThemeDefault]]: !layout['type-image']},
+      className
+    )}>
+     {pile.imageUrl && <img className={classNames(cls.bg)} src={src} />}
     </div>
   )
 }
+
 
 PileBg = connect((state, {match: {params: {id}}}) => ({
   pile: state.pile[`pile-${id}`],
@@ -94,5 +113,6 @@ function transformAppThemes(th) {
 
 export default compose(
   withStyles(styles),
+  withTheme(),
 )(BgImage)
 

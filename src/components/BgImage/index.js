@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import compose from 'recompose/compose'
+import {connect} from 'react-redux'
 import {Route, Switch} from 'react-router-dom'
 import {withStyles} from 'material-ui/styles'
 //
@@ -43,28 +44,38 @@ const styles = (theme, appThemes = transformAppThemes(theme), {black} = theme.pa
 
 class BgImage extends Component {
   render() {
-    const {classes: cls, className, ...props} = this.props;
   	return (
       <Switch>
-        <Route path="/" exact render={() => {
-          return (
-            <div className={classNames(cls.root, cls.hp, className)}>
-             <img className={classNames(cls.bg)} src={appThemes.hp.img} />
-            </div>
-          )
-        }} />
-        <Route path='/:id' render={() => {
-          return (
-            <div className={classNames(cls.root, cls.image, className)}>
-             <img className={classNames(cls.bg)} src={"https://firebasestorage.googleapis.com/v0/b/pigpile-next.appspot.com/o/foobar%2Fdog.jpeg?alt=media&token=8fa7707d-6aff-4ca0-9e5c-7e86b4ac70bf"} />
-            </div>
-          )
-        }} />
-
+        <Route path="/login" render={() => null} />
+        <Route path="/" exact render={() => <HomeBg {...this.props} />} />
+        <Route path='/:id' render={(ownProps) => <PileBg {...ownProps} {...this.props} />} />
       </Switch>
   	)
   }
 }
+
+function HomeBg(props) {
+  const {classes: cls, className} = props;
+  return (
+    <div className={classNames(cls.root, cls.hp, className)}>
+     <img className={classNames(cls.bg)} src={appThemes.hp.img} />
+    </div>
+  )
+}
+
+function PileBg(props) {
+  const {classes: cls, className, pile = {}} = props;
+  console.log('PileBg', props)
+  return (
+    <div className={classNames(cls.root, cls.image, className)}>
+     {pile.imageUrl && <img className={classNames(cls.bg)} src={pile.imageUrl} />}
+    </div>
+  )
+}
+
+PileBg = connect((state, {match: {params: {id}}}) => ({
+  pile: state.pile[`pile-${id}`],
+}))(PileBg)
 
 BgImage.propTypes = {
   classes: PropTypes.object.isRequired,

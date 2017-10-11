@@ -20,6 +20,7 @@ class App extends Component {
 
   render() {
     const {classes: cls} = this.props;
+    console.log('App props', this.props)
   	return (
     	<AppFrame drawer={false}>
         <AppContent />

@@ -18,6 +18,7 @@ class AppContent extends Component {
     const {classes: cls} = this.props;
   	return (
       <Switch>
+        <Route path="/login" render={() => <div>the login page</div>} />
         <Route path='/' exact={true} component={Home} />
         <Route path='/:id' component={Pile} />
       </Switch>

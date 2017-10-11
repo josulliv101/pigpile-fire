@@ -8,7 +8,7 @@ import withSubscriptionToPileDonations from '../../../hocs/withSubscriptionToPil
 
 const styles = (theme) => ({
   root: {
-    marginTop: theme.components.hero.height,
+
   },
   full: {
     background: theme.palette.common.white,

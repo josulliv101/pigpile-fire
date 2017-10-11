@@ -11,7 +11,7 @@ const template = ({assets = {}, host = assets.url || '', body = '', css = '', in
       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500"/>
       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Caveat"/>
       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Bungee"/>
-      <style>${css}</style>
+      <style id="jss-server-side">${css}</style>
     </head>
     <body>
       <div id="app">${body}</div>

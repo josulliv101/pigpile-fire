@@ -10,6 +10,7 @@ import LinksGrid from './LinksGrid'
 import CategoryGrid from './CategoryGrid'
 import Brand from './Brand'
 import Copyright from './Copyright'
+import Pigtail from '../../icons/Pigtail'
 
 const styles = (theme) => ({
   root: {
@@ -52,16 +53,33 @@ const styles = (theme) => ({
     borderRadius: '50%',
     height: 240,
     margin: `0 auto ${theme.spacing.unit * 6}px`,
+    position: 'relative',
     width: 240,
-    '&>div': {
+    '&>div:first-child': {
       backgroundImage: `url(${theme.components.img.chester})`,
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'contain',
       backgroundPosition: 'center',
       height: 136,
       opacity: .9,
+      position: 'relative',
       transform: 'translate(40%,30%)',
       width: 136,
+      zIndex: 2,
+    },
+    '&>div:last-child': {
+      color: theme.palette.common.black,
+      height: 220,
+      left: 0,
+      position: 'absolute',
+      top: 0,
+      width: 220,
+      zIndex: 1,
+      '&>svg': {
+        height: '100%',
+        opacity: .1,
+        width: '100%',
+      },
     },
   },
   first: {},
@@ -113,7 +131,10 @@ function AppFooter(props) {
           {/*<Title align="center" className={cls.tagline} xlheavy>
             Pigpile's the trusted source in online fundraising.
           </Title>*/}
-          <div className={cls.chester}><div/></div>
+          <div className={cls.chester}>
+            <div/>
+            <div><Pigtail /></div>
+          </div>
         </Grid>
         <Grid item xs={12}>
           <hr className={cls.last}/>

@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
+import compose from 'recompose/compose'
 import {Link, Route, Switch} from 'react-router-dom'
 import {withStyles} from 'material-ui/styles'
 //
@@ -8,6 +9,7 @@ import AppFrame from './AppFrame'
 import AppContent from './AppContent'
 import Home from '../pages/Home'
 import Pile from '../pages/Pile'
+import withoutServerStyle from '../../hocs/withoutServerStyle'
 
 const styles = (theme) => ({
   '@global': globalStyle(theme),
@@ -34,4 +36,9 @@ App.propTypes = {
   className: PropTypes.string,
 };
 
-export default withStyles(styles)(App)
+export default compose(
+  withStyles(styles),
+  withoutServerStyle(),
+)(App)
+
+

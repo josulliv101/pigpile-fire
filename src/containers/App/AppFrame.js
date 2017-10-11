@@ -9,8 +9,8 @@ import globalStyle from '../../style/global'
 import AppBar from '../../components/AppBar'
 import AppFooter from '../../components/AppFooter'
 import BgImage from '../../components/BgImage'
-import Home from '../pages/Home'
-import Pile from '../pages/Pile'
+import Hero from '../../components/Hero'
+import NavBar from '../../components/NavBar'
 
 const styles = (theme) => ({
   '@global': globalStyle(theme),
@@ -57,6 +57,8 @@ class AppFrame extends Component {
         <div>
           <BgImage {...props} />
           <AppBar {...props} />
+          <Hero />
+          <NavBar />
           {children}
           <AppFooter />
         </div>

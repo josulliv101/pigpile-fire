@@ -6,7 +6,7 @@ import FeaturedSection from './FeaturedSection'
 
 const styles = (theme) => ({
   root: {
-    marginTop: theme.components.hero.height,
+
   },
 })
 

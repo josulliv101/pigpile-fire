@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react'
+import React, {Component} from 'react'
 import classNames from 'classnames'
 import compose from 'recompose/compose'
 import {withStyles} from 'material-ui/styles'
@@ -15,7 +15,7 @@ const styles = (theme) => ({
   },
 })
 
-class Pile extends PureComponent {
+class Pile extends Component {
 
   componentDidCatch(error, errorInfo) {
     console.log('ERROR CAUGHT', error, errorInfo)

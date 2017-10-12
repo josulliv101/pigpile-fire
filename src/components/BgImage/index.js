@@ -52,7 +52,7 @@ class BgImage extends Component {
       <Switch>
         <Route path="/login" render={() => null} />
         <Route path="/" exact render={() => <HomeBg {...this.props} />} />
-        <Route path='/:id' render={(ownProps) => <PileBg {...ownProps} {...this.props} />} />
+        <Route path='/:id' render={(ownProps) => <PileBg {...this.props} {...ownProps} />} />
       </Switch>
   	)
   }

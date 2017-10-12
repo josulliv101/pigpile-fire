@@ -24,6 +24,18 @@ const styles = (theme) => ({
   display3: {},
   display2: {},
   display1: {},
+  gutterBottomSm: {
+    marginBottom: theme.spacing.unit * .5,
+  },
+  gutterBottomLg: {
+    marginBottom: theme.spacing.unit * 2,
+  },
+  gutterBottomXl: {
+    marginBottom: theme.spacing.unit * 3,
+  },
+  gutterBottomXxl: {
+    marginBottom: theme.spacing.unit * 4,
+  },
   heavy: {
     fontWeight: 400,
   },
@@ -45,7 +57,7 @@ const styles = (theme) => ({
   },
 })
 
-const Base = ({classes: {contrast: clsContrast, contrastHigh: clsContrastHigh, contrastWithContrastHigh, lite: clsLite, heavy: clsHeavy, lowercase:clsLowercase, uppercase:clsUppercase, xlheavy: clsXlheavy, ...cls}, className, contrast, contrastHigh, lite, lowercase, heavy, uppercase, xlheavy, ...props}) => (
+const Base = ({classes: {contrast: clsContrast, contrastHigh: clsContrastHigh, contrastWithContrastHigh, lite: clsLite, gutterBottomSm: clsGutterBottomSm, gutterBottomLg: clsGutterBottomLg, gutterBottomXl: clsGutterBottomXl, gutterBottomXxl: clsGutterBottomXxl, heavy: clsHeavy, lowercase:clsLowercase, uppercase:clsUppercase, xlheavy: clsXlheavy, ...cls}, className, contrast, contrastHigh, gutterBottomSm, gutterBottomLg, gutterBottomXl, gutterBottomXxl,lite, lowercase, heavy, uppercase, xlheavy, ...props}) => (
   <Typography
     {...props}
     classes={cls}
@@ -55,6 +67,10 @@ const Base = ({classes: {contrast: clsContrast, contrastHigh: clsContrastHigh, c
       {[clsContrastHigh]: contrastHigh},
       {[contrastWithContrastHigh]: contrast && contrastHigh},
       {[clsLite]: lite},
+      {[clsGutterBottomSm]: gutterBottomSm},
+      {[clsGutterBottomLg]: gutterBottomLg},
+      {[clsGutterBottomXl]: gutterBottomXl},
+      {[clsGutterBottomXxl]: gutterBottomXxl},
       {[clsHeavy]: heavy},
       {[clsLowercase]: lowercase},
       {[clsUppercase]: uppercase},

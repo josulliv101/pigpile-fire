@@ -5,19 +5,21 @@ import {Link} from 'react-router-dom'
 import { withStyles } from 'material-ui/styles'
 //
 import Brand from './Brand'
+import Tagline from './Tagline'
 import Logo from './Logo'
 import LoginButton from './LoginButton'
 
-const styles = (theme, {primary, common: {white}} = theme.palette) => ({
+const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} = theme.breakpoints) => ({
   root: {
-    alignItems: 'flex-start', // Needs to be flex-start or gets cut off do to height 0
-    display: 'flex',
+    // alignItems: 'flex-start', // Needs to be flex-start or gets cut off do to height 0
+    color: white,
+    // display: 'flex',
     height: 0, // NavBar links below AppBar need to still be clickable. 0 height resolves that.
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     // overflow: 'visible',
-    paddingLeft: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    position: 'fixed',
+    // paddingLeft: theme.spacing.unit,
+    // paddingRight: theme.spacing.unit,
+    // position: 'fixed',
     width: '100%',
     zIndex: 4,
     '&$withDrawer': {
@@ -25,24 +27,94 @@ const styles = (theme, {primary, common: {white}} = theme.palette) => ({
         left: `calc(50% + ${theme.components.drawer.width/2}px)`,
       },
     },
+    '& $brand, $logo, $login, $tagline': {
+      position: 'fixed',
+      transform: 'scale3d(1, 1, 1) translateY(0px)',
+      transition: theme.transitions.create(['transform']),
+    },
+    '& $brand, $login, $tagline': {
+      // position: 'absolute',
+      zIndex: 2,
+    },
+  },
+  brand: {
+    left: theme.spacing.unit * 2,
+  },
+  docked: {
+    // display: 'none',
+  },
+  login: {
+    right: theme.spacing.unit * 2,
   },
   logo: {
     left: '50%',
-    position: 'fixed',
-    // top: 0,
+    zIndex: 4,
   },
-  withDrawer: {}
+  tagline: {
+    left: 140,
+    top: theme.spacing.unit/2,
+  },
+  transformOriginLeft: {
+    transformOrigin: 'left center',
+  },
+  withDrawer: {},
+
+  [up(values.md)]: {
+    drawer: {},
+    root: {
+      '& $shrink': {
+        transform: 'scale3d(.8, .8, 1) translate3d(0, -4px, 0)',
+      },
+      '& $shrinkLogo': {
+        transform: 'scale3d(.7, .7, 1) translate3d(0, -12px, 0)',
+      },
+      '& $shrinkTagline': {
+        transform: 'scale3d(.86, .86, 1) translate3d(-24px, -6px, 0)',
+      },
+      '& $brand, $login': {
+        zIndex: 4,
+      },
+    },
+    brand: {},
+    login: {},
+    shrink: {},
+    shrinkLogo: {},
+    shrinkTagline: {},
+  },
+
+  [up(1180)]: {
+    root: {
+      '& $brand, $login': {
+        zIndex: 4,
+      },
+    },
+    brand: {},
+    login: {},
+    tagline: {},
+  },
+
+  // Avoid appbar text and text in content colliding.
+  [up(1660)]: {
+    root: {
+      '& $tagline': {
+        zIndex: 4,
+      },
+    },
+    tagline: {},
+  },
 });
 
 class AppBar extends Component {
 
   render() {
-    const {children, classes: cls, drawer} = this.props;
+    const {children, classes: cls, drawer, navDocked} = this.props;
+    const clsShrink = {[cls.shrink]: navDocked};
   	return (
-      <div className={classNames(cls.root, {[cls.withDrawer]: drawer})}>
-        <Brand />
-        <Logo className={cls.logo} />
-        <LoginButton />
+      <div className={classNames(cls.root, {[cls.docked]: navDocked}, {[cls.withDrawer]: drawer})}>
+        <Brand className={classNames(cls.brand, cls.transformOriginLeft, clsShrink)} />
+        <Tagline className={classNames(cls.tagline, cls.transformOriginLeft, {[cls.shrinkTagline]: navDocked})} />
+        <Logo className={classNames(cls.logo, {[cls.shrinkLogo]: navDocked})} />
+        <LoginButton className={classNames(cls.login, clsShrink)} />
       </div>
   	)
   }
@@ -51,6 +123,12 @@ class AppBar extends Component {
 AppBar.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
+  drawer: PropTypes.bool,
+  navDocked: PropTypes.bool.isRequired,
+};
+
+AppBar.defaultProps = {
+  // navDocked: true,
 };
 
 export default withStyles(styles)(AppBar)

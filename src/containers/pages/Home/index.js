@@ -2,7 +2,9 @@ import React, {PureComponent} from 'react'
 import classNames from 'classnames'
 import {withStyles} from 'material-ui/styles'
 //
-import FeaturedSection from './FeaturedSection'
+import FeaturedSection from '../../../sections/FeaturedSection'
+import MeetChesterSection from '../../../sections/MeetChester'
+import BeKind from '../../../sections/BeKind'
 
 const styles = (theme) => ({
   root: {
@@ -17,6 +19,9 @@ class Home extends PureComponent {
   	return (
     	<div className={classNames(cls.root, className)}>
         <FeaturedSection />
+        <BeKind />
+        <MeetChesterSection />
+
     	</div>
   	)
   }

@@ -58,7 +58,7 @@ class AppFrame extends Component {
           <BgImage {...props} />
           <AppBar {...props} />
           <Hero />
-          <NavBar />
+          <NavBar {...props} />
           {children}
           <AppFooter />
         </div>

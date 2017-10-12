@@ -10,6 +10,8 @@ import AppContent from './AppContent'
 import Home from '../pages/Home'
 import Pile from '../pages/Pile'
 import withoutServerStyle from '../../hocs/withoutServerStyle'
+import withScrollBehavior from '../../hocs/withScrollBehavior'
+import withStickyNav from '../../hocs/withStickyNav'
 
 const styles = (theme) => ({
   '@global': globalStyle(theme),
@@ -21,10 +23,10 @@ const styles = (theme) => ({
 class App extends Component {
 
   render() {
-    const {classes: cls} = this.props;
+    const {classes: cls, ...props} = this.props;
     console.log('App props', this.props)
   	return (
-    	<AppFrame drawer={false}>
+    	<AppFrame {...props}>
         <AppContent />
       </AppFrame>
   	)
@@ -39,6 +41,8 @@ App.propTypes = {
 export default compose(
   withStyles(styles),
   withoutServerStyle(),
+  withStickyNav(),
+  withScrollBehavior(),
 )(App)
 
 

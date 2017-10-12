@@ -5,15 +5,21 @@ import {Link} from 'react-router-dom'
 import Grid from 'material-ui/Grid'
 import {withStyles} from 'material-ui/styles'
 //
-import withSubscriptionToTrending from '../../../hocs/withSubscriptionToTrending'
-import FeatureCard from '../../../components/FeatureCard'
-import {Title} from '../../../components/Text'
+import {Display1} from '../components/Text'
 
 const styles = (theme) => ({
   root: {
-    background: theme.palette.grey[200],
+    background: theme.components.footer.bg,
+    color: theme.palette.common.white,
     paddingTop: theme.spacing.unit * 5,
     paddingBottom: theme.spacing.unit * 5,
+  },
+  bekind: {
+    background: 'rgba(255, 255, 255, 0.07)',
+    color: theme.palette.common.lightWhite,
+    fontSize: 28,
+    marginBottom: theme.spacing.unit * 2,
+    padding: 64,
   },
   [theme.breakpoints.up(748)]: {
 
@@ -24,22 +30,17 @@ const styles = (theme) => ({
 })
 
 
-class FeaturedSection extends PureComponent {
-
-  getCards = piles => piles.map(pile => (
-    <Grid key={pile.id} item xs={12} sm={6} md={6} lg={4} xl={4}>
-      <FeatureCard {...pile} />
-    </Grid>
-  ))
+class MeetChesterSection extends PureComponent {
 
   render() {
-    const {classes: cls, className, trending = [], ...props} = this.props;
+    const {classes: cls, className} = this.props;
   	return (
       <section className={classNames(cls.root, className)}>
         <main>
-          <Title gutterBottom heavy>Trending</Title>
           <Grid container>
-            {this.getCards(trending)}
+            <Grid item xs={12}>
+              <Display1 align="center" heavy className={cls.bekind}>Be kind. Pigpile on good causes.</Display1>
+            </Grid>
           </Grid>
         </main>
       </section>
@@ -49,5 +50,4 @@ class FeaturedSection extends PureComponent {
 
 export default compose(
   withStyles(styles),
-  withSubscriptionToTrending(),
-)(FeaturedSection);
+)(MeetChesterSection);

@@ -7,9 +7,9 @@ import Button from '../Button'
 
 const styles = (theme) => ({
   root: {
-    ...theme.components.brand,
-    fontSize: 24,
-    fontWeight: 300,
+    fontSize: 18,
+    fontWeight: 400,
+    textTransform: 'lowercase',
   },
   [theme.breakpoints.up(748)]: {
 
@@ -19,18 +19,18 @@ const styles = (theme) => ({
   },
 })
 
-function Brand(props) {
+function Tagline(props) {
   const {classes: cls, className} = props
   return (
-    <Button className={classNames(cls.root, className)} dense to="/" >
-      pigpile
+    <Button to="/" className={classNames(cls.root, className)} dense to="/" >
+      / free online fundraising
     </Button>
   )
 }
 
-Brand.propTypes = {
+Tagline.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
 }
 
-export default withStyles(styles)(Brand)
+export default withStyles(styles)(Tagline)

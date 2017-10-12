@@ -16,10 +16,10 @@ export default function withStickyNav() {
         this.setState({navDocked: status > 0})
       }
 
-      componentWillReceiveProps(nextProps) {
-        console.log('sticky', nextProps.width)
+      componentDidMount(nextProps) {
+        console.log('sticky', this.props)
         // Involves scrolling behavior so only matters on client.
-        this.setState({stickyEnabled: isWidthUp('md', nextProps.width, true)})
+        this.setState({stickyEnabled: isWidthUp('md', this.props.width, true)})
       }
 
       render() {

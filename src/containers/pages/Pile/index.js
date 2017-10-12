@@ -34,7 +34,7 @@ class Pile extends Component {
           <h3>{pile.title}</h3>
           <hr/>
           <ul>
-            {this.getDonations(donations)}
+            {donations.length ? this.getDonations(donations) : <li>no donations yet</li>}
           </ul>
         </main>
       </section>

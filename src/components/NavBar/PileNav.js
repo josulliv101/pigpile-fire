@@ -1,9 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { withStyles } from 'material-ui/styles'
+import {connect} from 'react-redux'
+import compose from 'recompose/compose'
+import MuiButton from 'material-ui/Button'
+import {withStyles} from 'material-ui/styles'
 //
 import Button from '../Button'
+import {setting} from '../../redux/modules/Settings'
 
 const styles = (theme, {common: {white}} = theme.palette) => ({
   root: {
@@ -19,12 +23,12 @@ const styles = (theme, {common: {white}} = theme.palette) => ({
 })
 
 function PileNav(props) {
-  const {className, classes: cls} = props
+  const {className, classes: cls, drawer, setting} = props
   return (
     <div className={classNames(cls.root, className)}>
-      <Button to="/" >
+      <MuiButton onClick={() => setting('drawer', !drawer)} color="contrast">
         pigpile
-      </Button>
+      </MuiButton>
       <Button to="/" to="/" >
         pile
       </Button>
@@ -37,4 +41,7 @@ PileNav.propTypes = {
   className: PropTypes.string,
 }
 
-export default withStyles(styles)(PileNav)
+export default compose(
+  withStyles(styles),
+  connect(state => ({drawer: state.settings.drawer}), {setting}),
+)(PileNav)

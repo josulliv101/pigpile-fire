@@ -11,7 +11,7 @@ export default function globalStyle(theme) {
       boxSizing: 'inherit',
     },
     body: {
-      background: theme.palette.common.lightWhite,
+      background: theme.palette.grey[200],
       color: theme.palette.text.primary,
       fontFamily: theme.typography.fontFamily,
       height: '100%', // TODO flag as possible mobile issue

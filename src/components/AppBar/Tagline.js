@@ -8,7 +8,6 @@ import Button from '../Button'
 const styles = (theme) => ({
   root: {
     fontSize: 18,
-    fontWeight: 400,
     textTransform: 'lowercase',
   },
   [theme.breakpoints.up(748)]: {
@@ -22,7 +21,7 @@ const styles = (theme) => ({
 function Tagline(props) {
   const {classes: cls, className} = props
   return (
-    <Button to="/" className={classNames(cls.root, className)} dense to="/" >
+    <Button to="/" className={classNames(cls.root, className)} dense heavy to="/" >
       / free online fundraising
     </Button>
   )

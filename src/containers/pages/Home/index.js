@@ -8,7 +8,7 @@ import BeKind from '../../../sections/BeKind'
 
 const styles = (theme) => ({
   root: {
-
+    background: theme.palette.common.white,
   },
 })
 
@@ -21,7 +21,6 @@ class Home extends PureComponent {
         <FeaturedSection />
         <BeKind />
         <MeetChesterSection />
-
     	</div>
   	)
   }

@@ -8,6 +8,8 @@ import Pile from '../pages/Pile'
 
 const styles = (theme) => ({
   root: {
+    background: theme.palette.common.white,
+    minHeight: 240,
     // Slide over the top of the <Hero /> if present
     position: 'relative',
     zIndex: 1,

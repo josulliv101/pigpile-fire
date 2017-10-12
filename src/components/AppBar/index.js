@@ -23,14 +23,20 @@ const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} 
     width: '100%',
     zIndex: 4,
     '&$withDrawer': {
+      '& $brand': {
+        left: theme.spacing.unit * 2 + theme.components.drawer.width,
+      },
       '& $logo': {
         left: `calc(50% + ${theme.components.drawer.width/2}px)`,
+      },
+      '& $tagline': {
+        left: 140 + theme.components.drawer.width,
       },
     },
     '& $brand, $logo, $login, $tagline': {
       position: 'fixed',
       transform: 'scale3d(1, 1, 1) translateY(0px)',
-      transition: theme.transitions.create(['transform']),
+      // transition: theme.transitions.create(['transform']),
     },
     '& $brand, $login, $tagline': {
       // position: 'absolute',
@@ -48,6 +54,7 @@ const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} 
   },
   logo: {
     left: '50%',
+    transition: theme.transitions.create(['left', 'transform']),
     zIndex: 4,
   },
   tagline: {
@@ -65,6 +72,9 @@ const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} 
       '& $shrink': {
         transform: 'scale3d(.8, .8, 1) translate3d(0, -4px, 0)',
       },
+      '& $shrinkLogin': {
+        transform: 'scale3d(.8, .8, 1) translate3d(0, -6px, 0)',
+      },
       '& $shrinkLogo': {
         transform: 'scale3d(.7, .7, 1) translate3d(0, -12px, 0)',
       },
@@ -72,18 +82,22 @@ const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} 
         transform: 'scale3d(.86, .86, 1) translate3d(-24px, -6px, 0)',
       },
       '& $brand, $login': {
-        zIndex: 4,
+        // zIndex: 4,
       },
     },
     brand: {},
     login: {},
     shrink: {},
+    shrinkLogin: {},
     shrinkLogo: {},
     shrinkTagline: {},
   },
 
-  [up(1180)]: {
+  [up(1240)]: {
     root: {
+      '& $brand, $login, $tagline': {
+        transition: theme.transitions.create(['left', 'transform']),
+      },
       '& $brand, $login': {
         zIndex: 4,
       },
@@ -114,7 +128,7 @@ class AppBar extends Component {
         <Brand className={classNames(cls.brand, cls.transformOriginLeft, clsShrink)} />
         <Tagline className={classNames(cls.tagline, cls.transformOriginLeft, {[cls.shrinkTagline]: navDocked})} />
         <Logo className={classNames(cls.logo, {[cls.shrinkLogo]: navDocked})} />
-        <LoginButton className={classNames(cls.login, clsShrink)} />
+        <LoginButton className={classNames(cls.login, {[cls.shrinkLogin]: navDocked})} />
       </div>
   	)
   }

@@ -18,8 +18,7 @@ const styles = (theme) => ({
     background: 'rgba(255, 255, 255, 0.07)',
     color: theme.palette.common.lightWhite,
     fontSize: 28,
-    marginBottom: theme.spacing.unit * 2,
-    padding: 64,
+    padding: theme.spacing.unit * 8,
   },
   [theme.breakpoints.up(748)]: {
 

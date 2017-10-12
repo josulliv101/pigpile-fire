@@ -33,8 +33,12 @@ const styles = (theme, appThemes = transformAppThemes(theme), {black} = theme.pa
       transition: theme.transitions.create(['width']),
       width: '100%',
     },
+    '&$withDrawer>$bg': {
+      width: `calc(100% - ${theme.components.drawer.width}px)`,
+    },
   },
   bg: {},
+  withDrawer: {},
   ...appThemes,
   [up(values.md)]: {
     root: {
@@ -84,6 +88,7 @@ function PileBg(props) {
       cls.root,
       {[cls.image]: layout['type-image']},
       {[cls[idThemeDefault]]: !layout['type-image']},
+      {[cls.withDrawer]: props.drawer},
       className
     )}>
      {pile.imageUrl && <img className={classNames(cls.bg)} src={src} />}

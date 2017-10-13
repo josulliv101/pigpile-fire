@@ -1,5 +1,6 @@
 export default {
-  id: 'wave-grey',
+  id: 'themeWaveGrey',
+  label: 'Wave (grey)',
   getTheme: (theme = {}, {common: {white}} = theme.palette) => ({
     backgroundColor: white,
     '&:after': {
@@ -11,4 +12,5 @@ export default {
     },
   }),
   img: 'https://firebasestorage.googleapis.com/v0/b/pigpile-next.appspot.com/o/app%2Fbg%2Fgrey-wave.png?alt=media&token=61428983-274c-4338-b09d-7daa8800e079',
+  userTheme: true,
 }

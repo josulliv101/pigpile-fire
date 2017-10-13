@@ -1,5 +1,6 @@
 export default {
   id: 'image',
+  label: 'Wide Image',
   getTheme: (theme) => ({
     backgroundColor: theme && theme.palette && theme.palette.common && theme.palette.common.black,
     '&:after': {
@@ -10,4 +11,5 @@ export default {
       opacity: 1,
     },
   }),
+  userTheme: true,
 }

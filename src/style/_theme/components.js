@@ -5,7 +5,7 @@ export default {
     fontFamily: 'Bungee, Roboto',
   },
   drawer: {
-    width: 300,
+    width: 500,
   },
   footer: {
     bg: 'linear-gradient(to bottom, rgba(93,100,112,1) 0%,rgba(93,100,112,1) 100%)',

@@ -1,10 +1,12 @@
-import React, {PureComponent} from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import Button from 'material-ui/Button'
+import {Route, Switch} from 'react-router-dom'
 import {withStyles} from 'material-ui/styles'
 import Drawer from 'material-ui/Drawer'
 //
+import PileUpdate from './PileUpdate'
 
 const styles = (theme) => ({
   root: {
@@ -12,9 +14,14 @@ const styles = (theme) => ({
     // color: theme.palette.common.white,
     position: 'relative',
     height: '100%',
-    width: theme.components.drawer.width,
+
     // boxShadow: theme.shadows[4],
     overflow: 'visible',
+    position: 'fixed',
+    width: theme.components.drawer.width,
+  },
+  foo: {
+    width: theme.components.drawer.width,
   },
   drawerPaper: {
     alignItems: 'flex-start',
@@ -30,10 +37,10 @@ const styles = (theme) => ({
   },
 })
 
-class AppDrawer extends PureComponent {
+class AppDrawer extends Component {
 
   render() {
-    const {className, classes: cls} = this.props
+    const {className, classes: cls, ...props} = this.props
     return (
       <Drawer
         {...this.props}
@@ -41,9 +48,13 @@ class AppDrawer extends PureComponent {
         classes={{
           paper: cls.root,
         }}
+        className={cls.foo}
       >
         <div className={cls.drawerPaper}>
-          <Button>layout default</Button>
+          <Switch>
+            <Route path="/login" render={() => null} />
+            <Route path='/:id' render={(ownProps) => <PileUpdate {...ownProps} />} />
+          </Switch>
         </div>
       </Drawer>
     )

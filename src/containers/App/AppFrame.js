@@ -41,7 +41,7 @@ class AppFrame extends Component {
     const {children, classes: cls, ...props} = this.props;
   	return (
     	<div className={classNames(cls.root, {[cls.withDrawer]: props.drawer})}>
-        <AppDrawer open={props.drawer} />
+        <AppDrawer open={props.drawer} {...props} />
         <div className={classNames(cls.bd)}>
           <BgImage {...props} />
           <AppBar {...props} />

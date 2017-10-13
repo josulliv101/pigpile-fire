@@ -79,7 +79,7 @@ class Content extends Component {
         { Item(cls, {label: 'images', value: '1 Image'}) }
         <Divider />
 
-        { Item(cls, {label: 'tags', value: Object.keys(pile.tags).join(', ') }) }
+        { Item(cls, {label: 'tags', value: Object.keys(pile.tags || {}).join(', ') }) }
         <Divider />
       </List>
     )

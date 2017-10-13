@@ -7,6 +7,7 @@ import ListSubheader from 'material-ui/List/ListSubheader';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import {withStyles} from 'material-ui/styles'
 //
+import {Body2, Subheading} from '../Text'
 
 const styles = (theme) => ({
   root: {
@@ -25,7 +26,8 @@ class Theming extends Component {
 
     return (
       <div className={classNames(cls.root, className)}>
-        ... Theming
+        <Subheading gutterBottom heavy>Select a Theme</Subheading>
+        <Body2>Note: In order to use the 'wide-image' theme, your uploaded image must meet be dimensions. If not, the option will be disabled.</Body2>
       </div>
     )
   }

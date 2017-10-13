@@ -9,20 +9,19 @@ import TextField from 'material-ui/TextField'
 import {withStyles} from 'material-ui/styles'
 //
 import {Subheading} from '../Text'
+import Content from './Content'
+import Theming from './Theming'
 
 const styles = (theme) => ({
   root: {
     width: '100%',
-  },
-  bd: {
-    padding: theme.spacing.unit * 2,
   },
   subheading: {
     background: theme.palette.primary[500],
     padding: `${theme.spacing.unit * .75}px ${theme.spacing.unit * 2}px`,
   },
   tabRoot: {
-    minWidth: '33.33%',
+    minWidth: '25%',
   },
   tabsRoot: {
     background: theme.palette.grey[100],
@@ -65,75 +64,10 @@ class PileUpdate extends Component {
           <Tab classes={{root: cls.tabRoot}} label="Content" />
           <Tab classes={{root: cls.tabRoot}} label="Theming" />
           <Tab classes={{root: cls.tabRoot}} label="Advanced" />
+          <Tab classes={{root: cls.tabRoot}} label="Bank" />
         </Tabs>
-        <div className={classNames(cls.bd)}>
-          <TextField
-            id="title"
-            label="Title"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            placeholder="Placeholder"
-            helperText="Keep it short and to the point (example 'Help Joe Fight Cancer')"
-            fullWidth
-            margin="normal"
-            value={pile.title}
-          />
-          <TextField
-            id="organizer"
-            label="Organizer"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            placeholder="Placeholder"
-            helperText="Help text goes here."
-            fullWidth
-            margin="normal"
-            value={pile.organizer}
-          />
-
-          <TextField
-            id="beneficiary"
-            label="Beneficiary"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            multiline
-            rowsMax="4"
-            placeholder="Placeholder"
-            helperText="Help text goes here."
-            fullWidth
-            margin="normal"
-            value={pile.beneficiary}
-          />
-
-          <TextField
-            id="overview"
-            label="Overview"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            placeholder="Placeholder"
-            helperText="Help text goes here."
-            fullWidth
-            margin="normal"
-            value={pile.overview}
-          />
-
-          <TextField
-            id="goal"
-            label="Goal"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            placeholder="Placeholder"
-            helperText="Help text goes here."
-            fullWidth
-            margin="normal"
-            value={pile.goal}
-          />
-
-        </div>
+        {this.state.value === 0 && <Content {...pile} />}
+        {this.state.value === 1 && <Theming {...pile} />}
       </div>
     )
   }

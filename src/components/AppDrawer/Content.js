@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import compose from 'recompose/compose'
@@ -12,6 +13,7 @@ import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-
 import {withStyles} from 'material-ui/styles'
 import Edit from 'material-ui-icons/Edit';
 //
+import PopupEditor from './PopupEditor'
 import {Subheading} from '../Text'
 
 const styles = (theme) => ({
@@ -21,7 +23,7 @@ const styles = (theme) => ({
   btn: {
     backgroundColor: theme.palette.common.faintBlack,
     marginRight: theme.spacing.unit * 2,
-    minWidth: 132,
+    minWidth: 126,
     padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px`,
   },
   item: {
@@ -44,10 +46,23 @@ const styles = (theme) => ({
 
 class Content extends Component {
 
+  state = {
+    anchorEl: null,
+    id: null,
+    open: false,
+    value: null,
+  }
+
+  handleClose = () => this.setState({open: false})
+
+  handleEditor = (id, value) => {
+    this.setState({anchorEl: findDOMNode(this[id]), open: true, id, value})
+  }
+
   render() {
     const {className, classes: cls, ...pile} = this.props
     const {city, state, postal, country} = pile && pile.location || {}
-    return (
+    return [
       <List
         className={classNames(cls.root, className)}
         dense
@@ -55,40 +70,42 @@ class Content extends Component {
       >
         {/*<ListSubheader disableSticky>Basics</ListSubheader>*/}
         <Divider />
-        { Item(cls, {label: 'title', value: pile.title}) }
+        { Item(this, cls, {label: 'title', value: pile.title}) }
         <Divider />
-        { Item(cls, {label: 'goal', value: pile.goal}) }
+        { Item(this, cls, {label: 'goal', value: pile.goal}) }
         <Divider />
-        { Item(cls, {label: 'overview', value: pile.overview}) }
+        { Item(this, cls, {label: 'overview', value: pile.overview}) }
         <Divider />
-        { Item(cls, {label: 'location', value: `${city}, ${state} ${postal}, ${country}`}) }
+        { Item(this, cls, {label: 'location', value: `${city}, ${state} ${postal}, ${country}`}) }
         <Divider />
         {/*<ListSubheader disableSticky>People</ListSubheader><Divider />*/}
         
-        { Item(cls, {label: 'organizer', value: pile.organizer}) }
+        { Item(this, cls, {label: 'organizer', value: pile.organizer}) }
         <Divider />
-        { Item(cls, {label: 'beneficiary', value: pile.beneficiary}) }
-        <Divider />
-
-        { Item(cls, {label: 'story', value: pile.story}) }
+        { Item(this, cls, {label: 'beneficiary', value: pile.beneficiary}) }
         <Divider />
 
-        { Item(cls, {label: 'updates', value: 'No updates added yet.' }) }
+        { Item(this, cls, {label: 'story', value: pile.story}) }
         <Divider />
 
-        { Item(cls, {label: 'images', value: '1 Image'}) }
+        { Item(this, cls, {label: 'updates', value: 'No updates added yet.' }) }
         <Divider />
 
-        { Item(cls, {label: 'tags', value: Object.keys(pile.tags || {}).join(', ') }) }
+        { Item(this, cls, {label: 'images', value: '1 Image'}) }
         <Divider />
-      </List>
-    )
+
+        { Item(this, cls, {label: 'tags', value: Object.keys(pile.tags || {}).join(', ') }) }
+        <Divider />
+
+      </List>,
+      <PopupEditor handleRequestClose={this.handleClose} {...this.state} />
+    ]
   }
 }
 
-function ItemSwitch(cls, props) {
+function ItemSwitch(context, cls, props) {
   return (
-    <ListItem style={{padding: '0 64px 0 0'}} classes={{container: cls.item}} key={props.label}>
+    <ListItem onClick={() => context.handleEditor(props.label, props.value)} ref={node => { context[props.label] = node }} style={{padding: '0 48px 0 0'}} classes={{container: cls.item}} key={props.label}>
       <Subheading align="right" className={cls.btn} heavy>{props.label}</Subheading>
       <Subheading heavy noWrap>Fundraiser is currently {props.value ? 'active' : 'inactive'}.</Subheading>
       <ListItemSecondaryAction>
@@ -101,13 +118,13 @@ function ItemSwitch(cls, props) {
   )
 }
 
-function Item(cls, props) {
+function Item(context, cls, props) {
   return (
-    <ListItem style={{padding: '0 64px 0 0'}} button classes={{container: cls.item}} key={props.label}>
+    <ListItem onClick={() => context.handleEditor(props.label, props.value)} ref={node => { context[props.label] = node }} style={{padding: '0 48px 0 0'}} button classes={{container: cls.item}} key={props.label}>
       <Subheading align="right" className={cls.btn} heavy>{props.label}</Subheading>
       <Subheading heavy noWrap>{props.value}</Subheading>
       <ListItemSecondaryAction className={cls.icon}>
-        <IconButton aria-label="Edit">
+        <IconButton tabIndex="-1">
           <Edit />
         </IconButton>
       </ListItemSecondaryAction>

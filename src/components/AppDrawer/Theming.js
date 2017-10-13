@@ -84,9 +84,6 @@ class Theming extends Component {
                   >
                     {theme.id !== 'image' && <img className={cls.imgDefault} src={pile.imageUrl} />}
                   </CardMedia>
-                  <CardContent>
-                    <Subheading heavy>{theme.label}</Subheading>
-                  </CardContent>
                 </Card>
               </Grid>
             ))

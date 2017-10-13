@@ -19,10 +19,10 @@ const template = ({assets = {}, host = assets.url || '', body = '', css = '', in
     <script>
       window.__initialState = ${initialState}
     </script>
-    <script src="/__/firebase/4.5.0/firebase-app.js" async></script>
-    <script src="/__/firebase/4.5.0/firebase-firestore.js" async></script>
-    <script src="/__/firebase/init.js" async></script>
-    <script src='${host}/assets/client.bundle.js' async></script>
+    <script src="/__/firebase/4.5.0/firebase-app.js" defer></script>
+    <script src="/__/firebase/4.5.0/firebase-firestore.js" defer></script>
+    <script src="/__/firebase/init.js" defer></script>
+    <script src='${host}/assets/client.bundle.js' defer></script>
   </html>
   `;
 };

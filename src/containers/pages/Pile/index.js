@@ -31,7 +31,7 @@ class Pile extends Component {
       <section className={classNames(cls.full)}>
         <main className={classNames(cls.root, className)}>
           <h1>Pile page here. {match.params.id}</h1>
-          <h3>{pile.title}</h3>
+          <h3>{pile.title} (goal is ${pile.goal})</h3>
           <hr/>
           <ul>
             {donations.length ? this.getDonations(donations) : <li>no donations yet</li>}

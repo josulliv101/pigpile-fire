@@ -49,7 +49,7 @@ class PileUpdate extends Component {
   };
 
   render() {
-    const {className, classes: cls, pile = {}} = this.props
+    const {className, classes: cls, idParam, pile = {}} = this.props
     console.log('drawer pileupdate', this.props)
     return (
       <div className={classNames(cls.root, className)}>
@@ -66,8 +66,8 @@ class PileUpdate extends Component {
           <Tab classes={{root: cls.tabRoot}} label="Advanced" />
           <Tab classes={{root: cls.tabRoot}} label="Bank" />
         </Tabs>
-        {this.state.value === 0 && <Content {...pile} />}
-        {this.state.value === 1 && <Theming {...pile} />}
+        {this.state.value === 0 && pile.id && <Content {...pile} idParam={idParam} initialValues={pile} />}
+        {this.state.value === 1 && pile.id && <Theming {...pile} />}
       </div>
     )
   }
@@ -81,6 +81,7 @@ PileUpdate.propTypes = {
 export default compose(
   withStyles(styles),
   connect((state, {match: {params: {id}}}) => ({
+  	idParam: id,
     pile: state.pile[`pile-${id}`],
   })),
 )(PileUpdate)

@@ -32,6 +32,19 @@ function getPileDonations(firebase, id) {
 }
 
 
+const updatePile = (api, id, update = {}) => {
+
+  if (!api || !id) return;
+
+  console.log('updatePile', api, id, update);
+
+  return api
+    .firestore()
+    .collection("piles")
+    .doc(id)
+    .update(update)
+}
+
 const subscribeToPile = ({api, id, onSuccess = noop, onError = noop}) => {
 
   if (!api || !id) return;
@@ -86,4 +99,5 @@ module.exports = {
   subscribeToPile,
   subscribeToPileDonations,
   subscribeToTrendingPiles,
+  updatePile,
 }

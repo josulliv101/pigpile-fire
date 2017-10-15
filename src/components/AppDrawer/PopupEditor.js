@@ -2,13 +2,14 @@ import React, {Component} from 'react'
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-
+import { Field, getFormValues, reduxForm } from 'redux-form'
 import compose from 'recompose/compose'
 import Grid from 'material-ui/Grid';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Popover from 'material-ui/Popover';
 import {withStyles} from 'material-ui/styles'
+import numeral from 'numeral'
 //
 import {Subheading} from '../Text'
 
@@ -26,6 +27,32 @@ const styles = (theme) => ({
       marginRight: theme.spacing.unit * 1,
   		opacity: .7,
   	},
+  },
+
+
+  '@keyframes blink': {
+    '0%': {opacity: .2},
+    '20%': {opacity: 1},
+    '100%': {opacity: .2},
+  },
+
+  dots: {
+    fontSize: 36,
+    '&>span': {
+      animationName: 'blink',
+      animationDuration: '1.0s',
+      animationIterationCount: 'infinite',
+      animationFillMode: 'both',
+      display: 'inline-block',
+      position: 'relative',
+      top: '-.25em',
+    },
+    '&>span:nth-child(2)': {
+      animationDelay: '.2s',
+    },
+    '&>span:nth-child(3)': {
+      animationDelay: '.4s',
+    },
   },
   field: {
     backgroundColor: 'rgba(0,0,0,.04)',
@@ -50,20 +77,46 @@ class PopupEditor extends Component {
     transformOriginHorizontal: 'center',
   };
 
+  componentWillUnmount = () => {
+    console.log('componentWillUnmount', this.props)
+  }
+
   moveCaretAtEnd = (e) => {
     var temp_value = e.target.value
     e.target.value = ''
     e.target.value = temp_value
   }
 
+  _handleKeyPress = (e) => {
+
+    if (e.key === 'Enter') {
+      console.log('_handleKeyPress', e.key, this.props)
+      this.props.handleUpdate(this.props.id)
+    }
+  }
+
   render() {
-    const {anchorEl, className, classes: cls, open, ...data = {}} = this.props
+    const {anchorEl, className, classes: cls, dirty, fieldType = 'text', formErrors, formMeta, formValues, open, persistStatus = {}, ...data = {}} = this.props
     const {
       anchorOriginVertical,
       anchorOriginHorizontal,
       transformOriginVertical,
       transformOriginHorizontal,
     } = this.state;
+
+    const integerFieldProps = {
+      format: value => numeral(value).format('0,0'),
+      normalize: value => value && numeral(value).value(),
+    }
+    const fieldProps = fieldType === 'integer' ? integerFieldProps : {}
+    const Dots = props => (
+      <div className={cls.dots}>
+        <span>.</span>
+        <span>.</span>
+        <span>.</span>
+      </div>
+    )
+    console.log('persistStatus', persistStatus)
     return (
 	    <Popover
 	      open={open}
@@ -80,34 +133,44 @@ class PopupEditor extends Component {
 	      }}
 	    >
 	      
-	      <Subheading heavy>Editing {data.id}</Subheading>
-        <TextField
-          id="edit"
-          // label="Label"
+	      <Subheading heavy>Editing {data.id} {formErrors && formErrors[data.id]}</Subheading>
+        <Field
+          name={data.id}
           className={cls.field}
-          InputLabelProps={{
-            // shrink: true,
-          }}
-          // placeholder="Placeholder"
-          // multiline
-          // rows="8"
-
-          helperText="Full width!"
-          fullWidth
-          margin="none"
-          value={data.value}
-          onFocus={this.moveCaretAtEnd}
-          autoFocus
+          component={InputField}
+          handleKeyPress={this._handleKeyPress}
+          {...fieldProps}
+          // format={value => numeral(value).format('0,0')}
+          // normalize={value => value && numeral(value).value()}
         />
-
 	      <div className={cls.btnGroup}>
 	      	<Button onClick={this.props.handleRequestClose}>Cancel</Button>
-	      	<Button color="primary" raised>Update</Button>
+	      	<Button color="primary" onClick={this.props.handleUpdate.bind(null, data.id)} raised> 
+            {persistStatus.inprocess ? <Dots /> : 'Update'}
+          </Button>
 	      </div>
 	    </Popover>
     )
   }
 }
+
+function InputField(field) {
+	const {className, input, handleKeyPress = f=>f, meta: {error, touched, warning}, ...custom} = field
+
+	return (
+    <TextField
+      id={custom.name}
+      className={className}
+      helperText="Full width!"
+      fullWidth
+      // margin="none"
+      {...input}
+      // onFocus={this.moveCaretAtEnd}
+      onKeyPress={handleKeyPress}
+    />
+	)
+}
+
 
 PopupEditor.propTypes = {
   classes: PropTypes.object.isRequired,

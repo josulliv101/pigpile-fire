@@ -7,6 +7,7 @@ import {reducer as formReducer} from 'redux-form'
 // import {reducer as alertReducer} from './modules/Alert'
 import {reducer as pilesReducer} from './modules/Pile'
 import {reducer as settingsReducer} from './modules/Settings'
+import {reducer as persistReducer} from './modules/Persist'
 
 export default function configureStore(initialState, ...enhancerAddOns) {
 
@@ -17,6 +18,7 @@ export default function configureStore(initialState, ...enhancerAddOns) {
 
   const reducer = combineReducers({
     form: formReducer,
+    persist: persistReducer,
     pile: pilesReducer,
     settings: settingsReducer,
   })

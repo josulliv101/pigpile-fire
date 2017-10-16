@@ -50,11 +50,21 @@ const styles = (theme) => ({
     minWidth: 126,
     padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px`,
   },
+  form: {
+    opacity: 1,
+    transition: theme.transitions.create(['opacity']),
+    '&$withPopup': {
+      opacity: .5,
+    },
+  },
   item: {
     transition: theme.transitions.create(['background-color']),
     '&$success': {
       backgroundColor: '#dbf5cd',
       color: '#319133',
+      '&>li:hover': {
+        backgroundColor: '#dbf5cd',
+      },
       '& $icon': {
         opacity: 1,
       },
@@ -75,6 +85,7 @@ const styles = (theme) => ({
   [theme.breakpoints.up(948)]: {
     root: {},
   },
+  withPopup: {},
 })
 
 class Content extends Component {
@@ -97,24 +108,39 @@ class Content extends Component {
     console.log('handleClose')
     // Popup cancelled, reset value
     this.props.reset()
+    this.props.history.push({state: null})
     this.setState({open: false})
-    
+
   }
 
-  handleEditor = (id, value, type) => {
-    this.setState({anchorEl: findDOMNode(this[id]), open: true, id, fieldType: type, value})
+  handleEditor = (id, value, type, multiline = false) => {
+    this.props.history.push({state: id})
+    this.setState({
+      anchorEl: findDOMNode(this[id]), 
+      open: true, 
+      id, 
+      fieldType: type, 
+      multiline, 
+      value
+    })
   }
 
   handlePersistData = (id) => {
 
-    const {persistStatus = {}} = this.props
+    const {formValues, persistStatus = {}} = this.props
     console.log('handlePersistData', id)
 
     // Ignore multiple update btn clicks
     if (persistStatus.inprocess === true) return
 
+    const update = id !== 'location' ? formValues[id] : {
+      city: formValues.city,
+      state: formValues.state,
+      country: formValues.country,
+      postal: formValues.postal,
+    }
     // Pile id is first param
-    this.props.persistUpdate(this.props.id, {[id]: this.props.formValues[id]})
+    this.props.persistUpdate(this.props.id, {[id]: update})
 
     // Close popup
     // this.setState({open: false})
@@ -125,11 +151,12 @@ class Content extends Component {
     const {city, state, postal, country} = pile && pile.location || {}
     console.log('form', this.props)
     return [
-    	<form onSubmit={ this.props.handleSubmit } autoComplete="off">
+    	<form className={classNames(cls.form, {[cls.withPopup]: this.state.open})} onSubmit={ this.props.handleSubmit } autoComplete="off">
         <List
           className={classNames(cls.root, className)}
           dense
           disablePadding
+          key="fields"
         >
           {<ListSubheader disableSticky heavy>Select a field to edit it.</ListSubheader>}
           <Divider />
@@ -137,7 +164,7 @@ class Content extends Component {
           <Divider />
           { Item(this, cls, {type: 'integer', label: 'goal', value: pile.goal, success: this.state.id === 'goal' && persistStatus.successUi === true}) }
           <Divider />
-          { Item(this, cls, {label: 'overview', value: pile.overview}) }
+          { Item(this, cls, {multiline: true, label: 'overview', value: pile.overview}) }
           <Divider />
           { Item(this, cls, {label: 'location', value: `${city}, ${state} ${postal}, ${country}`}) }
           <Divider />
@@ -165,6 +192,7 @@ class Content extends Component {
           this.state.open && 
           <PopupEditor 
             dirty={dirty} 
+            key="popup-editor"
             handleUpdate={this.handlePersistData}
             formErrors={formErrors} 
             formMeta={formMeta} 
@@ -181,7 +209,7 @@ class Content extends Component {
 
 function ItemSwitch(context, cls, props) {
   return (
-    <ListItem onClick={() => context.handleEditor(props.label, props.value)} ref={node => { context[props.label] = node }} style={{padding: '0 48px 0 0'}} classes={{container: cls.item}} key={props.label}>
+    <ListItem onClick={() => context.handleEditor(props.label, props.value, props.type, props.multiline)} ref={node => { context[props.label] = node }} style={{padding: '0 48px 0 0'}} classes={{container: cls.item}} key={props.label}>
       <Subheading align="right" className={cls.btn} heavy>{props.label}</Subheading>
       <Subheading heavy noWrap>Fundraiser is currently {props.value ? 'active' : 'inactive'}.</Subheading>
       <ListItemSecondaryAction>
@@ -196,7 +224,7 @@ function ItemSwitch(context, cls, props) {
 
 function Item(context, cls, props) {
   return (
-    <ListItem onClick={() => context.handleEditor(props.label, props.value, props.type)} ref={node => { context[props.label] = node }} style={{padding: '0 48px 0 0'}} button classes={{container: classNames(cls.item, {[cls.success]: props.success})}} key={props.label}>
+    <ListItem onClick={() => context.handleEditor(props.label, props.value, props.type, props.multiline)} ref={node => { context[props.label] = node }} style={{padding: '0 48px 0 0'}} button classes={{container: classNames(cls.item, {[cls.success]: props.success})}} key={props.label}>
       <Subheading align="right" className={classNames(cls.btn)} heavy>{props.label}</Subheading>
       <Subheading heavy noWrap>{props.value}</Subheading>
       <ListItemSecondaryAction className={cls.icon}>

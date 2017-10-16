@@ -1,3 +1,13 @@
+function getAllTags({api}) {
+
+  if (!api) return
+
+  return api
+    .firestore()
+    .collection("meta-tags")
+    .get()
+}
+
 function getTrending(firebase) {
 
   if (!firebase) return
@@ -93,6 +103,7 @@ const subscribeToTrendingPiles = ({api, onSuccess = noop, onError = noop}) => {
 function noop () {}
 
 module.exports = {
+  getAllTags,
   getPile,
   getPileDonations,
   getTrending,

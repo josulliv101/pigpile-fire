@@ -11,6 +11,7 @@ import numeral from 'numeral'
 import {Subheading} from '../Text'
 import InputField from '../../forms/InputField'
 import LocationField from '../../forms/Location'
+import TagsField from '../../forms/Tags'
 import ButtonWithSpinner from '../../forms/ButtonWithSpinner'
 
 const styles = (theme) => ({
@@ -41,6 +42,7 @@ const styles = (theme) => ({
 
 const fieldToCmpMap = {
   location: LocationField,
+  tags: TagsField,
 }
 
 class PopupEditor extends Component {

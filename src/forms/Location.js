@@ -55,7 +55,7 @@ class Location extends Component {
 		      	className={classNames(cls.field, cls.city)}
 		      	component={InputField} 
 		      	label="City"
-		      	margin="normal"
+		      	margin="none"
 		      	fullWidth
 		      />
 		      <Field 
@@ -65,7 +65,7 @@ class Location extends Component {
 		      	label="State"
 		      	select
 		        onChange={() => console.log('select')}
-		        margin="normal"
+		        margin="none"
 		        fullWidth
 		      >
 			      {['Al', 'ID', 'MA', 'NY'].map(option => (
@@ -79,7 +79,7 @@ class Location extends Component {
 		      	className={classNames(cls.field, cls.zip)}
 		      	component={InputField} 
 		      	label="Zip"
-		      	margin="normal"
+		      	margin="none"
 		      	fullWidth
 		      />
 		      <Field 
@@ -89,7 +89,7 @@ class Location extends Component {
 		      	label="Country"
 		      	select
 		        onChange={() => console.log('select')}
-		        margin="normal"
+		        margin="none"
 		        fullWidth
 		      >
 			      {['United States', 'Canada', 'Mexico'].map(option => (

@@ -53,6 +53,7 @@ class AppDrawer extends Component {
         <div className={cls.drawerPaper}>
           <Switch>
             <Route path="/login" render={() => null} />
+            <Route path="/" exact={true} render={() => null} />
             <Route path='/:id' render={(ownProps) => <PileUpdate {...ownProps} />} />
           </Switch>
         </div>

@@ -15,6 +15,7 @@ import {withStyles} from 'material-ui/styles'
 import Edit from 'material-ui-icons/Edit';
 import Check from 'material-ui-icons/CheckCircle';
 //
+// import withGetAllTags from '../../hocs/withGetAllTags'
 import EditModal from '../../icons/EditModal'
 import {persistUpdate} from '../../redux/modules/Persist'
 import PopupEditor from './PopupEditor'
@@ -184,7 +185,7 @@ class Content extends Component {
           { Item(this, cls, {label: 'images', value: '1 Image', modal: true}) }
           <Divider />
 
-          { Item(this, cls, {label: 'tags', value: Object.keys(pile.tags || {}).join(', ') }) }
+          { Item(this, cls, {label: 'tags', value: Object.keys(pile.tags || {}).filter(key=>pile.tags[key] === true).join(', ') }) }
           <Divider />
 
         </List>
@@ -250,4 +251,5 @@ export default compose(
     persistStatus: state.persist[idParam] || {},
   }), {persistUpdate}),
   reduxForm({form: FORM_NAME, onSubmit: noop => noop, enableReinitialize: true, validate}),
+  // withGetAllTags(),
 )(Content)

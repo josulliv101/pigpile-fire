@@ -21,7 +21,7 @@ const styles = (theme) => ({
 function Tagline(props) {
   const {classes: cls, className} = props
   return (
-    <Button to="/" className={classNames(cls.root, className)} dense heavy to="/" >
+    <Button to="/" className={classNames(cls.root, className)} dense to="/" >
       / free online fundraising
     </Button>
   )

@@ -142,7 +142,7 @@ AppBar.propTypes = {
 };
 
 AppBar.defaultProps = {
-  // navDocked: true,
+  navDocked: false,
 };
 
 export default withStyles(styles)(AppBar)

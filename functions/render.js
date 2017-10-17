@@ -18,6 +18,7 @@ module.exports = (url, res, initialState) => {
     sheets,
     url,
   }));
+  console.log('APP html', html)
   const templatedHtml = template({
     assets: functions.config().assets,
     body: html,

@@ -8,10 +8,11 @@ export default (key = 'tagsAll') => withGet({
   onError,
   onSuccess,
   mapStateToProps: (state) => ({
-    [key]: state.settings && state.settings.tagsAll,
+    [key]: state.settings && state.settings.tagsAll || [],
+    key: 'foo',
   }),
   getting: getAllTags,
-
+  
 })
 
 // Avoid arrow-function here to avoid auto binding for 'this'

@@ -19,6 +19,7 @@ const styles = (theme) => ({
     overflow: 'visible',
     position: 'fixed',
     width: theme.components.drawer.width,
+    
   },
   foo: {
     width: theme.components.drawer.width,
@@ -40,10 +41,10 @@ const styles = (theme) => ({
 class AppDrawer extends Component {
 
   render() {
-    const {className, classes: cls, ...props} = this.props
+    const {className, classes: cls, dispatch, direction, drawer, handleStickyNavChange, history, location, match, navDocked, staticContext, stickyEnabled, ...props} = this.props
     return (
       <Drawer
-        {...this.props}
+        {...props}
         type="persistent"
         classes={{
           paper: cls.root,

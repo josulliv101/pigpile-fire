@@ -26,7 +26,7 @@ class App extends Component {
     const {classes: cls, ...props} = this.props;
     console.log('App props', this.props)
   	return (
-    	<AppFrame {...props}>
+      <AppFrame {...props}>
         <AppContent />
       </AppFrame>
   	)
@@ -38,11 +38,15 @@ App.propTypes = {
   className: PropTypes.string,
 };
 
-export default compose(
+let hocs = [
   withStyles(styles),
   withoutServerStyle(),
-  withStickyNav(),
   withScrollBehavior(),
-)(App)
+  // material-ui withWidth HOC (used by withStickyNav) causing warnings, not needed on server.
+  // withStickyNav(),
+]
+// hocs = process.env.BUILD_TARGET === 'client' ? hocs : hocs.slice(-1)
+
+export default compose(...hocs)(App)
 
 

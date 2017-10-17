@@ -6,6 +6,7 @@ import {Route, Switch} from 'react-router-dom'
 //
 import HeroHome from './HeroHome'
 import HeroPile from './HeroPile'
+import PileHeroImage from './PileHeroImage'
 
 class Hero extends Component {
   render() {
@@ -13,7 +14,7 @@ class Hero extends Component {
       <Switch>
         <Route path="/login" render={() => null} />
         <Route path="/" exact render={() => <HeroHome />} />
-        <Route path='/:id' render={() => <HeroPile />} />
+        <Route path='/:id' render={({match: {params: {id}}}) => <HeroPile pileId={id} />} />
       </Switch>
   	)
   }

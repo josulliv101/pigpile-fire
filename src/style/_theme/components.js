@@ -12,6 +12,7 @@ export default {
   },
   hero: {
     height: 600,
+    paddingTop: 80,
     img: {
       hp: 'https://firebasestorage.googleapis.com/v0/b/pigpile-next.appspot.com/o/app%2Fbg%2Flandscape.png?alt=media&token=18711e2d-2851-40f1-9f66-e4def71702f1',
     },

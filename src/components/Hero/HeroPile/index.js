@@ -13,7 +13,6 @@ import Stats from './Stats'
 
 const styles = (theme, {unit} = theme.spacing, {up, values} = theme.breakpoints) => ({
   root: {
-  	// background: theme.palette.common.lightWhite,
     height: '100vh',
     margin: '0 auto',
     paddingTop: theme.components.hero.paddingTop,
@@ -31,7 +30,8 @@ const styles = (theme, {unit} = theme.spacing, {up, values} = theme.breakpoints)
 class HeroPile extends PureComponent {
 
   render() {
-    const {classes: cls, className, pile: {goal, imageUrl, layout = {}, title} = {}} = this.props;
+    const {classes: cls, className, pile: {goal, imageUrl, layout = {}, title} = {}, themePreview} = this.props;
+    const currentThemeId = themePreview || layout.theme
   	return (
   		<div className={classNames(cls.root, className)}>
 	      <Grid container spacing={24}>
@@ -39,7 +39,7 @@ class HeroPile extends PureComponent {
 	        	<Title {...layout}>{title}</Title>
 	        </Grid>
 	        <Grid item xs={8}>
-	 					<Media imageUrl={imageUrl} />
+	 					{currentThemeId !== 'layoutImage' && <Media imageUrl={imageUrl} />}
 	        </Grid>
 	        <Grid item xs={4}>
 	        	<DonateButton to="/" />
@@ -60,5 +60,6 @@ export default compose(
 	withStyles(styles),
 	connect( (state, ownProps) => ({
   	pile: state.pile && state.pile[`pile-${ownProps.pileId}`],
+  	themePreview: state.settings && state.settings.themePreview,
   })),
 )(HeroPile)

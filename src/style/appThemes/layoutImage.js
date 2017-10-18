@@ -1,5 +1,5 @@
 export default {
-  id: 'image',
+  id: 'layoutImage',
   label: 'Wide Image',
   getTheme: (theme) => ({
     backgroundColor: theme && theme.palette && theme.palette.common && theme.palette.common.black,

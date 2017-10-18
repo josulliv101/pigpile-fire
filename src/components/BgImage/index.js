@@ -65,29 +65,35 @@ class BgImage extends Component {
 function HomeBg(props) {
   const {classes: cls, className} = props;
   return (
-    <div className={classNames(cls.root, cls.hp, className)}>
-     <img className={classNames(cls.bg)} src={appThemes.hp.img} />
+    <div className={classNames(cls.root, cls.pageHome, className)}>
+     <img className={classNames(cls.bg)} src={appThemes.pageHome.img} />
     </div>
   )
 }
 
 function PileBg(props) {
-  const {classes: cls, className, pile = {}, layout = pile.layout || {}, theme} = props;
+  const {classes: cls, className, pile = {}, layout = pile.layout || {}, theme, themePreview} = props;
   console.log('PileBg', layout, props)
-  const idThemeDefault = theme.layout.appTheme.default
+
+
+  const currentThemeId = themePreview || layout.theme || theme.layout.appTheme.default
+  const isBgSelf = currentThemeId === 'themeSelfAsBg' || currentThemeId === 'layoutImage'
   // If image layout, the pile should have an imageUrl
-  let src = layout['type-image'] && pile.imageUrl;
+  let src = isBgSelf && pile.imageUrl;
+
+  console.log('currentThemeId', src, currentThemeId)
 
   // Else use thw default appTheme image
-  if (!src) {
-    src = appThemes[idThemeDefault].img
+  if (!src && appThemes[currentThemeId].img) {
+    src = appThemes[currentThemeId].img
   }
 
   return (
     <div className={classNames(
       cls.root,
       {[cls.image]: layout['type-image']},
-      {[cls[idThemeDefault]]: !layout['type-image']},
+      cls[currentThemeId],
+      // {[cls[idThemeDefault]]: !layout['type-image']},
       {[cls.withDrawer]: props.drawer},
       className
     )}>
@@ -99,6 +105,7 @@ function PileBg(props) {
 
 PileBg = connect((state, {match: {params: {id}}}) => ({
   pile: state.pile[`pile-${id}`],
+  themePreview: state.settings && state.settings.themePreview,
 }))(PileBg)
 
 BgImage.propTypes = {

@@ -1,5 +1,5 @@
 export default {
-  id: 'hp',
+  id: 'pageHome',
   label: 'Pigpile Farm',
   getTheme: (theme) => ({
     backgroundColor: theme && theme.palette && theme.palette.common && theme.palette.common.black,

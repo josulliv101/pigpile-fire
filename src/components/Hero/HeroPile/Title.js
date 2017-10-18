@@ -5,13 +5,13 @@ import { withStyles } from 'material-ui/styles'
 //
 import {Headline} from '../../Text'
 
-const styles = (theme, {unit} = theme.spacing, {black, lightBlack, lightWhite, transparent, white} = theme.palette.common) => ({
+const styles = (theme, {unit} = theme.spacing, {darkBlack, lightBlack, lightWhite, transparent, white} = theme.palette.common) => ({
   root: {
     background: transparent,
     color: white,
     display: 'inline-block', // If bg present, only go as wide as text length, not full width.
-    fontSize: 28,
-    lineHeight: '40px',
+    fontSize: 24,
+    lineHeight: '36px',
     marginBottom: -unit,
     padding: 0,
   },
@@ -29,14 +29,14 @@ const styles = (theme, {unit} = theme.spacing, {black, lightBlack, lightWhite, t
 
   // Dark text, no bg
   textStyle3: {
-		color: black,
+		color: lightBlack,
   },
 
   // Dark text on light bg
   textStyle4: {
   	background: lightWhite,
-		color: black,
-		padding: `0 ${unit}px`,
+	color: lightBlack,
+	padding: `0 ${unit}px`,
   },
   
 })

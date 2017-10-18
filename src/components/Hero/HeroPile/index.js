@@ -6,6 +6,7 @@ import compose from 'recompose/compose'
 import Grid from 'material-ui/Grid'
 import { withStyles } from 'material-ui/styles'
 //
+import * as appThemes from '../../../style/appThemes/'
 import Title from './Title'
 import DonateButton from './DonateButton'
 import Media from './Media'
@@ -32,11 +33,12 @@ class HeroPile extends PureComponent {
   render() {
     const {classes: cls, className, pile: {goal, imageUrl, layout = {}, title} = {}, themePreview} = this.props;
     const currentThemeId = themePreview || layout.theme
+    const {textStyle} = appThemes[currentThemeId] || {}
   	return (
   		<div className={classNames(cls.root, className)}>
 	      <Grid container spacing={24}>
 	      	<Grid item xs={12}>
-	        	<Title {...layout}>{title}</Title>
+	        	<Title {...layout} {...textStyle}>{title}</Title>
 	        </Grid>
 	        <Grid item xs={8}>
 	 					{currentThemeId !== 'layoutImage' && <Media imageUrl={imageUrl} />}

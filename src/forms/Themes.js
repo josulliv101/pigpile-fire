@@ -81,8 +81,8 @@ class ThemeField extends Component {
     if (item.isTheme) this.props.setting('themePreview', item.id)
   }
 	
-	renderListItem = (item, {inset = false} = {}) => (
-  	<ListItem key={`theme-cat-${item.id}`} button divider key={item.id} onClick={this.handleChange.bind(this, item)}>
+	renderListItem = (item, {dense = false, inset = false} = {}) => (
+  	<ListItem dense={dense} key={`theme-cat-${item.id}`} button divider key={item.id} onClick={this.handleChange.bind(this, item)}>
       <ListItemText primary={item.label} inset={inset} />
       {
         !item.themes && this.props.input.value === item.id && 
@@ -108,12 +108,13 @@ class ThemeField extends Component {
     	console.log('child themes', item.themes)
     	// Grab children items too
     	return item.themes && this.state[item.id]
-    		? sum.concat(<div style={{display: 'flex', justifyContent: 'space-between'}}>{item.themes.map(child => this.renderListItem(child, {inset: false}))}</div>)
+    		? sum.concat(<div style={{}}>{item.themes.map(child => this.renderListItem(child, {dense: true, inset: false}))}</div>)
     		: sum
+    		// display: 'flex', justifyContent: 'space-between'
     }, []) 
 
     return (
-      <List dense {...props}>
+      <List {...props}>
         {listItems}
       </List>
     )    

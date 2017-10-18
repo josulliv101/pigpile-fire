@@ -63,13 +63,11 @@ class PileUpdate extends Component {
           textColor="primary"
         >
           <Tab classes={{root: cls.tabRoot}} label="Content" />
-          <Tab classes={{root: cls.tabRoot}} label="Theming" />
           <Tab classes={{root: cls.tabRoot}} label="Theme" />
           <Tab classes={{root: cls.tabRoot}} label="Bank" />
         </Tabs>
         {this.state.value === 0 && pile.id && <Content {...pile} history={this.props.history} idParam={idParam} initialValues={{...pile, ...pile.location}} />}
-        {this.state.value === 1 && pile.id && <Theming {...pile} />}
-        {this.state.value === 2 && pile.id && <Theme {...pile} history={this.props.history}  idParam={idParam} initialValues={{...pile, ...pile.location}} />}
+        {this.state.value === 1 && pile.id && <Theme {...pile} history={this.props.history}  idParam={idParam} initialValues={{...pile, ...pile.location}} />}
       </div>
     )
   }

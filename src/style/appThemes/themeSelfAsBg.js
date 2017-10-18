@@ -4,7 +4,7 @@ export default {
   getTheme: (theme = {}, {common: {white}} = theme.palette) => ({
     backgroundColor: white,
     '&:after': {
-      backgroundImage: 'linear-gradient(180deg,hsla(0,0%,48%,.7),rgba(255,255,255,.24))',
+      backgroundImage: 'linear-gradient(180deg,hsla(0,0%,24%,.9),rgba(255,255,255,.24))',
       opacity: .84,
     },
     '&>$bg': {

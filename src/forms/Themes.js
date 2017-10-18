@@ -8,6 +8,8 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import {withStyles} from 'material-ui/styles'
 import Check from 'material-ui-icons/CheckCircle';
+import ExpandMore from 'material-ui-icons/ExpandMore';
+import ExpandLess from 'material-ui-icons/ExpandLess';
 //
 // import InputField from './InputField'
 import * as themes from '../style/appThemes'
@@ -47,35 +49,72 @@ class Themes extends Component {
   }
 }
 
+
+const themeCategories = [
+	{id: 'pageHome', isTheme: true, label: 'Pigpile Farm Landscape'},
+	{id: 'wave', isTheme: false, label: 'Wave Theme', themes: [
+		{id: 'themeWaveGrey', isTheme: true, label: 'Grey'},
+		{id: 'themeWaveBlue', isTheme: true, label: 'Blue'},
+		{id: 'themeWaveGreyLite', isTheme: true, label: 'Light Grey'},
+		{id: 'themeWavePink', isTheme: true, label: 'Pink'},
+	]},
+	{id: 'themeSelfAsBg', isTheme: true, label: 'Use main image as background'},
+	{id: 'layoutImage', isTheme: true, label: 'Panoramic Theme'},
+]
+
 class ThemeField extends Component {
 
-  handleChange = (id) => {
+	// Holds toggle value for theme categories
+	state = {}
+
+  handleChange = (item) => {
     const {input} = this.props
-    console.log(id)
-    input.onChange(id);
+    console.log(item)
+
+    // Toggle visibility state
+    if (!item.isTheme) this.setState({[item.id]: !this.state[item.id]})
+
+    // Controls show/hide config options
+    if (item.isTheme) input.onChange(item.id);
 
     // Make available to all cmps that need to know
-    this.props.setting('themePreview', id)
+    if (item.isTheme) this.props.setting('themePreview', item.id)
   }
+	
+	renderListItem = (item, {inset = false} = {}) => (
+  	<ListItem key={`theme-cat-${item.id}`} button divider key={item.id} onClick={this.handleChange.bind(this, item)}>
+      <ListItemText primary={item.label} inset={inset} />
+      {
+        !item.themes && this.props.input.value === item.id && 
+        <ListItemIcon>
+          <Check style={{marginRight: 0}} />
+        </ListItemIcon>
+      }
+      {
+        item.themes && 
+        <ListItemIcon>
+          {!this.state[item.id] ? <ExpandMore style={{marginRight: 0}} /> : <ExpandLess style={{marginRight: 0}} />}
+        </ListItemIcon>
+      }
+  	</ListItem>
+	)
 
   render() {
     const {input, setting, themes = [], ...props} = this.props
     console.log('ThemeField', themes, props, input)
+
+    const listItems = themeCategories.reduce((sum = [], item) => {
+    	sum.push(this.renderListItem(item))
+    	console.log('child themes', item.themes)
+    	// Grab children items too
+    	return item.themes && this.state[item.id]
+    		? sum.concat(<div style={{display: 'flex', justifyContent: 'space-between'}}>{item.themes.map(child => this.renderListItem(child, {inset: false}))}</div>)
+    		: sum
+    }, []) 
+
     return (
-      <List {...props}>
-        {
-          Object.keys(themes).map(key => (
-            <ListItem button divider key={key} onClick={this.handleChange.bind(this, key)}>
-              <ListItemText primary={themes[key].label} />
-              {
-                input.value === key && 
-                <ListItemIcon>
-                  <Check style={{marginRight: 0}} />
-                </ListItemIcon>
-              }
-            </ListItem>
-          ))        
-        }
+      <List dense {...props}>
+        {listItems}
       </List>
     )    
   }

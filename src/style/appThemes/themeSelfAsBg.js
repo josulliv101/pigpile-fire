@@ -4,11 +4,11 @@ export default {
   getTheme: (theme = {}, {common: {white}} = theme.palette) => ({
     backgroundColor: white,
     '&:after': {
-      backgroundImage: 'linear-gradient(180deg,hsla(0,0%,24%,.9),rgba(255,255,255,.24))',
-      opacity: .84,
+      backgroundImage: 'linear-gradient(180deg, rgba(77,77,77,0.6) 0%, rgba(255,255,255,0) 20%, rgba(255,255,255,0) 100%)',
+      opacity: .94,
     },
     '&>$bg': {
-      opacity: .7,
+      opacity: .6,
     },
   }),
   textStyle: {

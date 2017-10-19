@@ -12,6 +12,7 @@ import Check from 'material-ui-icons/CheckCircle';
 import CheckSmall from 'material-ui-icons/Check';
 import CheckBox from 'material-ui-icons/RadioButtonChecked';
 import CheckBoxOutline from 'material-ui-icons/RadioButtonUnchecked';
+import Collapse from 'material-ui/transitions/Collapse'
 //
 // import InputField from './InputField'
 import * as themes from '../style/appThemes'
@@ -60,7 +61,19 @@ const themeCategories = [
 		{id: 'themeWaveGreyLite', isTheme: true, label: 'Light Grey', parentId: 'wave', sampleColor: '#DDD'},
 		{id: 'themeWavePink', isTheme: true, label: 'Pink', parentId: 'wave', sampleColor: 'pink'},
 	]},
-	{id: 'themeSelfAsBg', isTheme: true, label: 'Use main image as background', topLevel: true},
+	{
+		id: 'self', 
+		// isTheme: true, 
+		label: 'Use main image as background', 
+		topLevel: true,
+		themes: [
+			{id: 'themeSelfAsBg', isTheme: true, label: 'Light', parentId: 'self', sampleColor: '#ccc'},
+			{id: 'themeSelfAsBgDark', isTheme: true, label: 'Dark', parentId: 'self', sampleColor: '#666'},
+			{id: 'themeSelfAsBgBlue', isTheme: true, label: 'Blue', parentId: 'self', sampleColor: '#1a6fc3'},
+			{id: 'themeSelfAsBgGreen', isTheme: true, label: 'Green', parentId: 'self', sampleColor: 'green'},
+			{id: 'themeSelfAsBgRed', isTheme: true, label: 'Red', parentId: 'self', sampleColor: 'red'},
+		],
+	},
 	{
 		id: 'layoutImage', 
 		isTheme: true, 
@@ -151,12 +164,22 @@ class ThemeField extends Component {
     	sum.push(this.renderListItem(item))
     	console.log('child themes', item.themes)
     	// Grab children items too
-    	sum = item.themes && this.state.activeCategory == item.id
-    		? sum.concat(<div style={{}}>{item.themes.map(child => this.renderListItem(child, { categoryId: item.id, dense: true, inset: false}))}</div>)
+    	sum = item.themes 
+    		? sum.concat(
+    			<div style={{}}>
+    				<Collapse in={this.state.activeCategory === item.id} transitionDuration="auto" >
+    					{item.themes.map(child => this.renderListItem(child, { categoryId: item.id, dense: true, inset: false}))}
+    				</Collapse>
+    			</div>
+    		)
     		: sum
 
-    	sum = item.config && this.state.activeCategory == item.id
-    		? sum.concat(<div key="123">{item.config}</div>)
+    	sum = item.config
+    		? sum.concat(
+	    			<Collapse in={this.state.activeCategory == item.id} transitionDuration="auto" >
+	    				{item.config}
+	    			</Collapse>
+    			)
     		: sum
     		// display: 'flex', justifyContent: 'space-between'
 

@@ -77,7 +77,7 @@ function PileBg(props) {
 
 
   const currentThemeId = themePreview || layout.theme || theme.layout.appTheme.default
-  const isBgSelf = currentThemeId === 'themeSelfAsBg' || currentThemeId === 'layoutImage'
+  const isBgSelf = currentThemeId.startsWith('themeSelfAsBg') || currentThemeId === 'layoutImage'
   // If image layout, the pile should have an imageUrl
   let src = isBgSelf && pile.imageUrl;
 

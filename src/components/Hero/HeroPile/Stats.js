@@ -6,7 +6,7 @@ import Paper from 'material-ui/Paper'
 import {LinearProgress} from 'material-ui/Progress'
 import Text from 'material-ui/Typography'
 import numeral from 'numeral'
-import CountUp from 'react-countup'
+// import CountUp from 'react-countup'
 //
 import Pigtail from '../../../icons/Pigtail'
 
@@ -105,30 +105,13 @@ class Stats extends PureComponent {
           !justStats &&
           <div className={cls.bar}>
             {
-              this.state.countup ?
-              <CountUp
-                className={classNames(cls.countup)}
-                start={0}
-                end={37560}
-                duration={1.8}
-                // useEasing={true}
-                // useGrouping={true}
-                // separator=" "
-                // decimals={4}
-                // decimal=","
-                // prefix="EUR "
-                // suffix=" left"
-                // onComplete={onComplete}
-                // onStart={onStart}
-                onComplete={() => this.setState({countupDone: true})}
-                formattingFn={n => numeral(n).format('$0,0')}
-              /> : <div className={cls.logo}><Pigtail /></div>
+              <div className={classNames(cls.countup)}>{numeral(22005).format('$0,0')}</div>
             }
 
             <LinearProgress classes={{bar: cls.barProgress, determinateBar1: cls.determinateBar1}} color="primary" mode="determinate" value={this.state.progress} />
             <div className={classNames(cls.raisedBar)}>
               <Text type="subheading" color="inherit">{goal} MINIMUM GOAL </Text>
-              <Text className={classNames(cls.raisedMin, {[cls.show]: this.state.countupDone})} type="subheading" color="inherit">35% RAISED</Text>
+              <Text className={classNames(cls.raisedMin, {[cls.show]: true})} type="subheading" color="inherit">35% RAISED</Text>
             </div>
 
 

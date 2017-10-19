@@ -31,17 +31,21 @@ const styles = (theme) => ({
 
 class Themes extends Component {
 
-	componentWillUnmount = () => this.props.setting('themePreview', null)
-
+	componentWillUnmount = () => {
+		this.props.setting('themePreview', null)
+		this.props.setting('textStylePreview', null)
+		this.props.setting('textPositionPreview', null)
+	}
 	handleClick = (id) => {
 		console.log('id', id, this.props)
 	}
 
   render() {
-  	const {classes: cls, className, setting} = this.props;
+  	const {change, classes: cls, className, setting} = this.props;
     return (
 	    <Field 
       	name="layout.theme" 
+      	change={change}
       	className={classNames(cls.root)}
       	component={ThemeField} 
       	setting={setting}
@@ -79,12 +83,8 @@ const themeCategories = [
 		isTheme: true, 
 		label: 'Panoramic Theme',
 		topLevel: true,
-		config: [
-			<Button key="1" dense>style 1</Button>,
-			<Button key="2" dense>style 2</Button>,
-			<Button key="3" dense>style 3</Button>,
-			<Button key="4" dense>style 4</Button>
-		]
+		textStyle: true,
+		textPosition: true,
 	},
 ]
 
@@ -95,7 +95,19 @@ class ThemeField extends Component {
 		activeCategory: null,
 	}
 
-  handleChange = (item, categoryId) => {
+	handleTextStyleChange = (styleId) => {
+		console.log(styleId)
+		// if (item.isTheme) input.onChange(item.id);
+		this.props.setting('textStylePreview', styleId)
+	}
+
+	handleTextPositionChange = (n) => {
+		console.log(n)
+		// if (item.isTheme) input.onChange(item.id);
+		this.props.setting('textPositionPreview', n)
+	}
+
+  handleThemeChange = (item, categoryId) => {
     const {input} = this.props
     console.log(item)
 
@@ -112,7 +124,7 @@ class ThemeField extends Component {
   }
 	
 	renderListItem = (item, {categoryId, dense = false, inset = false} = {}) => (
-  	<ListItem dense={dense} key={`theme-cat-${item.id}`} button divider key={item.id} onClick={this.handleChange.bind(this, item, categoryId)}>
+  	<ListItem dense={dense} key={`theme-cat-${item.id}`} button divider key={item.id} onClick={this.handleThemeChange.bind(this, item, categoryId)}>
       {
       	item.sampleColor && <Button raised style={{minWidth: 24, minHeight: 24, padding: 0,background: item.sampleColor, marginRight: 0, height: 24, width: 24, border: '2px #fff solid'}}> </Button>
       }
@@ -152,7 +164,7 @@ class ThemeField extends Component {
 		if (category && category.themes && !this.categoryHasActiveTheme(active, category.themes)) {
 			// this.props.setting('themePreview', category.themes[0].id)
 
-			this.handleChange(category.themes[0], category.id)
+			this.handleThemeChange(category.themes[0], category.id)
 		}
 	}
 
@@ -174,14 +186,21 @@ class ThemeField extends Component {
     		)
     		: sum
 
-    	sum = item.config
+    	sum = item.textStyle === true 
     		? sum.concat(
 	    			<Collapse in={this.state.activeCategory == item.id} transitionDuration="auto" >
-	    				{item.config}
+	    				{[1,2,3,4].map(n => <Button dense onClick={this.handleTextStyleChange.bind(this, n)}>style {n}</Button>)}
 	    			</Collapse>
     			)
     		: sum
-    		// display: 'flex', justifyContent: 'space-between'
+
+    	sum = item.textPosition === true 
+    		? sum.concat(
+	    			<Collapse in={this.state.activeCategory == item.id} transitionDuration="auto" >
+	    				{[1,2,3].map(n => <Button dense onClick={this.handleTextPositionChange.bind(this, n)}>pos {n}</Button>)}
+	    			</Collapse>
+    			)
+    		: sum
 
     	return sum
     }, []) 

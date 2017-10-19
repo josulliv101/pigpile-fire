@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import {connect} from 'react-redux'
@@ -20,6 +20,19 @@ const styles = (theme, {unit} = theme.spacing, {up, values} = theme.breakpoints)
     position: 'relative',
     zIndex: 1,
   },
+  gridRoot: {
+  	height: '100%', 
+  },
+  textPosition1: {
+  	// default
+  },
+  textPosition2: {
+  	display: 'flex',
+  	flexDirection: 'column-reverse',
+  },
+  textPosition3: {
+  	justifyContent: 'flex-end',
+  },
   [up(values.md)]: {
     root: {
       height: theme.components.hero.height,
@@ -28,19 +41,23 @@ const styles = (theme, {unit} = theme.spacing, {up, values} = theme.breakpoints)
   },
 });
 
-class HeroPile extends PureComponent {
+class HeroPile extends Component {
 
   render() {
-    const {classes: cls, className, pile: {goal, imageUrl, layout = {}, title} = {}, themePreview} = this.props;
+    const {classes: cls, className, pile: {goal, imageUrl, layout = {}, title} = {}, textPositionPreview: textPositionPreviewProp, textStylePreview: textStylePreviewProp, themePreview} = this.props;
     const currentThemeId = themePreview || layout.theme
-    const {textStyle} = appThemes[currentThemeId] || {}
+    const textStylePreview = textStylePreviewProp && textStylePreviewProp > 0 && {[`textStyle-${textStylePreviewProp}`]: true}
+
+    const textPositionPreview = textPositionPreviewProp && textPositionPreviewProp > 0 && {[cls[`textPosition${textPositionPreviewProp}`]]: true}
+
+    const textPosition = (textPositionPreview && [textPositionPreview]) || [1,2,3].map(n => ({[cls[`textPosition${n}`]]: layout[`textPosition-${n}`]}))
+    const {textStyle: textStyleAppTheme} =  appThemes[currentThemeId] || {}
+    console.log('text..', textPosition)
   	return (
   		<div className={classNames(cls.root, className)}>
-	      <Grid container spacing={24}>
-	      	<Grid item xs={12}>
-	        	<Title {...layout} {...textStyle}>{title}</Title>
-	        </Grid>
-	        <Grid item xs={8}>
+	      <Grid className={cls.gridRoot} container spacing={24}>
+	      	<Grid className={classNames(...textPosition)} item xs={8}>
+	        	<Title {...(textStylePreview || textStyleAppTheme || layout)}>{title}</Title>
 	 					{currentThemeId !== 'layoutImage' && <Media imageUrl={imageUrl} />}
 	        </Grid>
 	        <Grid item xs={4}>
@@ -63,5 +80,7 @@ export default compose(
 	connect( (state, ownProps) => ({
   	pile: state.pile && state.pile[`pile-${ownProps.pileId}`],
   	themePreview: state.settings && state.settings.themePreview,
+  	textStylePreview: state.settings && state.settings.textStylePreview,
+  	textPositionPreview: state.settings && state.settings.textPositionPreview,
   })),
 )(HeroPile)

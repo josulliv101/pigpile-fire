@@ -102,7 +102,7 @@ const styles = (theme) => ({
   withPopup: {},
 })
 
-class Content extends Component {
+class Theme extends Component {
 
   state = {
     anchorEl: null,
@@ -142,7 +142,7 @@ class Content extends Component {
 
   handlePersistData = (id) => {
 
-    const {formValues, persistStatus = {}} = this.props
+    const {formValues, persistStatus = {}, textPositionPreview, textStylePreview} = this.props
     console.log('handlePersistData', id)
 
     // Ignore multiple update btn clicks
@@ -152,7 +152,10 @@ class Content extends Component {
 
     console.log(id, update)
     // Pile id is first param
-    this.props.persistUpdate(this.props.id, {[id]: update})
+    // this.props.persistUpdate(this.props.id, {[id]: update})
+    const textStyle = textStylePreview && {[`textStyle-${textStylePreview}`]: true}
+    const textPosition = textPositionPreview && {[`textPosition-${textPositionPreview}`]: true}
+    this.props.persistUpdate(this.props.id, {layout: {theme: update, ...textStyle, ...textPosition}})
 
     // Close popup
     // this.setState({open: false})
@@ -183,6 +186,7 @@ class Content extends Component {
           this.state.modal === false && this.state.open && 
           <PopupEditor 
             dirty={dirty} 
+            change={this.props.change}
             key="popup-editor-theme"
             handleUpdate={this.handlePersistData}
             formErrors={formErrors} 
@@ -227,7 +231,7 @@ function Item(context, cls, props) {
   )
 }
 
-Content.propTypes = {
+Theme.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
 }
@@ -239,7 +243,9 @@ export default compose(
     formMeta: getFormMeta(FORM_NAME)(state),
     formValues: getFormValues(FORM_NAME)(state),
     persistStatus: state.persist[idParam] || {},
+    textStylePreview: state.settings && state.settings.textStylePreview,
+    textPositionPreview: state.settings && state.settings.textPositionPreview,
   }), {persistUpdate}),
   reduxForm({form: FORM_NAME, onSubmit: noop => noop, enableReinitialize: true, validate}),
   // withGetAllTags(),
-)(Content)
+)(Theme)

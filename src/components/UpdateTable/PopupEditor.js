@@ -58,8 +58,6 @@ class PopupEditor extends PureComponent {
       // ...data = {},
     } = this.props
 
-
-    // console.log('data', data)
     return (
 	    <Popover
 	      open={open}

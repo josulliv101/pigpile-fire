@@ -51,7 +51,7 @@ class Location extends Component {
     	<div>
     		<div className={classNames(cls.root, className)}>
 		      <Field 
-		      	name="city" 
+		      	name="location.city" 
 		      	className={classNames(cls.field, cls.city)}
 		      	component={InputField} 
 		      	label="City"
@@ -59,7 +59,7 @@ class Location extends Component {
 		      	fullWidth
 		      />
 		      <Field 
-		      	name="state" 
+		      	name="location.state" 
 		      	className={classNames(cls.field, cls.state)}
 		      	component={InputField} 
 		      	label="State"
@@ -75,7 +75,7 @@ class Location extends Component {
 			      ))}
 		      </Field>
 		      <Field 
-		      	name="postal" 
+		      	name="location.postal" 
 		      	className={classNames(cls.field, cls.zip)}
 		      	component={InputField} 
 		      	label="Zip"
@@ -83,7 +83,7 @@ class Location extends Component {
 		      	fullWidth
 		      />
 		      <Field 
-		      	name="country" 
+		      	name="location.country" 
 		      	className={classNames(cls.field, cls.country)}
 		      	component={InputField} 
 		      	label="Country"

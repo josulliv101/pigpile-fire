@@ -23,12 +23,22 @@ const styles = (theme, {unit} = theme.spacing, {up, values} = theme.breakpoints)
   gridRoot: {
   	height: '100%', 
   },
+
+  sidebarType1: {
+  	// default
+  },
+  sidebarType2: {
+  	alignSelf: 'flex-end',
+  },
+  sidebarType3: {
+  	alignSelf: 'flex-end',
+  },
+
   textPosition1: {
   	// default
   },
   textPosition2: {
-  	display: 'flex',
-  	flexDirection: 'column-reverse',
+  	alignSelf: 'flex-end',
   },
   textPosition3: {
   	justifyContent: 'flex-end',
@@ -44,15 +54,18 @@ const styles = (theme, {unit} = theme.spacing, {up, values} = theme.breakpoints)
 class HeroPile extends Component {
 
   render() {
-    const {classes: cls, className, pile: {goal, imageUrl, layout = {}, title} = {}, textPositionPreview: textPositionPreviewProp, textStylePreview: textStylePreviewProp, themePreview} = this.props;
+    const {classes: cls, className, pile: {goal, imageUrl, layout = {}, title} = {}, sidebarTypePreview: sidebarTypePreviewProp, textPositionPreview: textPositionPreviewProp, textStylePreview: textStylePreviewProp, themePreview} = this.props;
     const currentThemeId = themePreview || layout.theme
     const textStylePreview = textStylePreviewProp && textStylePreviewProp > 0 && {[`textStyle-${textStylePreviewProp}`]: true}
 
     const textPositionPreview = textPositionPreviewProp && textPositionPreviewProp > 0 && {[cls[`textPosition${textPositionPreviewProp}`]]: true}
 
+    const sidebarTypePreview = sidebarTypePreviewProp && sidebarTypePreviewProp > 0 && {[cls[`sidebarType${sidebarTypePreviewProp}`]]: true}
+    const sidebar = (sidebarTypePreview && [sidebarTypePreview]) || [1,2,3].map(n => ({[cls[`sidebarType${n}`]]: layout[`sidebarType-${n}`]}))
+
     const textPosition = (textPositionPreview && [textPositionPreview]) || [1,2,3].map(n => ({[cls[`textPosition${n}`]]: layout[`textPosition-${n}`]}))
     const {textStyle: textStyleAppTheme} =  appThemes[currentThemeId] || {}
-    console.log('text..', textPosition)
+    console.log('sidebar..', sidebar)
   	return (
   		<div className={classNames(cls.root, className)}>
 	      <Grid className={cls.gridRoot} container spacing={24}>
@@ -60,9 +73,9 @@ class HeroPile extends Component {
 	        	<Title {...(textStylePreview || textStyleAppTheme || layout)}>{title}</Title>
 	 					{currentThemeId !== 'layoutImage' && <Media imageUrl={imageUrl} />}
 	        </Grid>
-	        <Grid item xs={4}>
+	        <Grid className={classNames(...sidebar)} item xs={4}>
 	        	<DonateButton to="/" />
-	        	<Stats goal={goal} />
+	        	{sidebarTypePreviewProp !== 3 && <Stats goal={goal} />}
 	        </Grid>
 	      </Grid>
   		</div>
@@ -82,5 +95,6 @@ export default compose(
   	themePreview: state.settings && state.settings.themePreview,
   	textStylePreview: state.settings && state.settings.textStylePreview,
   	textPositionPreview: state.settings && state.settings.textPositionPreview,
+  	sidebarTypePreview: state.settings && state.settings.sidebarTypePreview,
   })),
 )(HeroPile)

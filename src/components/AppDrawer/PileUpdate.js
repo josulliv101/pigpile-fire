@@ -10,8 +10,7 @@ import {withStyles} from 'material-ui/styles'
 //
 import {Subheading} from '../Text'
 import Content from './Content'
-import Theming from './Theming'
-import Theme from './Theme'
+import ThemeForm from './ThemeForm'
 
 const styles = (theme) => ({
   root: {
@@ -67,7 +66,10 @@ class PileUpdate extends Component {
           <Tab classes={{root: cls.tabRoot}} label="Bank" />
         </Tabs>
         {this.state.value === 0 && pile.id && <Content {...pile} history={this.props.history} idParam={idParam} initialValues={{...pile, ...pile.location}} />}
-        {this.state.value === 1 && pile.id && <Theme {...pile} history={this.props.history}  idParam={idParam} initialValues={{...pile, ...pile.location}} />}
+        {this.state.value === 1 && pile.id && <ThemeForm userLayout={pile.layout} activeThemeId={pile.theme} pileId={idParam} />}
+        {
+        	// {...pile} history={this.props.history}  idParam={idParam} initialValues={{...pile, ...pile.location}}
+        }
       </div>
     )
   }

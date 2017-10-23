@@ -17,13 +17,14 @@ import ButtonWithSpinner from '../../forms/ButtonWithSpinner'
 
 const styles = (theme) => ({
   root: {
-  	padding: theme.spacing.unit * 2,
+  	// padding: theme.spacing.unit * 2,
   	width: theme.components.drawer.width - (theme.spacing.unit * 4),
   },
   btnGroup: {
   	alignItems: 'center',
   	display: 'flex',
   	justifyContent: 'flex-end',
+  	padding: theme.spacing.unit * 2,
   	'&>button:first-child': {
       marginRight: theme.spacing.unit * 1,
   		opacity: .7,
@@ -33,6 +34,11 @@ const styles = (theme) => ({
     backgroundColor: 'rgba(0,0,0,.04)',
     margin: `${theme.spacing.unit * 2}px 0`,
     padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px`,
+  },
+  title: {
+  	background: theme.palette.grey[700],
+  	color: theme.palette.common.white,
+  	padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px`,
   },
   [theme.breakpoints.up(948)]: {
     root: {
@@ -90,7 +96,7 @@ class PopupEditor extends Component {
 	      anchorOrigin={{vertical: 'center', horizontal: 'center',}}
 	      transformOrigin={{vertical: 'center', horizontal: 'center',}}
 	    > 
-	      <Subheading heavy>
+		    <Subheading className={cls.title} heavy>
           Editing {data.id} {formErrors && formErrors[data.id]}
         </Subheading>
         <Field {...props} {...fieldProps} />

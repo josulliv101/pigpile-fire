@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import compose from 'recompose/compose'
@@ -19,10 +19,10 @@ const styles = (theme) => ({
   },
 })
 
-class InputField extends Component {
+class InputField extends PureComponent {
 
   render() {
-    const {children, className, input, handleKeyPress = f=>f, meta: {error, touched, warning}, ...custom} = this.props
+    const {children, className, input, handleKeyPress = f=>f, meta: {error, touched, warning}, setParentState, ...custom} = this.props
     return (
       <TextField
         id={custom.name}
@@ -30,7 +30,7 @@ class InputField extends Component {
         // helperText="Full width!"
         
         {...input}
-        onKeyPress={handleKeyPress}
+        // onKeyPress={handleKeyPress}
         {...custom}
       >
         {children}

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import compose from 'recompose/compose'
 import Button from 'material-ui/Button';
+import { CircularProgress } from 'material-ui/Progress';
 import {withStyles} from 'material-ui/styles'
 //
 
@@ -31,6 +32,20 @@ const styles = (theme) => ({
       animationDelay: '.4s',
     },
   },
+  progress: {
+    color: theme.palette.common.white,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    height: 20,
+    marginTop: -10,
+    marginLeft: -10,
+    width: 20,
+  },
+  wrapper: {
+    margin: theme.spacing.unit,
+    position: 'relative',
+  },
   [theme.breakpoints.up(948)]: {
     root: {
 
@@ -50,9 +65,12 @@ class ButtonWithSpinner extends Component {
   render() {
     const {children, classes: cls, className, spinning = false, ...props} = this.props
     return (
-      <Button className={classNames(className)} {...props}> 
-        {spinning ? <Dots className={cls.dots} /> : children}
-      </Button>
+      <div className={cls.wrapper}>
+	      <Button className={classNames(className)} {...props}> 
+	        {!spinning && children}
+	      </Button>
+        {spinning && <CircularProgress className={cls.progress} size={20} />}
+      </div>
     )
   }
 }

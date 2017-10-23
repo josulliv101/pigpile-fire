@@ -1,108 +1,19 @@
 import React, {Component} from 'react'
-import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import compose from 'recompose/compose'
-import {connect} from 'react-redux'
-import {Field} from 'redux-form'
-import { getFormMeta, getFormSyncErrors, getFormValues, reduxForm } from 'redux-form'
-import IconButton from 'material-ui/IconButton';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
-import Divider from 'material-ui/Divider';
-import Switch from 'material-ui/Switch';
-import ListSubheader from 'material-ui/List/ListSubheader';
-import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
-import {withStyles} from 'material-ui/styles'
-import Edit from 'material-ui-icons/Edit';
-import Check from 'material-ui-icons/CheckCircle';
-import serialize from 'serialize-javascript'
-//
-// import withGetAllTags from '../../hocs/withGetAllTags'
-import EditModal from '../../icons/EditModal'
-import {persistUpdate} from '../../redux/modules/Persist'
-import PopupEditor from './PopupEditor'
-import EditorField from '../../forms/Editor'
-import {Subheading} from '../Text'
 
 const FORM_NAME = 'pile-edit-theme'
 
-const validate = values => {
-  const errors = {}
-  if (!values.goal) {
-    errors.goal = 'A goal amount is required.'
-  }
-
-  if (!Number.isInteger(values.goal)) {
-    errors.goal = 'A goal amount must be an integer.'
-  }
-
-  if (values.goal < 5) {
-    errors.goal = 'A goal amount must be atleast $5.'
-  }
-
-  return errors
-}
-
 const styles = (theme) => ({
   root: {
-    // padding: theme.spacing.unit * 2,
-    backgroundColor: 'rgba(0, 0, 0, 0)',
+
   },
-  btn: {
-    backgroundColor: theme.palette.common.faintBlack,
-    marginRight: theme.spacing.unit * 2,
-    minWidth: 126,
-    padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px`,
-  },
-  dialog: {
-  	// height: 400,
-  	minWidth: 660,
-  },
-  form: {
-    opacity: 1,
-    transition: theme.transitions.create(['opacity']),
-    '&$withPopup': {
-      opacity: .5,
-    },
-  },
-  item: {
-    transition: theme.transitions.create(['background-color']),
-    '&$success': {
-      backgroundColor: '#dbf5cd',
-      color: '#319133',
-      '&>li:hover': {
-        backgroundColor: '#dbf5cd',
-      },
-      '& $icon': {
-        opacity: 1,
-      },
-    },
-    '&:hover': {
-      '& $icon': {
-        opacity: 1,
-      },
-    },
-  },
-  icon: {
-    opacity: 0,
-  },
-  listSection: {
-    background: 'inherit',
-  },
-  success: {},
   [theme.breakpoints.up(948)]: {
     root: {},
   },
-  withPopup: {},
 })
 
-class Theme extends Component {
+class UpdateTable extends Component {
 
   state = {
     anchorEl: null,
@@ -112,7 +23,6 @@ class Theme extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-
     // Detect an update success, then close dialog
     if (this.props.persistStatus.inprocess === true && nextProps.persistStatus.inprocess === false && nextProps.persistStatus.done === true) {
       this.setState({open: false})
@@ -120,7 +30,6 @@ class Theme extends Component {
   }
   handleClose = () => {
     console.log('handleClose')
-    // Popup cancelled, reset value
     this.props.reset()
     this.props.history.push({state: null})
     this.setState({open: false})
@@ -142,7 +51,7 @@ class Theme extends Component {
 
   handlePersistData = (id) => {
 
-    const {formValues, persistStatus = {}, textPositionPreview, textStylePreview} = this.props
+    const {formValues, persistStatus = {}, sidebarTypePreview, textPositionPreview, textStylePreview} = this.props
     console.log('handlePersistData', id)
 
     // Ignore multiple update btn clicks
@@ -155,7 +64,8 @@ class Theme extends Component {
     // this.props.persistUpdate(this.props.id, {[id]: update})
     const textStyle = textStylePreview && {[`textStyle-${textStylePreview}`]: true}
     const textPosition = textPositionPreview && {[`textPosition-${textPositionPreview}`]: true}
-    this.props.persistUpdate(this.props.id, {layout: {theme: update, ...textStyle, ...textPosition}})
+    const sidebarType = sidebarTypePreview && {[`sidebarType-${sidebarTypePreview}`]: true}
+    this.props.persistUpdate(this.props.id, {layout: {theme: update, ...sidebarType, ...textStyle, ...textPosition}})
 
     // Close popup
     // this.setState({open: false})
@@ -165,6 +75,8 @@ class Theme extends Component {
     const {className, classes: cls, dirty, formErrors, formMeta, formValues, persistStatus, ...pile} = this.props
     const {city, state, postal, country} = pile && pile.location || {}
     console.log('form', this.props)
+    const showConfigColor = pile.layout.theme.startsWith('themeWave')
+    const showConfigLayoutImage = pile.layout.theme.startsWith('layoutImage')
     return [
     	<form key="pile-edit" className={classNames(cls.form, {[cls.withPopup]: this.state.open})} onSubmit={ this.props.handleSubmit } autoComplete="off">
         <List
@@ -179,8 +91,14 @@ class Theme extends Component {
           <Divider />
           {<ListSubheader disableSticky>Config Options for the Wave theme</ListSubheader>}
           <Divider />
-          { Item(this, cls, {label: 'color', value: 'Grey', success: this.state.id === 'color' && persistStatus.successUi === true }) }
-          <Divider />
+          { showConfigColor && Item(this, cls, {label: 'color', value: 'Grey', success: this.state.id === 'color' && persistStatus.successUi === true }) }
+          { showConfigColor && <Divider />}
+          { showConfigLayoutImage && Item(this, cls, {label: 'titleStyle', value: '1', success: this.state.id === 'titleStyle' && persistStatus.successUi === true }) }
+          { showConfigLayoutImage && <Divider />}
+          { showConfigLayoutImage && Item(this, cls, {label: 'titlePosition', value: '1', success: this.state.id === 'titlePosition' && persistStatus.successUi === true }) }
+          { showConfigLayoutImage && <Divider />}
+          { showConfigLayoutImage && Item(this, cls, {label: 'sidebarType', value: '1', success: this.state.id === 'sidebarType' && persistStatus.successUi === true }) }
+          { showConfigLayoutImage && <Divider />}
         </List>
         {
           this.state.modal === false && this.state.open && 
@@ -245,6 +163,7 @@ export default compose(
     persistStatus: state.persist[idParam] || {},
     textStylePreview: state.settings && state.settings.textStylePreview,
     textPositionPreview: state.settings && state.settings.textPositionPreview,
+    sidebarTypePreview: state.settings && state.settings.sidebarTypePreview,
   }), {persistUpdate}),
   reduxForm({form: FORM_NAME, onSubmit: noop => noop, enableReinitialize: true, validate}),
   // withGetAllTags(),

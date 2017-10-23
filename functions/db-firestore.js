@@ -8,6 +8,16 @@ function getAllTags({api}) {
     .get()
 }
 
+function getAllThemes({api}) {
+
+  if (!api) return
+
+  return api
+    .firestore()
+    .collection("themes")
+    .get()
+}
+
 function getTrending(firebase) {
 
   if (!firebase) return
@@ -104,6 +114,7 @@ function noop () {}
 
 module.exports = {
   getAllTags,
+  getAllThemes,
   getPile,
   getPileDonations,
   getTrending,

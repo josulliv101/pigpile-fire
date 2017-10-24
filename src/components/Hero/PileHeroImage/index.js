@@ -88,6 +88,8 @@ class PileHeroImage extends PureComponent {
 
   state = {}
 
+  
+  
   render() {
     const {align = 'top', anchorAside, anchorMain, aside, bg, className, classes: cls, layout: layoutProp, pile = {}, textColor, textContrast, textWeight} = this.props
     const layout = layoutProp || pile.layout

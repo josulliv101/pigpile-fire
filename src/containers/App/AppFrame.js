@@ -18,13 +18,13 @@ import NavBar from '../../components/NavBar'
 const styles = (theme) => ({
   root: {
     display: 'flex',
-    marginLeft: -theme.components.drawer.width,
+    // marginLeft: -theme.components.drawer.width,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     '&$withDrawer': {
-      marginLeft: 0,
+      marginLeft: -theme.components.drawer.width,
     },
   },
   drawer: {},
@@ -39,15 +39,21 @@ class AppFrame extends Component {
 
   render() {
     const {children, classes: cls, ...props} = this.props;
-
+// open={false} {...props}
   	return (
     	<div className={
         classNames(
           cls.root, 
-          {[cls.withDrawer]: props.drawer},
+          // {[cls.withDrawer]: drawer},
+          // {[cls.withDrawerOpen]: false},
         )
       }>
-        <AppDrawer open={props.drawer} {...props} />
+        <Switch>
+          <Route path="/login" render={() => null} />
+          <Route path='/' exact={true} render={() => null} />
+          <Route path='/:id' render={(ownProps) => <AppDrawer open={props.drawer} {...ownProps} />} />
+        </Switch>
+
         <div className={classNames(cls.bd)}>
           <BgImage {...props} />
           <AppBar {...props} />

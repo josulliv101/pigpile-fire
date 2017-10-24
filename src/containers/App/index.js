@@ -26,7 +26,7 @@ class App extends Component {
     const {classes: cls, ...props} = this.props;
     console.log('App props', this.props)
   	return (
-      <AppFrame {...props}>
+      <AppFrame {...props} >
         <AppContent />
       </AppFrame>
   	)

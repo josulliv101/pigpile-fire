@@ -11,7 +11,7 @@ import PileUpdate from './PileUpdate'
 const styles = (theme) => ({
   root: {
     background: theme.palette.grey[200],
-    display: 'none',
+    // display: 'none',
     // color: theme.palette.common.white,
     // position: 'relative',
     height: '100%',
@@ -22,20 +22,32 @@ const styles = (theme) => ({
     // transform: 'translate3d(-384px, 0px, 0px)',
     width: theme.components.drawer.width,
     '&$mounted': {
-    	display: 'block',
+    	// display: 'block',
     },
   },
-
+  // So that the main content gets pushed over
+  docked: {
+  	transition: theme.transitions.create(['width']),
+  	width: 0,
+  },
+  dockedOpen: {
+  	width: theme.components.drawer.width,
+  },
   foo: {
     width: theme.components.drawer.width,
   },
   mounted: {},
   drawerPaper: {
+  	/*
     alignItems: 'flex-start',
     // background: theme.palette.common.lightBlack,
     display: 'flex',
     // height: '100%',
     overflow: 'visible',
+    */
+    width: theme.components.drawer.width,
+    // position: 'relative',
+    height: '100%',
   },
   [theme.breakpoints.up(948)]: {
     root: {
@@ -55,25 +67,20 @@ class AppDrawer extends Component {
   }
 
   render() {
-    const {className, classes: cls, dispatch, direction, drawer, handleStickyNavChange, history, location, match, navDocked, staticContext, stickyEnabled, ...props} = this.props
+    const {className, classes: cls, dispatch, direction, drawer, handleStickyNavChange, history, location, navDocked, staticContext, stickyEnabled, ...props} = this.props
     
+    if (!this.state.mounted) return null
+
     return (
-      <Drawer
-        {...props}
-        type="persistent"
-        classes={{
-          paper: classNames(cls.root, {[cls.mounted]: this.state.mounted}),
-        }}
-        className={classNames(cls.foo)}
-      >
-        <div className={classNames(cls.drawerPaper)}>
-          <Switch>
-            <Route path="/login" render={() => null} />
-            <Route path="/" exact={true} render={() => null} />
-            <Route path='/:id' render={(ownProps) => <PileUpdate {...ownProps} />} />
-          </Switch>
-        </div>
-      </Drawer>
+	    <Drawer
+	      type="persistent"
+	      open={props.open}
+	      classes={{
+	      	docked: classNames(cls.docked, {[cls.dockedOpen]: props.open}),
+	        paper: cls.drawerPaper,
+	      }}>
+	      <PileUpdate {...props} />
+	    </Drawer>
     )
   }
 }

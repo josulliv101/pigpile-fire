@@ -7,6 +7,7 @@ import Grid from 'material-ui/Grid'
 import { withStyles } from 'material-ui/styles'
 //
 import * as appThemes from '../../../style/appThemes/'
+import {setting} from '../../../redux/modules/Settings'
 import Title from './Title'
 import DonateButton from './DonateButton'
 import Media from './Media'
@@ -53,6 +54,8 @@ const styles = (theme, {unit} = theme.spacing, {up, values} = theme.breakpoints)
 
 class HeroPile extends Component {
 
+  componentWillUnmount = () => this.props.setting('drawer', false)
+
   render() {
     const {classes: cls, className, pile: {goal, imageUrl, layout = {}, title} = {}, sidebarTypePreview: sidebarTypePreviewProp, textPositionPreview: textPositionPreviewProp, textStylePreview: textStylePreviewProp, themePreview} = this.props;
     const currentThemeId = themePreview || layout.theme
@@ -96,5 +99,5 @@ export default compose(
   	textStylePreview: state.settings && state.settings.textStylePreview,
   	textPositionPreview: state.settings && state.settings.textPositionPreview,
   	sidebarTypePreview: state.settings && state.settings.sidebarTypePreview,
-  })),
+  }), {setting}),
 )(HeroPile)

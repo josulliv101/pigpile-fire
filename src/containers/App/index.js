@@ -39,11 +39,12 @@ App.propTypes = {
 };
 
 let hocs = [
-  withStyles(styles),
+  
   withoutServerStyle(),
   withScrollBehavior(),
   // material-ui withWidth HOC (used by withStickyNav) causing warnings, not needed on server.
   // withStickyNav(),
+  withStyles(styles),
 ]
 // hocs = process.env.BUILD_TARGET === 'client' ? hocs : hocs.slice(-1)
 

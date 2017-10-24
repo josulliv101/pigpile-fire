@@ -24,8 +24,12 @@ class SelectList extends Component {
 
   handleChange = (id) => {
     console.log('list', id)
+    const {input, multi} = this.props
+
+    if (!multi) return input.onChange(id)
+
+    // If multi, data persisted in shape `{foo: true, bar: true}`
     
-    const {input} = this.props
     const update = Object.assign({}, input.value, {[id]: !input.value[id]})
     input.onChange(Object.keys(update).reduce((sum, key) => {
       if (update[key] === true) return Object.assign({}, sum, {[key]: true})
@@ -54,7 +58,7 @@ class SelectList extends Component {
 
 
   render() {
-    const {input, items = [], setParentState, ...props} = this.props
+    const {input, items = [], multi, setParentState, ...props} = this.props
     console.log('SelectList', items, props, input)
     return (
       <List {...props}>
@@ -63,7 +67,7 @@ class SelectList extends Component {
             <ListItem button divider key={item.id} onClick={this.handleChange.bind(this, item.id)}>
               <ListItemText primary={item.name} />
               {
-                input.value[item.id] === true && 
+                ((multi && input.value[item.id] === true) || input.value === item.id) && 
                 <ListItemIcon>
                   <Check style={{marginRight: 0}} />
                 </ListItemIcon>

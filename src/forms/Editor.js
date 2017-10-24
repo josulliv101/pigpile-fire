@@ -211,6 +211,25 @@ export default class EditorField extends Component {
     }
   }
 
+
+  componentDidMount = () => {
+  	const {input: {name} = {}, stringify} = this.props
+  	// Give the editor a chance to affect persisting data by giving
+  	// ability to set state on parent. For example, this good be a good
+  	// place to have a prop that managed whether a persist was a 'merge' or 'replace'
+  	console.log('Editor componentDidMount###', this.props)
+  	if (this.props.setParentState) {
+  		this.props.setParentState({stringify})
+  	}
+  }
+
+  componentWillUnmount = () => {
+  	console.log('Editor### componentWillUnmount', this.props)
+  	if (this.props.setParentState) {
+  		this.props.setParentState({stringify: null})
+  	}
+  }
+
   onChange = (editorState) => {
     console.log('onChange', editorState)
     const { input } = this.props

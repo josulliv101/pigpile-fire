@@ -4,12 +4,7 @@ import {Field, Form, reduxForm, submit} from 'redux-form'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import List from 'material-ui/List'
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from 'material-ui/Dialog';
+import Dialog from 'material-ui/Dialog';
 import Button from 'material-ui/Button'
 import compose from 'recompose/compose'
 import {withStyles} from 'material-ui/styles'
@@ -23,7 +18,7 @@ import InputField from '../../forms/InputField' // default popup editor
 import {persistUpdate} from '../../redux/modules/Persist'
 import ButtonWithSpinner from '../../forms/ButtonWithSpinner'
 
-const FORM_NAME = 'pile-update-table'
+// const FORM_NAME = 'pile-update-theme'
 const TextEditor = (props) => <Field {...props} component={InputField} />
 
 
@@ -43,7 +38,8 @@ const styles = (theme) => ({
   },
   dialog: {
   	'& $form': {
-  		width: 400,
+  		height: 500,
+  		width: 600,
   	},
   },
   form: {},
@@ -93,18 +89,28 @@ class Table extends PureComponent {
     })
   }
 
-  dispatchSubmit = () => this.props.dispatch(submit(FORM_NAME))
+  dispatchSubmit = () => this.props.dispatch(submit(this.props.form))
 
   handlePersistData = (values) => {
   	const {dispatch, pileId} = this.props
+  	const {id, stringify} = this.state
   	console.log('handlePersistData...', dot.dot(values))
 
+  	// Move any stringify or merge ect to saga?
+  	let update = {[id]: stringify ? JSON.stringify(values[id]) : values[id]} 
+/*
+  	if (this.state.stringify) {
+  		update = Object.keys(values).reduce((sum, key) => {
+  			sum[key] = JSON.stringify(values[key])
+  			return sum
+  		}, {})
+  	}
+*/
   	// Use dot notation to prevent object values from overwriting 
   	// existing properties that are not involved in update.
   	// try , { merge: true } option
-  	dispatch(persistUpdate(pileId, values))
+  	dispatch(persistUpdate(pileId, update))
   }
-
 
   // Avoid having to use arrow-function or use bind in onClick handler
   setTableState = update => this.setState(update)
@@ -125,11 +131,13 @@ class Table extends PureComponent {
 	  	id,
 	  	label,
 	  	modal = false,
+	  	stringify = false,
 	  	EditorFrame = !modal ? PopupEditor : Dialog,
 	  	...state,
 	  } = this.state
 
 	  console.log('STATE', this.state)
+	  console.log('PROPS', this.props)
 
 	  return (
 	    <List 
@@ -160,7 +168,7 @@ class Table extends PureComponent {
             {...state}>
 			    	<Form 
 			    	className={cls.form}
-							key={FORM_NAME} 
+							key={this.props.form} 
 							onSubmit={handleSubmit(this.handlePersistData)} 
 							autoComplete="off">
 					    <Subheading className={cls.title} heavy>
@@ -194,5 +202,9 @@ Table.propTypes = {
 
 export default compose(
 	withStyles(styles),
-	reduxForm({form: FORM_NAME, enableReinitialize: true}),
+	reduxForm({
+		//form: FORM_NAME, 
+		// So new values can be established when an item is persisted to db
+		enableReinitialize: true,
+	}),
 )(Table)

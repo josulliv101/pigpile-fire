@@ -11,10 +11,10 @@ import * as appThemes from '../../style/appThemes/'
 const styles = (theme, appThemes = transformAppThemes(theme), {black} = theme.palette.common, {hero} = theme.components, {up, values} = theme.breakpoints) => ({
   root: {
     backgroundColor: black,
-    position: 'fixed',
+    position: 'absolute',
     width: '100%',
-    willChange: 'transform',
-    zIndex: 0,
+    // willChange: 'transform',
+    zIndex: 1,
     '&:after': {
       // backgroundImage: 'linear-gradient(180deg,#4180d7,hsla(0,0%,48%,.7))', // linear-gradient(180deg,rgb(33, 150, 243),hsl(207, 83%, 71%))',
       bottom: 0,
@@ -42,11 +42,15 @@ const styles = (theme, appThemes = transformAppThemes(theme), {black} = theme.pa
   ...appThemes,
   [up(values.md)]: {
     root: {
-      height: hero.height,
+      height: '100%',
       '&:after': {
         height: hero.height,
       },
+	    '&>$bg': {
+	      height: hero.height,
+	    },
     },
+    bg: {},
   },
 });
 

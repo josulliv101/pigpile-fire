@@ -3,6 +3,9 @@ export default function globalStyle(theme) {
   if (!theme) throw new Error('theme is required for including global style')
   return ({
 	   '@global': {
+	   	'.sticky-outer-wrapper>div': {
+	   		willChange: 'transform',
+	   	},
 	    '.RichEditor-root': {
 	      background: '#fff',
 	      border: '1px solid #ddd',

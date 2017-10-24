@@ -14,11 +14,14 @@ import Table from '../UpdateTable/Table'
 import Row from '../UpdateTable/FieldRow'
 import Title from '../UpdateTable/SectionTitle'
 import LocationField from '../../forms/Location'
-import SelectTheme from '../../forms/Themes'
+import SelectTheme from '../../forms/SelectTheme'
 // import SelectTags from '../../forms/Tags'
 import SelectList from '../../forms/SelectList'
+import DraftJsEditor from '../../forms/Editor'
 
 const ListEditor = (props) => <Field {...props} component={SelectList} />
+const ThemeEditor = (props) => <Field {...props} component={SelectTheme} />
+const ContentEditor = (props) => <Field {...props} component={DraftJsEditor} />
 
 const styles = (theme) => ({
   root: {},
@@ -39,14 +42,15 @@ class ThemeForm extends Component {
 
 	themeRows = (activeTheme) => {
 		const {name = ''} = activeTheme
-		const {pile = {}, tags = {}} = this.props
+		const {pile = {}, tags = {}, themes} = this.props
 		const tagsLabel = Object.keys(pile.tags || {}).join(', ')
 
 		return [
 			{id: 'subhead1', label: 'Change the theme.', type: 'title'},
-			{id: 'theme', label: 'Theme', value: name, editor: SelectTheme},
+			{id: 'theme', label: 'Theme', value: name, editor: (props) => <ThemeEditor {...props} items={themes} />},
 			{id: 'subheadTags', label: 'Update tags.', type: 'title'},
-			{id: 'tags', label: 'Tags', value: tagsLabel, modal: false, editor: (props) => <ListEditor {...props} items={tags} />},
+			{id: 'tags', label: 'Tags', value: tagsLabel, editor: (props) => <ListEditor {...props} items={tags} multi={true} />},
+			{id: 'story', label: 'Story', value: pile.story, modal: true, editor: (props) => <ContentEditor {...props} stringify={true} />},
 			{id: 'subhead2', label: `Config options for ${name}.`, type: 'title'},
 		]
 	}
@@ -79,7 +83,7 @@ class ThemeForm extends Component {
     if (!activeTheme) return null
 
     const rows = this.themeRows(activeTheme).concat(this.configRows(config, userLayout))
-  	return <Table rows={rows} persist={persist} pileId={pileId} initialValues={initialValues} />
+  	return <Table form="pile-update-theme" rows={rows} persist={persist} pileId={pileId} initialValues={initialValues} />
   }
 }
 

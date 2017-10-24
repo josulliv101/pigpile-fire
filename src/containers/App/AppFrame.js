@@ -16,7 +16,6 @@ import Hero from '../../components/Hero'
 import NavBar from '../../components/NavBar'
 
 const styles = (theme) => ({
-  '@global': globalStyle(theme),
   root: {
     display: 'flex',
     marginLeft: -theme.components.drawer.width,
@@ -31,6 +30,7 @@ const styles = (theme) => ({
   drawer: {},
   bd: {
     flex: 1,
+
   },
   withDrawer: {},
 });
@@ -39,8 +39,14 @@ class AppFrame extends Component {
 
   render() {
     const {children, classes: cls, ...props} = this.props;
+
   	return (
-    	<div className={classNames(cls.root, {[cls.withDrawer]: props.drawer})}>
+    	<div className={
+        classNames(
+          cls.root, 
+          {[cls.withDrawer]: props.drawer},
+        )
+      }>
         <AppDrawer open={props.drawer} {...props} />
         <div className={classNames(cls.bd)}>
           <BgImage {...props} />

@@ -24,7 +24,12 @@ const styles = (theme, {unit} = theme.spacing, {up, values} = theme.breakpoints)
   gridRoot: {
   	height: '100%', 
   },
-
+  sidebar: {
+  	marginTop: unit * 6,
+  	'&>a:first-child': {
+  		marginBottom: unit * 3,
+  	},
+  },
   sidebarType1: {
   	// default
   },
@@ -76,7 +81,7 @@ class HeroPile extends Component {
 	        	<Title {...(textStylePreview || textStyleAppTheme || layout)}>{title}</Title>
 	 					{currentThemeId !== 'layoutImage' && <Media imageUrl={imageUrl} />}
 	        </Grid>
-	        <Grid className={classNames(...sidebar)} item xs={4}>
+	        <Grid className={classNames(cls.sidebar, ...sidebar)} item xs={4}>
 	        	<DonateButton to="/" />
 	        	{sidebarTypePreviewProp !== 3 && <Stats goal={goal} />}
 	        </Grid>

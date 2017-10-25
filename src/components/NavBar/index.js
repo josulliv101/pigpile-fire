@@ -37,33 +37,16 @@ const styles = (theme, {primary, common: {black, white}} = theme.palette) => ({
 // 'handleStickyNavChange', 'stickyEnabled' & 'navDocked' props are coming from
 // the 'withStickyNav' HOC that wraps the App component
 class NavBar extends Component {
-/*
-	componentDidMount = () => {
-		console.log('this.navbar', this.navbar) 
-		createObserver(this.navbar);
-	}
-*/
-	state = {
-		stick: false,
-	}
 
-	setSticky = stick => this.setState({stick})
+	setSticky = inView => this.props.setting('navDocked', !inView)
 
   render() {
-    const {classes: cls, className, handleStickyNavChange, stickyEnabled} = this.props;
-    console.log('sticky?', this.state.stick)
+    const {classes: cls, className} = this.props;
   	return (
   		<Observer 
   			className={classNames(cls.nav, className)}
-  			threshold={1} onChange={ this.setSticky }>
-	      <div
-	        
-	        // ref={node => this.navbar = node}
-	        // enabled={stickyEnabled}
-	        // innerZ={2}
-	        // enableTransforms={false}
-	        // onStateChange={handleStickyNavChange}
-	      >
+  			threshold={1} 
+  			onChange={ this.setSticky }>
 	        <main>
 	          <Switch>
 	            <Route path="/login" render={() => <div>the login page</div>} />
@@ -71,9 +54,7 @@ class NavBar extends Component {
 	            <Route path='/:id' component={PileNav} />
 	          </Switch>
 	        </main>
-	      </div>
   		</Observer>
-
   	)
   }
 }
@@ -84,32 +65,3 @@ NavBar.propTypes = {
 };
 
 export default withStyles(styles)(NavBar)
-
-/*
-
-function createObserver(node) {
-  var observer;
-  console.log('createObserver', node)
-  var options = {
-    root: document.getElementById('app'),
-    rootMargin: "0px",
-    threshold: buildThresholdList()
-  };
-
-  observer = new IntersectionObserver(handleIntersect, options);
-  observer.observe(node);
-}
-
-function handleIntersect(entries, observer) {
-  console.log('handleIntersect', entries, observer)
-  entries.forEach(function(entry) {
-  	console.log('entry', entry)
-  })
-}
-
-function buildThresholdList() {
-  var thresholds = [];
-  thresholds = thresholds.concat(0, .25, .5, .75, 1);
-  return thresholds;
-}
-*/

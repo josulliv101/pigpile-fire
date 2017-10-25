@@ -7,6 +7,7 @@ import {Link, Route, Switch} from 'react-router-dom'
 import { withStyles } from 'material-ui/styles'
 import Button from 'material-ui/Button'
 //
+import {setting} from '../../redux/modules/Settings'
 import globalStyle from '../../style/global'
 import AppBar from '../../components/AppBar'
 import AppDrawer from '../../components/AppDrawer'
@@ -43,17 +44,13 @@ class AppFrame extends Component {
   	return (
     	<div className={
         classNames(
-          cls.root, 
-          // {[cls.withDrawer]: drawer},
-          // {[cls.withDrawerOpen]: false},
-        )
-      }>
+          cls.root,
+        )}>
         <Switch>
           <Route path="/login" render={() => null} />
           <Route path='/' exact={true} render={() => null} />
           <Route path='/:id' render={(ownProps) => <AppDrawer open={props.drawer} {...ownProps} />} />
         </Switch>
-
         <div className={classNames(cls.bd)}>
           <BgImage {...props} />
           <AppBar {...props} />
@@ -75,5 +72,8 @@ AppFrame.propTypes = {
 
 export default compose(
   withStyles(styles),
-  connect(state => ({drawer: state.settings.drawer})),
+  connect(state => ({
+    drawer: state.settings.drawer,
+    navDocked: state.settings.navDocked,
+  }), {setting}),
 )(AppFrame)

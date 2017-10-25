@@ -37,7 +37,17 @@ const styles = (theme, appThemes = transformAppThemes(theme), {black} = theme.pa
       width: `calc(100% - ${theme.components.drawer.width}px)`,
     },
   },
-  bg: {},
+  bg: {
+  	// backgroundColor: theme.palette.common.transparent,
+  	// transition: theme.transitions.create(['opacity']),
+  },
+  loaded: {
+  	// opacity: 1,
+  },
+  notLoaded: {
+  	// backgroundColor: 'red',
+  	// opacity: 0,
+  },
   withDrawer: {},
   ...appThemes,
   [up(values.md)]: {
@@ -75,37 +85,63 @@ function HomeBg(props) {
   )
 }
 
-function PileBg(props) {
+class PileBg extends Component {
 
-  const {
-  	classes: cls, 
-  	className, 
-  	pile = {}, 
-  	layout = pile.layout || {}, 
-  	theme: themeProp, 
-  	themePreview
-  } = props;
+	state = {
+		loaded: false,
+	}
 
-  
-  const themeId = themePreview || pile.theme || themeProp.layout.appTheme.default
-  const theme = appThemes[themeId]
+  ref = node => this.img = node
 
-  console.log('PileBg', themeId, theme)
-  if (!theme) return null
-  const src = theme.img || pile.imageUrl
-  console.log('theme', theme, src)
-  return (
-    <div className={classNames(
-      cls.root,
-      {[cls.image]: themeId === 'panoramic'},
-      cls[themeId],
-      // {[cls[idThemeDefault]]: !layout['type-image']},
-      {[cls.withDrawer]: props.drawer},
-      className
-    )}>
-     {src && <img className={classNames(cls.bg)} src={src} />}
-    </div>
-  )
+  handleLoaded = () => this.setState({loaded: true})
+
+  // In case the image has been cached by browser already and onLoad didn't fire.
+  componentDidMount = () => this.img && this.img.complete && this.handleLoaded()
+
+	render() {
+		const {
+	  	classes: cls, 
+	  	className, 
+	  	pile = {}, 
+	  	layout = pile.layout || {}, 
+	  	theme: themeProp, 
+	  	themePreview
+	  } = this.props;
+
+	  
+	  const themeId = themePreview || pile.theme || themeProp.layout.appTheme.default
+	  const theme = appThemes[themeId]
+
+	  console.log('PileBg', themeId, theme)
+	  if (!theme) return null
+	  const src = theme.img || pile.imageUrl
+	  console.log('theme', theme, src)
+	  return (
+	    <div className={classNames(
+	      cls.root,
+	      {[cls.image]: themeId === 'panoramic'},
+	      cls[themeId],
+	      // {[cls[idThemeDefault]]: !layout['type-image']},
+	      {[cls.withDrawer]: this.props.drawer},
+	      className
+	    )}>
+	     {
+	     		src && 
+	     		<img 
+	     			ref={this.ref} 
+	     			onLoad={this.handleLoaded} 
+	     			className={classNames(
+	     				cls.bg, 
+	     				// {[cls.loaded]: this.state.loaded},
+	     				// {[cls.notLoaded]: !this.state.loaded},
+	     			)} 
+	     			src={src} 
+	     		/>
+	     	}
+	    </div>
+	  )	
+	}
+
 }
 
 

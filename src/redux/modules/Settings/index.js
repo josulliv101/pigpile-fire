@@ -5,7 +5,7 @@ export const setting = createAction('@pigpile/SETTINGS_SET', (id, val) => ({id, 
 const initialState = {
   drawer: false,
   scrolled: false,
-  trending: [],
+  trending: null,
 }
 
 // Settings is a catch-all area for data that doesn't warrant its own redux module

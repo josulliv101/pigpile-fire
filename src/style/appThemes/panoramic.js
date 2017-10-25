@@ -8,6 +8,7 @@ export default {
       opacity: .84,
     },
     '&>$bg': {
+      backgroundColor: 'red',
       opacity: 1,
     },
   }),

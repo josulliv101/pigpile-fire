@@ -8,6 +8,7 @@ export default {
       // opacity: .84,
     },
     '&>$bg': {
+      backgroundColor: '#343434',
       opacity: .7,
     },
   }),

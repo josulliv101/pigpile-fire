@@ -8,13 +8,16 @@ import Paper from 'material-ui/Paper'
 
 const styles = (theme, {unit} = theme.spacing, {white} = theme.palette.common) => ({
   root: {
-
+  	opacity: 0,
+  	transition: theme.transitions.create(['opacity']),
   },
   image: {
   	border: `${white} ${unit * 1}px solid`,
   	width: '100%', // Fill up paper
   },
-  loaded: {},
+  loaded: {
+  	opacity: 1,
+  },
   [theme.breakpoints.up(948)]: {
     root: {
 

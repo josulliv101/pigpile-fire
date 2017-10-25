@@ -121,13 +121,13 @@ const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} 
 class AppBar extends Component {
 
   render() {
-    const {children, classes: cls, drawer, navDocked} = this.props;
+    const {children, classes: cls, drawer, navDocked, ...props} = this.props;
     const clsShrink = {[cls.shrink]: navDocked};
   	return (
       <div className={classNames(cls.root, {[cls.docked]: navDocked}, {[cls.withDrawer]: drawer})}>
         <Brand className={classNames(cls.brand, cls.transformOriginLeft, clsShrink)} />
         <Tagline className={classNames(cls.tagline, cls.transformOriginLeft, {[cls.shrinkTagline]: navDocked})} />
-        <Logo className={classNames(cls.logo, {[cls.shrinkLogo]: navDocked})} />
+        <Logo {...props} className={classNames(cls.logo, {[cls.shrinkLogo]: navDocked})} />
         <LoginButton className={classNames(cls.login, {[cls.shrinkLogin]: navDocked})} />
       </div>
   	)

@@ -8,6 +8,7 @@ import {reducer as formReducer} from 'redux-form'
 import {reducer as pilesReducer} from './modules/Pile'
 import {reducer as settingsReducer} from './modules/Settings'
 import {reducer as persistReducer} from './modules/Persist'
+import {reducer as getReducer} from './modules/Get'
 
 export default function configureStore(initialState, ...enhancerAddOns) {
 
@@ -20,6 +21,7 @@ export default function configureStore(initialState, ...enhancerAddOns) {
     form: formReducer,
     persist: persistReducer,
     pile: pilesReducer,
+    gettings: getReducer,
     settings: settingsReducer,
   })
 

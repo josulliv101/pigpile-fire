@@ -68,7 +68,7 @@ function Logo(props) {
     >
       {!loading && <Pigtail className={cls.icon} />}
       <div className={cls.back}>
-      	{loading && <CircularProgress className={cls.progress} size={26} thickness={6} />}
+      	{loading && <CircularProgress className={cls.progress} size={26} thickness={8} />}
       </div>
     </IconButton>
   )

@@ -7,6 +7,7 @@ import {Link, Route, Switch} from 'react-router-dom'
 import { withStyles } from 'material-ui/styles'
 import Button from 'material-ui/Button'
 //
+import {allDone} from '../../redux/modules/Get'
 import {setting} from '../../redux/modules/Settings'
 import globalStyle from '../../style/global'
 import AppBar from '../../components/AppBar'
@@ -75,5 +76,6 @@ export default compose(
   connect(state => ({
     drawer: state.settings.drawer,
     navDocked: state.settings.navDocked,
+    loading: !allDone(state),
   }), {setting}),
 )(AppFrame)

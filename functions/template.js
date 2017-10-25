@@ -19,6 +19,7 @@ const template = ({assets = {}, host = assets.url || '', body = '', css = '', in
     <script>
       window.__initialState = ${initialState}
     </script>
+    <script src="https://polyfill.io/v2/polyfill.min.js?flags=gated,always&features=IntersectionObserver"></script>
     <script src="/__/firebase/4.5.0/firebase-app.js" defer></script>
     <script src="/__/firebase/4.5.0/firebase-firestore.js" defer></script>
     <script src="/__/firebase/init.js" defer></script>

@@ -24,8 +24,8 @@ const styles = (theme, {primary, common: {black, white}} = theme.palette) => ({
 		backgroundColor: black,
 		boxShadow: theme.shadows[4],
 		color: white,
-    position: 'relative',
-    top: 0,
+    position: 'sticky',
+    top: -1,
     willChange: 'transform',
     zIndex: 3,
   },
@@ -51,9 +51,10 @@ class NavBar extends Component {
 
   render() {
     const {classes: cls, className, handleStickyNavChange, stickyEnabled} = this.props;
+    console.log('sticky?', this.state.stick)
   	return (
   		<Observer 
-  			className={classNames(cls.nav, {[cls.stick]: !this.state.stick}, className)}
+  			className={classNames(cls.nav, className)}
   			threshold={1} onChange={ this.setSticky }>
 	      <div
 	        

@@ -11,7 +11,7 @@ import {setting} from '../../redux/modules/Settings'
 
 const styles = (theme, {common: {white}} = theme.palette) => ({
   root: {
-
+  	padding: '1px 0',
   },
 
   [theme.breakpoints.up(748)]: {

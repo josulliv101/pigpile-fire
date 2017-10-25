@@ -28,11 +28,11 @@ function getTrending(firebase) {
     .get()
 }
 
-function getPile(firebase, id) {
+function getPile({api, id}) {
 
-  if (!firebase || !id) return
+  if (!api || !id) return
 
-  return firebase
+  return api
     .firestore()
     .collection("piles")
     .doc(id)

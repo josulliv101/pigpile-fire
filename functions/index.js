@@ -19,7 +19,7 @@ app.get('/:userId?', (req, res) => {
   if (id) {
 
     Promise.all([
-      db.getPile(admin, id),
+      db.getPile({api: admin, id}),
       db.getPileDonations(admin, id),
     ]).then(
       function ([doc, snapshot]) {

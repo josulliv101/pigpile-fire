@@ -76,32 +76,34 @@ function HomeBg(props) {
 }
 
 function PileBg(props) {
-  const {classes: cls, className, pile = {}, layout = pile.layout || {}, theme, themePreview} = props;
-  console.log('PileBg', layout, props)
 
+  const {
+  	classes: cls, 
+  	className, 
+  	pile = {}, 
+  	layout = pile.layout || {}, 
+  	theme: themeProp, 
+  	themePreview
+  } = props;
 
-  const currentThemeId = themePreview || layout.theme || theme.layout.appTheme.default
-  const isBgSelf = currentThemeId.startsWith('themeSelfAsBg') || currentThemeId === 'layoutImage'
-  // If image layout, the pile should have an imageUrl
-  let src = isBgSelf && pile.imageUrl;
+  
+  const themeId = themePreview || pile.theme || themeProp.layout.appTheme.default
+  const theme = appThemes[themeId]
 
-  console.log('currentThemeId', src, currentThemeId)
-
-  // Else use thw default appTheme image
-  if (!src && appThemes[currentThemeId].img) {
-    src = appThemes[currentThemeId].img
-  }
-
+  console.log('PileBg', themeId, theme)
+  if (!theme) return null
+  const src = theme.img || pile.imageUrl
+  console.log('theme', theme, src)
   return (
     <div className={classNames(
       cls.root,
-      {[cls.image]: layout['type-image']},
-      cls[currentThemeId],
+      {[cls.image]: themeId === 'panoramic'},
+      cls[themeId],
       // {[cls[idThemeDefault]]: !layout['type-image']},
       {[cls.withDrawer]: props.drawer},
       className
     )}>
-     {pile.imageUrl && <img className={classNames(cls.bg)} src={src} />}
+     {src && <img className={classNames(cls.bg)} src={src} />}
     </div>
   )
 }

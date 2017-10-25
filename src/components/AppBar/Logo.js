@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import {Link} from 'react-router-dom'
 import IconButton from 'material-ui/IconButton'
+import { CircularProgress } from 'material-ui/Progress';
 import { withStyles } from 'material-ui/styles'
 //
 import Pigtail from '../../icons/Pigtail'
@@ -38,19 +39,37 @@ const styles = (theme, {common: {white}, primary} = theme.palette) => ({
     width: size,
     zIndex: 2,
   },
+  loading: {
+  	'& $back': {
+  		background: white,
+  	},
+  },
+  progress: {
+    color: primary[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    height: 26,
+    marginTop: -13,
+    marginLeft: -13,
+    width: 26,
+    zIndex: 5,
+  },
   rippleFix: {},
 })
 
 function Logo(props) {
-  const {className, classes: cls, shrink} = props
+  const {className, classes: cls, loading = false, shrink} = props
   return (
     <IconButton
-      className={classNames(cls.root, {[cls.rippleFix]: shrink}, className)}
+      className={classNames(cls.root, {[cls.rippleFix]: shrink}, {[cls.loading]: loading},className)}
       component={Link}
       to="/"
     >
-      <Pigtail className={cls.icon} />
-      <div className={cls.back} />
+      {!loading && <Pigtail className={cls.icon} />}
+      <div className={cls.back}>
+      	{loading && <CircularProgress className={cls.progress} size={26} thickness={6} />}
+      </div>
     </IconButton>
   )
 }

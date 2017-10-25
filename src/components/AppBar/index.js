@@ -70,7 +70,7 @@ const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} 
     drawer: {},
     root: {
       '& $shrink': {
-        transform: 'scale3d(.8, .8, 1) translate3d(0, -4px, 0)',
+        transform: 'scale3d(.8, .8, 1) translate3d(0, -6px, 0)',
       },
       '& $shrinkLogin': {
         transform: 'scale3d(.8, .8, 1) translate3d(0, -6px, 0)',

@@ -6,8 +6,9 @@ import {Editor, EditorState, convertFromRaw} from 'draft-js'
 import DraftEditorContents from 'draft-js/lib/DraftEditorContents.react'
 import DefaultDraftBlockRenderMap from 'draft-js/lib/DefaultDraftBlockRenderMap'
 //
-import withSubscriptionToPile from '../../../hocs/withSubscriptionToPile'
-import withSubscriptionToPileDonations from '../../../hocs/withSubscriptionToPileDonations'
+import withGetPile from '../../../hocs/withGetPile'
+// import withSubscriptionToPile from '../../../hocs/withSubscriptionToPile'
+// import withSubscriptionToPileDonations from '../../../hocs/withSubscriptionToPileDonations'
 // import Editor from '../../../forms/Editor'
 
 const styles = (theme) => ({
@@ -29,7 +30,7 @@ class Pile extends Component {
 
   render() {
     const {classes: cls, className, donations = [], match, pile = {}} = this.props;
-    console.log('donations', donations)
+    console.log('getPile', this.props)
     console.log('pile', pile)
 
 	  const rawStory = typeof pile.story === 'string' ? JSON.parse(pile.story) : pile.story
@@ -51,7 +52,9 @@ class Pile extends Component {
           }
           <hr/>
           <ul>
-            {donations.length ? this.getDonations(donations) : <li>no donations yet</li>}
+            {
+            	// donations.length ? this.getDonations(donations) : <li>no donations yet</li>
+            }
           </ul>
         </main>
       </section>
@@ -63,6 +66,6 @@ class Pile extends Component {
 // Pass a custom key to 'withSubscriptionToPile' if needed.
 export default compose(
   withStyles(styles),
-  withSubscriptionToPile(),
-  withSubscriptionToPileDonations(),
+  withGetPile(),
+  // withSubscriptionToPileDonations(),
 )(Pile);

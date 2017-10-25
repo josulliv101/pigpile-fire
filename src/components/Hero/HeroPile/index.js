@@ -99,7 +99,7 @@ HeroPile.propTypes = {
 export default compose(
 	withStyles(styles),
 	connect( (state, ownProps) => ({
-  	pile: state.pile && state.pile[`pile-${ownProps.pileId}`],
+  	pile: state.settings && state.settings[`pile-${ownProps.pileId}`],
   	themePreview: state.settings && state.settings.themePreview,
   	textStylePreview: state.settings && state.settings.textStylePreview,
   	textPositionPreview: state.settings && state.settings.textPositionPreview,

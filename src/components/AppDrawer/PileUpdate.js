@@ -84,6 +84,6 @@ export default compose(
   withStyles(styles),
   connect((state, {match: {params: {id}}}) => ({
   	idParam: id,
-    pile: state.pile[`pile-${id}`],
+    pile: state.settings && state.settings[`pile-${id}`],
   })),
 )(PileUpdate)

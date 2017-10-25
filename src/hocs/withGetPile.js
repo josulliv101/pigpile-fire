@@ -10,6 +10,7 @@ export default (key = 'pile') => withGet({
   mapStateToProps: (state, {match}) => ({
   	id: match && match.params && match.params.id,
     [key]: state.settings && state.settings[`pile-${match && match.params && match.params.id}`] || {},
+    loaded: state.settings && !!state.settings[`pile-${match && match.params && match.params.id}`],
   }),
   getting: getPile,
   passedOnProps: props => ({id: props.id}),

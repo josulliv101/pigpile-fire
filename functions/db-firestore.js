@@ -18,11 +18,11 @@ function getAllThemes({api}) {
     .get()
 }
 
-function getTrending(firebase) {
+function getTrending({api}) {
 
-  if (!firebase) return
+  if (!api) return
 
-  return firebase
+  return api
     .firestore()
     .collection("piles")
     .get()

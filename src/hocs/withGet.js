@@ -9,7 +9,10 @@ export default function withGet({getting, onSuccess = noop, onError = noop, mapS
     class Enhanced extends PureComponent {
 
       componentDidMount() {
-      	console.log('withGet componentDidMount', getting)
+      	console.log('withGet componentDidMount', this.props)
+
+      	if (this.props.loaded === true) return
+
         this.props.getOnce({
           getting,
           onSuccess: onSuccess.bind(this, this.props),

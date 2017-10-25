@@ -36,10 +36,10 @@ app.get('/:userId?', (req, res) => {
       }
     )
   } else {
-    db.getTrending(admin).then(function (snapshot) {
+    db.getTrending({api: admin}).then(function (snapshot) {
         const trending = snapshot.docs.map(doc => doc.data());
         console.log('snapshot', snapshot.size)
-        render(req.url, res, {pile: {trending}});
+        render(req.url, res, {settings: {trending}});
       }, function(e) {
         console.log('err', e)
         render(req.url, res, {});

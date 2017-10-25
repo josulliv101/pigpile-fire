@@ -5,7 +5,8 @@ import {Link} from 'react-router-dom'
 import Grid from 'material-ui/Grid'
 import {withStyles} from 'material-ui/styles'
 //
-import withSubscriptionToTrending from '../hocs/withSubscriptionToTrending'
+import withGetTrending from '../hocs/withGetTrending'
+// import withSubscriptionToTrending from '../hocs/withSubscriptionToTrending'
 import FeatureCard from '../components/FeatureCard'
 import {Title} from '../components/Text'
 
@@ -49,5 +50,5 @@ class FeaturedSection extends PureComponent {
 
 export default compose(
   withStyles(styles),
-  withSubscriptionToTrending(),
+  withGetTrending(), // Results added to 'trending' prop by default. A different key can be specified if needed.
 )(FeaturedSection);

@@ -32,14 +32,6 @@ const styles = (theme) => ({
     flex: 1,
 
   },
-  nav: {
-    background: '#333',
-    color: '#fff',
-    padding: 18,
-    position: 'sticky',
-    top: 0,
-    zIndex: 3,
-  },
   withDrawer: {},
 });
 
@@ -66,7 +58,7 @@ class AppFrame extends Component {
           <BgImage {...props} />
           <AppBar {...props} />
           <Hero />
-          <div className={cls.nav}>my foobar nav</div>
+          <NavBar {...props} />
           {children}
           <AppFooter />
         </div>

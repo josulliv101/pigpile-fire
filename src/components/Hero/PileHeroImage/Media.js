@@ -66,7 +66,7 @@ class Media extends PureComponent {
   render() {
     const {children, classes: cls, imageUrl} = this.props
     return (
-      <Paper className={classNames(cls.root, {[cls.loaded]: this.state.loaded})} elevation={16}>
+      <Paper className={classNames(cls.root, {[cls.loaded]: this.state.loaded})} elevation={2}>
         {/*<UtilityBar className={cls.utils} tooltipPlacement="bottom" />*/}
         <img ref={node => this.img = node} src={imageUrl} onLoad={this.handleLoaded} />
         {children}

@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import compose from 'recompose/compose'
 import Grid from 'material-ui/Grid'
 import { withStyles } from 'material-ui/styles'
+import Fade from 'material-ui/transitions/Fade';
 //
 import * as appThemes from '../../../style/appThemes/'
 import {setting} from '../../../redux/modules/Settings'
@@ -75,18 +76,20 @@ class HeroPile extends Component {
     const {textStyle: textStyleAppTheme} =  appThemes[currentThemeId] || {}
     console.log('sidebar..', sidebar)
   	return (
-  		<div className={classNames(cls.root, className)}>
-	      <Grid className={cls.gridRoot} container spacing={24}>
-	      	<Grid className={classNames(...textPosition)} item xs={8}>
-	        	<Title {...(textStylePreview || textStyleAppTheme || layout)}>{title}</Title>
-	 					{currentThemeId !== 'layoutImage' && <Media imageUrl={imageUrl} />}
-	        </Grid>
-	        <Grid className={classNames(cls.sidebar, ...sidebar)} item xs={4}>
-	        	<DonateButton to="/" />
-	        	{sidebarTypePreviewProp !== 3 && <Stats goal={goal} />}
-	        </Grid>
-	      </Grid>
-  		</div>
+  		<Fade in={true}>
+	  		<div className={classNames(cls.root, className)}>
+		      <Grid className={cls.gridRoot} container spacing={24}>
+		      	<Grid className={classNames(...textPosition)} item xs={8}>
+		        	<Title {...(textStylePreview || textStyleAppTheme || layout)}>{title}</Title>
+		 					{currentThemeId !== 'layoutImage' && <Media imageUrl={imageUrl} />}
+		        </Grid>
+		        <Grid className={classNames(cls.sidebar, ...sidebar)} item xs={4}>
+		        	<DonateButton to="/" />
+		        	{/*sidebarTypePreviewProp !== 3 && <Stats goal={goal} />*/}
+		        </Grid>
+		      </Grid>
+	  		</div>
+  		</Fade>
   	)
   }
 }

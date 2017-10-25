@@ -27,10 +27,16 @@ function PileNav(props) {
   return (
     <div className={classNames(cls.root, className)}>
       <MuiButton onClick={() => setting('drawer', !drawer)} color="contrast">
-        pigpile
+        Overview
       </MuiButton>
       <Button to="/" to="/" >
-        pile
+        The Story
+      </Button>
+      <Button to="/" to="/" >
+        Updates
+      </Button>
+      <Button to="/" to="/" >
+        Comments
       </Button>
     </div>
   )

@@ -1,22 +1,35 @@
 import React, {Component} from 'react'
 import classNames from 'classnames'
 import compose from 'recompose/compose'
+import Grid from 'material-ui/Grid'
 import {withStyles} from 'material-ui/styles'
 import {Editor, EditorState, convertFromRaw} from 'draft-js'
 import DraftEditorContents from 'draft-js/lib/DraftEditorContents.react'
 import DefaultDraftBlockRenderMap from 'draft-js/lib/DefaultDraftBlockRenderMap'
 //
 import withGetPile from '../../../hocs/withGetPile'
-// import withSubscriptionToPile from '../../../hocs/withSubscriptionToPile'
-// import withSubscriptionToPileDonations from '../../../hocs/withSubscriptionToPileDonations'
-// import Editor from '../../../forms/Editor'
+import LogoCard from '../../../components/LogoCard'
+import Stats from '../../../components/Hero/HeroPile/Stats'
+import PromoInsert from './PromoInsert'
+import ShareBar from './ShareBar'
+import Organizer from './Organizer'
 
-const styles = (theme) => ({
+const styles = (theme, {unit} = theme.spacing) => ({
   root: {
-
+  	paddingTop: unit * 5,
   },
   full: {
-    background: theme.palette.common.white,
+    background: 'linear-gradient(to bottom, #fafafa 30%,#efefef 100%)',
+  },
+  gridMain: {
+  	'&>div': {
+  		marginBottom: unit * 2,
+  	},
+  },
+  gridAside: {
+  	'&>div': {
+  		marginBottom: unit * 2,
+  	},
   },
 })
 
@@ -41,21 +54,36 @@ class Pile extends Component {
   	return (
       <section className={classNames(cls.full)}>
         <main className={classNames(cls.root, className)}>
-          <h1>Pile page here. {match.params.id}</h1>
-          <h3>{pile.title} (goal is ${pile.goal})</h3>
-          {
-          	pile.story && 
-          	<Editor 
-          		editorState={editorState} 
-          		readOnly
-          	/>
-          }
-          <hr/>
-          <ul>
-            {
-            	// donations.length ? this.getDonations(donations) : <li>no donations yet</li>
-            }
-          </ul>
+		      <Grid container spacing={24}>
+		      	<Grid className={cls.gridMain} item xs={8}>
+		          <LogoCard title="Overview">
+		          	{pile.overview}
+		          </LogoCard>
+		         	<PromoInsert />
+		         	<LogoCard title="The Story">
+		          {
+		          	pile.story && 
+		          	<Editor editorState={editorState} readOnly/>
+		          }
+		          </LogoCard>
+		          <LogoCard title="Updates">
+		          	...
+		          </LogoCard>
+		        </Grid>
+		        <Grid className={cls.gridAside} item xs={4}>
+		        	<Stats full={true} />
+              <ShareBar />
+              <Organizer />
+		          <h1>Pile page here. {match.params.id}</h1>
+		          <h3>{pile.title} (goal is ${pile.goal})</h3>
+		          <hr/>
+		          <ul>
+	            {
+	            	// donations.length ? this.getDonations(donations) : <li>no donations yet</li>
+	            }
+	          </ul>
+		        </Grid>
+		      </Grid>
         </main>
       </section>
   	)

@@ -10,7 +10,7 @@ const styles = (theme, {unit} = theme.spacing, {darkBlack, lightBlack, lightWhit
     background: transparent,
     color: white,
     display: 'inline-block', // If bg present, only go as wide as text length, not full width.
-    fontSize: 30,
+    fontSize: 26,
     lineHeight: '36px',
     marginBottom: unit * 1.5,
     padding: 0,

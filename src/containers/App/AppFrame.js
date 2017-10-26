@@ -47,18 +47,25 @@ class AppFrame extends Component {
         classNames(
           cls.root,
         )}>
+
+    		{/* Drawers */}
         <Switch>
           <Route path="/login" render={() => null} />
           <Route path='/' exact={true} render={() => null} />
           <Route path='/:id' render={(ownProps) => <AppDrawer open={props.drawer} {...ownProps} />} />
         </Switch>
+
         <div className={classNames(cls.bd)}>
           <BgImage {...props} />
           <AppBar {...props} />
           <Hero />
           <NavBar {...props} />
           {children}
-          <AppFooter />
+	        <Switch>
+	          <Route path="/login" render={() => null} />
+	          <Route render={ownProps => <AppFooter />} />
+	        </Switch>
+          
         </div>
     	</div>
   	)

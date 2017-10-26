@@ -22,7 +22,7 @@ const styles = (theme, {unit} = theme.spacing, {primary, common: {white}} = them
   },
   logo: {
     color: theme.palette.grey[400],
-    marginBottom: theme.spacing.unit * 1/2,
+    marginBottom: theme.spacing.unit * 1.5,
     textAlign: 'center',
 		height: 36,
 		width: 36,

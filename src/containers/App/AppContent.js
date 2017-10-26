@@ -4,11 +4,12 @@ import {Route, Switch} from 'react-router-dom'
 import { withStyles } from 'material-ui/styles'
 //
 import Home from '../pages/Home'
+import Login from '../pages/Login'
 import Pile from '../pages/Pile'
 
 const styles = (theme) => ({
   root: {
-    background: theme.palette.common.white,
+    // background: theme.palette.common.white,
     minHeight: 240,
     // Slide over the top of the <Hero /> if present
     position: 'relative',
@@ -23,7 +24,7 @@ class AppContent extends Component {
   	return (
       <div className={cls.root}>
         <Switch>
-          <Route path="/login" render={() => <div>the login page</div>} />
+          <Route path="/login" component={Login} />
           <Route path='/' exact={true} component={Home} />
           <Route path='/:id' component={Pile} />
         </Switch>

@@ -8,7 +8,7 @@ import {Link} from 'react-router-dom'
 
 const styles = (theme) => ({
   root: {
-    boxShadow: theme.shadows[16],
+    boxShadow: theme.shadows[6],
     fontSize: 24,
     fontWeight: 400,
     height: 64,

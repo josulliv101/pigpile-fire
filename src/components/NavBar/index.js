@@ -49,7 +49,7 @@ class NavBar extends Component {
   			onChange={ this.setSticky }>
 	        <main>
 	          <Switch>
-	            <Route path="/login" render={() => <div>the login page</div>} />
+	            <Route path="/login" render={() => null} />
 	            <Route path='/' exact={true} component={HomeNav} />
 	            <Route path='/:id' component={PileNav} />
 	          </Switch>

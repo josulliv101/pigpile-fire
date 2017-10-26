@@ -50,7 +50,7 @@ const styles = (theme) => ({
   first: {},
   full: {
     background: 'rgb(82, 86, 92)', // theme.components.footer.bg,
-    minHeight: '90vh',
+    // minHeight: '90vh',
     position: 'relative',
     zIndex: 1,
   },

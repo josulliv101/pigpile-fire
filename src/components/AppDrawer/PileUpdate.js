@@ -37,23 +37,30 @@ const styles = (theme) => ({
 class PileUpdate extends Component {
 
   state = {
+  	enable: false,
     value: 0,
   };
 
   handleChange = (event, value) => {
     this.setState({ value });
-  };
+  }
 
-  handleChangeIndex = index => {
-    this.setState({ value: index });
-  };
+  componentWillReceiveProps = (nextProps) => {
+  	// Avoid rendering any content until user indicates interest in the drawer. 
+  	// Also don't want content to disappear as soon as drawer shuts.
+  	// Nicer if it remains while shutting.
+  	if (!this.props.open && nextProps.open && !this.state.enable ) {
+  		this.setState({enable: true})
+  	}
+  }
 
   render() {
     const {className, classes: cls, idParam, pile = {}} = this.props
+    const {enable, value} = this.state
     console.log('drawer pileupdate', this.props)
     return (
       <div className={classNames(cls.root, className)}>
-        <Subheading className={cls.subheading} contrast xlheavy>Fundraiser Content, Theming & More</Subheading>
+        <Subheading className={cls.subheading} contrast xlheavy>Edit Fundraiser</Subheading>
         <Tabs
           classes={{root: cls.tabsRoot}}
           value={this.state.value}
@@ -63,10 +70,10 @@ class PileUpdate extends Component {
         >
           <Tab classes={{root: cls.tabRoot}} label="Content" />
           <Tab classes={{root: cls.tabRoot}} label="Theme" />
-          <Tab classes={{root: cls.tabRoot}} label="Bank" />
+          <Tab classes={{root: cls.tabRoot}} label="Advanced" />
         </Tabs>
-        {this.state.value === 0 && pile.id && <Content {...pile} history={this.props.history} idParam={idParam} initialValues={{...pile, ...pile.location}} />}
-        {this.state.value === 1 && pile.id && <ThemeForm userLayout={pile.layout} activeThemeId={pile.theme} pileId={idParam} />}
+        {enable && value === 0 && pile.id && <Content {...pile} history={this.props.history} idParam={idParam} initialValues={{...pile, ...pile.location}} />}
+        {enable && value === 1 && pile.id && <ThemeForm userLayout={pile.layout} activeThemeId={pile.theme} pileId={idParam} />}
         {
         	// {...pile} history={this.props.history}  idParam={idParam} initialValues={{...pile, ...pile.location}}
         }

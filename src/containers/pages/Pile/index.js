@@ -9,10 +9,13 @@ import DefaultDraftBlockRenderMap from 'draft-js/lib/DefaultDraftBlockRenderMap'
 //
 import withGetPile from '../../../hocs/withGetPile'
 import LogoCard from '../../../components/LogoCard'
+import {Subheading} from '../../../components/Text'
 import Stats from '../../../components/Hero/HeroPile/Stats'
 import PromoInsert from './PromoInsert'
 import ShareBar from './ShareBar'
 import Organizer from './Organizer'
+import TshirtEnabledCallout from './TshirtEnabledCallout'
+import MeetChesterSection from '../../../sections/MeetChester'
 
 const styles = (theme, {unit} = theme.spacing) => ({
   root: {
@@ -20,6 +23,7 @@ const styles = (theme, {unit} = theme.spacing) => ({
   },
   full: {
     background: 'linear-gradient(to bottom, #fafafa 30%,#efefef 100%)',
+    paddingBottom: unit * 3,
   },
   gridMain: {
   	'&>div': {
@@ -50,42 +54,48 @@ class Pile extends Component {
 	  const contentState = pile.story && convertFromRaw(rawStory)
 	  const editorState = pile.story && EditorState.createWithContent(contentState)
 
-
   	return (
-      <section className={classNames(cls.full)}>
-        <main className={classNames(cls.root, className)}>
-		      <Grid container spacing={24}>
-		      	<Grid className={cls.gridMain} item xs={8}>
-		          <LogoCard title="Overview">
-		          	{pile.overview}
-		          </LogoCard>
-		         	<PromoInsert />
-		         	<LogoCard title="The Story">
-		          {
-		          	pile.story && 
-		          	<Editor editorState={editorState} readOnly/>
-		          }
-		          </LogoCard>
-		          <LogoCard title="Updates">
-		          	...
-		          </LogoCard>
-		        </Grid>
-		        <Grid className={cls.gridAside} item xs={4}>
-		        	<Stats full={true} />
-              <ShareBar />
-              <Organizer />
-		          <h1>Pile page here. {match.params.id}</h1>
-		          <h3>{pile.title} (goal is ${pile.goal})</h3>
-		          <hr/>
-		          <ul>
-	            {
-	            	// donations.length ? this.getDonations(donations) : <li>no donations yet</li>
-	            }
-	          </ul>
-		        </Grid>
-		      </Grid>
-        </main>
-      </section>
+  		[
+	      <section className={classNames(cls.full)}>
+	        <main className={classNames(cls.root, className)}>
+			      <Grid container spacing={24}>
+			      	<Grid className={cls.gridMain} item xs={8}>
+			          <LogoCard title="Overview">
+			          	{pile.overview}
+			          </LogoCard>
+			         	<PromoInsert />
+			         	<LogoCard title="The Story">
+			          {
+			          	pile.story && 
+			          	<Editor editorState={editorState} readOnly/>
+			          }
+			          </LogoCard>
+			          <LogoCard title="Updates">
+			          	...
+			          </LogoCard>
+			        </Grid>
+			        <Grid className={cls.gridAside} item xs={4}>
+			        	<Stats full={true} />
+	              <ShareBar />
+	              <Organizer />
+	              <TshirtEnabledCallout />
+
+	              <div>
+	              	<Subheading>Want to create your own pigpile? Easily update your campaign & change themes. Try the demo!</Subheading>
+	              </div>
+
+			          
+			          <ul>
+		            {
+		            	// donations.length ? this.getDonations(donations) : <li>no donations yet</li><hr/>
+		            }
+		          </ul>
+			        </Grid>
+			      </Grid>
+	        </main>
+	      </section>,
+	      <MeetChesterSection />
+      ]
   	)
   }
 }

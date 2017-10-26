@@ -61,6 +61,7 @@ const styles = (theme, appThemes = transformAppThemes(theme), {black} = theme.pa
 	    },
     },
     bg: {},
+    ...appThemes,
   },
 });
 
@@ -68,12 +69,21 @@ class BgImage extends Component {
   render() {
   	return (
       <Switch>
-        <Route path="/login" render={() => null} />
+        <Route path="/login" render={() => <LoginBg {...this.props} />} />
         <Route path="/" exact render={() => <HomeBg {...this.props} />} />
         <Route path='/:id' render={(ownProps) => <PileBg {...this.props} {...ownProps} />} />
       </Switch>
   	)
   }
+}
+
+function LoginBg(props) {
+  const {classes: cls, className} = props;
+  return (
+    <div className={classNames(cls.root, cls.pageLogin, className)}>
+     <img className={classNames(cls.bg)} src={appThemes.pageLogin.img} />
+    </div>
+  )
 }
 
 function HomeBg(props) {

@@ -9,7 +9,7 @@ import {Subheading, Title} from '../components/Text'
 
 const styles = (theme) => ({
   root: {
-    background: 'rgb(82, 86, 92)',
+    background: 'rgb(68, 79, 95)',
     color: theme.palette.common.white,
     paddingTop: theme.spacing.unit * 5,
     paddingBottom: theme.spacing.unit * 5,
@@ -24,7 +24,7 @@ const styles = (theme) => ({
     border: '14px rgb(104, 111, 122) solid',
     borderRadius: '50%',
     height: 240,
-    margin: `0 auto ${theme.spacing.unit * 6}px`,
+    margin: `0 auto ${theme.spacing.unit * 0}px`,
     width: 240,
     '&>div': {
       backgroundImage: `url(${theme.components.img.chester})`,
@@ -57,7 +57,7 @@ class MeetChesterSection extends PureComponent {
   	return (
       <section className={classNames(cls.root, className)}>
         <main>
-          <Grid container>
+          <Grid alignItems="center" container>
             <Grid item xs={8}>
               <Title className={cls.title} heavy>Pigpile's the trusted source in online fundraising.</Title>
               <Subheading className={cls.blurb}>
@@ -65,9 +65,6 @@ class MeetChesterSection extends PureComponent {
               </Subheading>
               <Subheading className={cls.blurb}>
                 Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
-              </Subheading>
-              <Subheading className={cls.blurb}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
               </Subheading>
             </Grid>
             <Grid item xs={4}>

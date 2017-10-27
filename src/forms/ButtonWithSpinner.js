@@ -69,7 +69,7 @@ class ButtonWithSpinner extends Component {
 	      <Button className={classNames(className)} {...props}> 
 	        {!spinning && children}
 	      </Button>
-        {spinning && <CircularProgress className={cls.progress} size={20} />}
+        {spinning && <CircularProgress className={cls.progress} size={20} thickness={8} />}
       </div>
     )
   }

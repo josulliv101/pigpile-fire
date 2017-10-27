@@ -1,10 +1,11 @@
-import React, {PureComponent} from 'react'
+import React, {Component} from 'react'
 import {findDOMNode} from 'react-dom'
 import {Field, Form, reduxForm, submit} from 'redux-form'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import List from 'material-ui/List'
 import Dialog from 'material-ui/Dialog';
+import Divider from 'material-ui/Divider';
 import Button from 'material-ui/Button'
 import compose from 'recompose/compose'
 import {withStyles} from 'material-ui/styles'
@@ -19,18 +20,21 @@ import {persistUpdate} from '../../redux/modules/Persist'
 import ButtonWithSpinner from '../../forms/ButtonWithSpinner'
 
 // const FORM_NAME = 'pile-update-theme'
-const TextEditor = (props) => <Field {...props} component={InputField} />
+const TextEditor = (props) => <Field {...props} component={InputField} fullWidth />
 
 
 const styles = (theme) => ({
   root: {
   	padding: 0,
   },
+  bd: {
+  	padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 1}px`,
+  },
   btnGroup: {
   	alignItems: 'center',
   	display: 'flex',
   	justifyContent: 'flex-end',
-  	padding: theme.spacing.unit * 2,
+  	padding: 0, // theme.spacing.unit * 2,
   	'&>button:first-child': {
       marginRight: theme.spacing.unit * 1,
   	    opacity: .7,
@@ -42,8 +46,11 @@ const styles = (theme) => ({
   		width: 600,
   	},
   },
-  form: {},
+  form: {
+  	margin: 0,
+  },
   popup: {},
+
   title: {
   	background: theme.palette.grey[700],
   	color: theme.palette.common.white,
@@ -51,7 +58,7 @@ const styles = (theme) => ({
   },
 })
 
-class Table extends PureComponent {
+class Table extends Component {
 
   state = {
     anchorEl: null,
@@ -141,7 +148,9 @@ class Table extends PureComponent {
 
 	  return (
 	    <List 
-	    	className={classNames(cls.root, className)}>
+	    	className={classNames(cls.root, className)}
+	    	dense
+	    	disableGutters>
 	    	{
 	    		rows.map(
 	    			item => item.type === 'title' 
@@ -167,26 +176,28 @@ class Table extends PureComponent {
             // persistStatus={persist}
             {...state}>
 			    	<Form 
-			    	className={cls.form}
+			    	  className={cls.form}
 							key={this.props.form} 
 							onSubmit={handleSubmit(this.handlePersistData)} 
 							autoComplete="off">
 					    <Subheading className={cls.title} heavy>
 			          {label || 'Edit'}
 			        </Subheading>
-			    		<Editor name={id} setParentState={this.setTableState}  />
-				      <div className={cls.btnGroup}>
-				      	<Button onClick={this.handleClose}>Cancel</Button>
-				      	<ButtonWithSpinner 
-			            color="primary" 
-			            onClick={this.dispatchSubmit} 
-			            raised
-			            type="submit"
-			            spinning={persist.inprocess}
-			          > 
-			            Update
-			          </ButtonWithSpinner>
-				      </div>
+			        <div className={cls.bd}>
+				    		<Editor name={id} setParentState={this.setTableState}  />
+					      <div className={cls.btnGroup}>
+					      	<Button onClick={this.handleClose}>Cancel</Button>
+					      	<ButtonWithSpinner 
+				            color="primary" 
+				            onClick={this.dispatchSubmit} 
+				            raised
+				            type="submit"
+				            spinning={persist.inprocess}
+				          > 
+				            Update
+				          </ButtonWithSpinner>
+					      </div>
+					    </div>
 			      </Form>
           </EditorFrame>
         }

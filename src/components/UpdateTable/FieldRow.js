@@ -5,26 +5,58 @@ import IconButton from 'material-ui/IconButton'
 import Switch from 'material-ui/Switch'
 import {ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText} from 'material-ui/List'
 import Edit from 'material-ui-icons/Edit'
+import Check from 'material-ui-icons/Check'
 import {withStyles} from 'material-ui/styles'
 //
 import EditModal from '../../icons/EditModal'
 import {Subheading} from '../Text'
 
-const styles = (theme, {unit} = theme.spacing) => ({
+const styles = (theme, {unit: u} = theme.spacing) => ({
   root: {
-    '&$success': {
-      backgroundColor: 'green',
+  	background: 'rgba(0, 0, 0, .04)',
+  	padding: `0 ${u * 4.5}px 0 0`,
+  },
+  check: {
+  	color: 'rgba(0,0,0,.4)',
+  	marginRight: -u * 1,
+  },
+  // Hovers are relative to .container
+  container: {
+  	// backgroundColor: theme.palette.common.faintBlack,
+  	// padding: `0 ${unit * 6}px 0 0`,
+    '& $success': {
+      backgroundColor: '#D7F1D8',
+      '& $field': {
+      	background: '#9bce9f',
+      },
+    },
+    '&:hover': {
+      background: theme.palette.common.transparent,
+      '& $icon': {
+        opacity: .5,
+      },
     },
   },
   field: {
     backgroundColor: theme.palette.common.faintBlack,
-    marginRight: unit * 2,
-    minWidth: 126,
-    padding: `0 ${unit * 6}px 0 0`,
+    marginRight: u * 2,
+    width: 112,
+    padding: `${u}px ${u * 2}px ${u}px ${u}px`,
     textTransform: 'capitalize',
   },
-  icon: {},
+  icon: {
+  	height: 40,
+  	marginTop: -20,
+  	marginRight: -u/2,
+  	opacity: 0,
+  	width: 40,
+  },
+  iconBtn: {
+  	height: 40,
+  	width: 40,
+  },
   success: {},
+  value: {},
 })
 
 class FieldRow extends PureComponent {
@@ -64,12 +96,15 @@ class FieldRow extends PureComponent {
     return (
       <ListItem 
         button 
+        classes={{container: cls.container}}
         className={classNames(cls.root, {[cls.success]: active && success}, className)}
+        // disableGutters
+        divider
         onClick={this.handleClick}>
-        <Subheading className={cls.field} heavy>{label}</Subheading>
-        <Subheading heavy noWrap>{value}</Subheading>
+        <Subheading align={active && success ? 'center' : 'right'} className={cls.field} heavy>{active && success ? <Check className={cls.check} /> : label}</Subheading>
+        <Subheading className={cls.value} heavy noWrap>{value}</Subheading>
         <ListItemSecondaryAction className={cls.icon}>
-          <IconButton tabIndex="-1">
+          <IconButton className={cls.iconBtn} tabIndex="-1">
             <Icon />
           </IconButton>
         </ListItemSecondaryAction>

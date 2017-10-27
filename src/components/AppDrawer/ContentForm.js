@@ -1,0 +1,93 @@
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import classNames from 'classnames'
+import {connect} from 'react-redux'
+import {Field} from 'redux-form'
+import dot from 'dot-object'
+import compose from 'recompose/compose'
+import {withStyles} from 'material-ui/styles'
+//
+import withGetAllThemes from '../../hocs/withGetAllThemes'
+import withGetAllTags from '../../hocs/withGetAllTags'
+
+import Table from '../UpdateTable/Table'
+import Row from '../UpdateTable/FieldRow'
+import Title from '../UpdateTable/SectionTitle'
+import LocationField from '../../forms/Location'
+import SelectTheme from '../../forms/SelectTheme'
+// import SelectTags from '../../forms/Tags'
+import SelectList from '../../forms/SelectList'
+import DraftJsEditor from '../../forms/Editor'
+
+const ListEditor = (props) => <Field {...props} component={SelectList} />
+const ThemeEditor = (props) => <Field {...props} component={SelectTheme} />
+const ContentEditor = (props) => <Field {...props} component={DraftJsEditor} />
+
+const styles = (theme) => ({
+  root: {},
+})
+
+function capitalizeFirstLetter(s) {
+		if (!s) return ''
+    return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+class ContentForm extends Component {
+
+	// Split on capital letters
+	camelCaseToLabel = (s) => {
+		const label = s.split(/(?=[A-Z])/).join(' ')
+		return capitalizeFirstLetter(label)		
+	}
+
+	contentRows = (activeTheme) => {
+		const {pile = {}} = this.props
+		return [
+			{id: 'edit', label: 'Edit a field.', type: 'title'},
+			{id: 'title', label: 'Title', value: pile.title},
+			{id: 'goal', label: 'Goal', value: pile.goal},
+			{id: 'organizer', label: 'Organizer', value: pile.organizer},
+		]
+	}
+
+  render() {
+
+    const {
+    	className, 
+    	classes: cls, 
+    	initialValues = {},
+    	pileId,
+    	// handleSubmit = f => f,
+    	persist = {},
+    	pile = {},
+    } = this.props
+
+    console.log('CONTENT FORM props', this.props)
+
+  	return <Table 
+  					form="pile-update-content" 
+  					rows={this.contentRows()} 
+  					persist={persist} 
+  					pileId={pileId} 
+  					initialValues={initialValues} 
+  				 />
+  }
+}
+
+ContentForm.propTypes = {
+  classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
+}
+
+const pick = ({title, goal, overview, organizer}) => ({title, goal, overview, organizer})
+
+export default compose(
+  withStyles(styles),
+  connect((state, {pileId, pile = {}}) => ({
+  	initialValues: pick(pile),
+  	persist: dot.pick(`persist.${pileId}`, state),
+  	// pile: dot.pick(`pile.pile-${pileId}`, state),
+  })),
+  withGetAllTags('tags'),
+  withGetAllThemes('themes'),
+)(ContentForm)

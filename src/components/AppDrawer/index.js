@@ -38,6 +38,7 @@ const styles = (theme) => ({
   },
   mounted: {},
   drawerPaper: {
+  	boxShadow: theme.shadows[4],
   	/*
     alignItems: 'flex-start',
     // background: theme.palette.common.lightBlack,

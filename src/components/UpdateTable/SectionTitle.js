@@ -6,7 +6,9 @@ import {withStyles} from 'material-ui/styles'
 //
 
 const styles = (theme) => ({
-  root: {},
+  root: {
+  	borderBottom: '1px solid rgba(0, 0, 0, 0.075)',
+  },
 })
 
 class SectionTitle extends Component {

@@ -13,11 +13,11 @@ import {Subheading} from '../Text'
 
 const styles = (theme, {unit: u} = theme.spacing) => ({
   root: {
-  	background: 'rgba(0, 0, 0, .04)',
+  	backgroundColor: 'rgba(0, 0, 0, .04)',
   	padding: `0 ${u * 4.5}px 0 0`,
   },
   check: {
-  	color: 'rgba(0,0,0,.4)',
+  	color: 'rgba(255,255,255,.98)',
   	marginRight: -u * 1,
   },
   // Hovers are relative to .container
@@ -27,11 +27,11 @@ const styles = (theme, {unit: u} = theme.spacing) => ({
     '& $success': {
       backgroundColor: '#D7F1D8',
       '& $field': {
-      	background: '#9bce9f',
+      	backgroundColor: '#9bce9f',
       },
     },
     '&:hover': {
-      background: theme.palette.common.transparent,
+      backgroundColor: theme.palette.common.transparent,
       '& $icon': {
         opacity: .5,
       },

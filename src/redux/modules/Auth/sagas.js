@@ -11,6 +11,7 @@ import {
 	authSignOutSuccess, 
 	authSignOutFailure
 } from './'
+import {setting} from '../Settings'
 
 function* workSignIn(api, {payload: {providerId}}) {
 
@@ -48,6 +49,8 @@ function* workAuthRedirect(api) {
 
   try {
 
+  	yield put(setting('handlingAuthRedirect', true))
+
     const {user} = yield call([firebaseAuth, firebaseAuth.getRedirectResult])
 
     console.log('handleAuthRedirect user', user)
@@ -55,6 +58,7 @@ function* workAuthRedirect(api) {
     // If redirect returned no user, we're done
     if (!user) return
 
+    
     const {displayName, photoURL, uid} = user.toJSON()
     // const userExists = yield call(insert, uid, email, {displayName, photoURL, uid})
 
@@ -62,6 +66,8 @@ function* workAuthRedirect(api) {
 
 
     yield put(authSignInSuccess({displayName, photoURL, uid}))
+
+    yield put(setting('handlingAuthRedirect', false))
 
     // getIdToken returns a promise
     const jwt = yield call(() => user.getIdToken(true)) // TODO need true here for forced refresh?

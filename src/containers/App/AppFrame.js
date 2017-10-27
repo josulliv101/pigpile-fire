@@ -86,6 +86,6 @@ export default compose(
   	auth: state.auth,
     drawer: state.settings.drawer,
     navDocked: state.settings.navDocked,
-    loading: !allDone(state),
+    loading: !allDone(state) || state.settings.handlingAuthRedirect === true,
   }), {setting}),
 )(AppFrame)

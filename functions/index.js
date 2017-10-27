@@ -18,7 +18,8 @@ app.get('/:userId?', (req, res) => {
 
   if (id) {
   	if (id === 'login') {
-  		render(req.url, res, {});
+  		console.log('&&&', req.query)
+  		render(req.url, res, {settings: {handlingAuthRedirect: req.query.redirect === '1'}});
   		return
   	}
     Promise.all([

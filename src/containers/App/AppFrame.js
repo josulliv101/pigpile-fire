@@ -59,7 +59,7 @@ class AppFrame extends Component {
 	        <Switch>
 	        	<Route path="/login" render={() => <AppBar {...props} />} />
           	<Route path='/' exact={true} render={() => <AppBar {...props} />} />
-	          <Route path='/:id' render={(ownProps) => <AppBar {...props} {...ownProps}  />} />
+	          <Route path='/:id' render={({match = {}}) => <AppBar {...props} {...match}  />} />
 	        </Switch>
           <Hero />
           <NavBar {...props} />

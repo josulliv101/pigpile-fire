@@ -11,6 +11,7 @@ import Tagline from './Tagline'
 import Logo from './Logo'
 import LoginButton from './LoginButton'
 import AccountButton from './AccountButton'
+import {setting} from '../../redux/modules/Settings'
 
 const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} = theme.breakpoints) => ({
   root: {
@@ -79,7 +80,7 @@ const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} 
         transform: 'scale3d(.8, .8, 1) translate3d(0, -12px, 0)',
       },
       '& $shrinkLogo': {
-        transform: 'scale3d(.8, .8, 1) translate3d(0, -18px, 0)',
+        transform: 'scale3d(.76, .76, 1) translate3d(0, -18px, 0)',
       },
       '& $shrinkTagline': {
         transform: 'scale3d(.86, .86, 1) translate3d(-24px, -6px, 0)',
@@ -124,9 +125,8 @@ const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} 
 class AppBar extends Component {
 
   render() {
-    const {auth, children, classes: cls, drawer, match = {}, navDocked, ...props} = this.props;
+    const {auth, children, classes: cls, drawer, navDocked, pile = {}, ...props} = this.props;
     const clsShrink = {[cls.shrink]: navDocked};
-    const {params = {}} = match
 
     console.log('id!!!', props)
   	return (
@@ -135,7 +135,13 @@ class AppBar extends Component {
         <Tagline className={classNames(cls.tagline, cls.transformOriginLeft, {[cls.shrinkTagline]: navDocked})} />
         <Logo {...props} className={classNames(cls.logo, {[cls.shrinkLogo]: navDocked})} />
 				{auth && auth.authenticated
-					? <AccountButton className={classNames(cls.login, {[cls.shrinkLogin]: navDocked})} user={auth.user}  />
+					? <AccountButton 
+							className={classNames(cls.login, {[cls.shrinkLogin]: navDocked})}
+							drawer={drawer}
+							edit={auth && auth.uid === pile.createdBy}
+							setting={this.props.setting}
+							user={auth.user} 
+							/>
 					: <LoginButton className={classNames(cls.login, {[cls.shrinkLogin]: navDocked})} />}
       </div>
   	)
@@ -155,7 +161,7 @@ AppBar.defaultProps = {
 
 export default compose(
 	withStyles(styles),
-	connect((state, {id}) => ({
-		id,
-	})),
+	connect((state, {params = {}}) => ({
+		pile: params.id && state.settings && state.settings[`pile-${params.id}`],
+	}), {setting}),
 )(AppBar)

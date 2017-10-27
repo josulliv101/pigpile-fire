@@ -100,7 +100,7 @@ class Stats extends PureComponent {
   render() {
     const {className, classes: cls, full = true, goal, justStats = false} = this.props
     return (
-      <Paper elevation={1} className={classNames(cls.root, {[cls.full]: full}, className)}>
+      <Paper elevation={6} className={classNames(cls.root, {[cls.full]: full}, className)}>
         {
           !justStats &&
           <div className={cls.bar}>

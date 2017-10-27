@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import {connect} from 'react-redux'
+import compose from 'recompose/compose'
 import {Link} from 'react-router-dom'
 import { withStyles } from 'material-ui/styles'
 //
@@ -8,6 +10,7 @@ import Brand from './Brand'
 import Tagline from './Tagline'
 import Logo from './Logo'
 import LoginButton from './LoginButton'
+import AccountButton from './AccountButton'
 
 const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} = theme.breakpoints) => ({
   root: {
@@ -73,10 +76,10 @@ const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} 
         transform: 'scale3d(.8, .8, 1) translate3d(0, -6px, 0)',
       },
       '& $shrinkLogin': {
-        transform: 'scale3d(.8, .8, 1) translate3d(0, -6px, 0)',
+        transform: 'scale3d(.8, .8, 1) translate3d(0, -12px, 0)',
       },
       '& $shrinkLogo': {
-        transform: 'scale3d(.7, .7, 1) translate3d(0, -12px, 0)',
+        transform: 'scale3d(.8, .8, 1) translate3d(0, -18px, 0)',
       },
       '& $shrinkTagline': {
         transform: 'scale3d(.86, .86, 1) translate3d(-24px, -6px, 0)',
@@ -121,14 +124,19 @@ const styles = (theme, {primary, common: {white}} = theme.palette, {up, values} 
 class AppBar extends Component {
 
   render() {
-    const {children, classes: cls, drawer, navDocked, ...props} = this.props;
+    const {auth, children, classes: cls, drawer, match = {}, navDocked, ...props} = this.props;
     const clsShrink = {[cls.shrink]: navDocked};
+    const {params = {}} = match
+
+    console.log('id!!!', props)
   	return (
       <div className={classNames(cls.root, {[cls.docked]: navDocked}, {[cls.withDrawer]: drawer})}>
         <Brand className={classNames(cls.brand, cls.transformOriginLeft, clsShrink)} />
         <Tagline className={classNames(cls.tagline, cls.transformOriginLeft, {[cls.shrinkTagline]: navDocked})} />
         <Logo {...props} className={classNames(cls.logo, {[cls.shrinkLogo]: navDocked})} />
-        <LoginButton className={classNames(cls.login, {[cls.shrinkLogin]: navDocked})} />
+				{auth && auth.authenticated
+					? <AccountButton className={classNames(cls.login, {[cls.shrinkLogin]: navDocked})} user={auth.user}  />
+					: <LoginButton className={classNames(cls.login, {[cls.shrinkLogin]: navDocked})} />}
       </div>
   	)
   }
@@ -145,4 +153,9 @@ AppBar.defaultProps = {
   navDocked: false,
 };
 
-export default withStyles(styles)(AppBar)
+export default compose(
+	withStyles(styles),
+	connect((state, {id}) => ({
+		id,
+	})),
+)(AppBar)

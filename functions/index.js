@@ -17,7 +17,10 @@ app.get('/:userId?', (req, res) => {
   res.set('Cache-Control', 'public, max-age=60, s-maxage=180');
 
   if (id) {
-
+  	if (id === 'login') {
+  		render(req.url, res, {});
+  		return
+  	}
     Promise.all([
       db.getPile({api: admin, id}),
       db.getPileDonations(admin, id),

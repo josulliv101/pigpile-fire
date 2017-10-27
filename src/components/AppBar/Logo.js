@@ -8,7 +8,7 @@ import { withStyles } from 'material-ui/styles'
 //
 import Pigtail from '../../icons/Pigtail'
 
-const size = 36
+const size = 42
 
 const styles = (theme, {common: {white}, primary} = theme.palette) => ({
   root: {
@@ -24,7 +24,7 @@ const styles = (theme, {common: {white}, primary} = theme.palette) => ({
   back: {
     background: primary[500],
     border: `${white} 2px solid`,
-    borderRadius: 36,
+    borderRadius: size,
     height: size,
     left: `calc(50% - ${size/2}px)`,
     position: 'absolute',

@@ -85,7 +85,7 @@ class HeroPile extends Component {
 		        </Grid>
 		        <Grid className={classNames(cls.sidebar, ...sidebar)} item xs={4}>
 		        	<DonateButton to="/" />
-		        	{/*sidebarTypePreviewProp !== 3 && <Stats goal={goal} />*/}
+		        	{sidebarTypePreviewProp !== 3 && <Stats goal={goal} />}
 		        </Grid>
 		      </Grid>
 	  		</div>

@@ -3,7 +3,7 @@ import createSagaMiddleware, {END} from 'redux-saga'
 import {reducer as formReducer} from 'redux-form'
 // import {reducer as asyncWorkReducer} from '@josulliv101/connect-async-work'
 //
-// import {reducer as authReducer} from './modules/Auth'
+import {reducer as authReducer} from './modules/Auth'
 // import {reducer as alertReducer} from './modules/Alert'
 import {reducer as pilesReducer} from './modules/Pile'
 import {reducer as settingsReducer} from './modules/Settings'
@@ -18,6 +18,7 @@ export default function configureStore(initialState, ...enhancerAddOns) {
   const sagaMiddleware = createSagaMiddleware()
 
   const reducer = combineReducers({
+  	auth: authReducer,
     form: formReducer,
     persist: persistReducer,
     pile: pilesReducer,

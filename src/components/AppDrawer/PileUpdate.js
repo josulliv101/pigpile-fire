@@ -89,8 +89,8 @@ PileUpdate.propTypes = {
 
 export default compose(
   withStyles(styles),
-  connect((state, {match: {params: {id}}}) => ({
-  	idParam: id,
-    pile: state.settings && state.settings[`pile-${id}`],
+  connect((state, {match: {params = {}} = {}}) => ({
+  	idParam: params.id,
+    pile: params.id && state.settings && state.settings[`pile-${params.id}`],
   })),
 )(PileUpdate)

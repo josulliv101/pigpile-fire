@@ -75,7 +75,7 @@ class Pile extends Component {
 			          </LogoCard>
 			        </Grid>
 			        <Grid className={cls.gridAside} item xs={4}>
-			        	<Stats full={true} />
+			        	{/*<Stats full={true} />*/}
 	              <ShareBar />
 	              <Organizer />
 	              <TshirtEnabledCallout />

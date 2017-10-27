@@ -52,12 +52,15 @@ class AppFrame extends Component {
         <Switch>
           <Route path="/login" render={() => null} />
           <Route path='/' exact={true} render={() => null} />
-          <Route path='/:id' render={(ownProps) => <AppDrawer open={props.drawer} {...ownProps} />} />
+          <Route path='/:id' render={({match = {}}) => <AppDrawer open={props.drawer} {...match} />} />
         </Switch>
-
         <div className={classNames(cls.bd)}>
           <BgImage {...props} />
-          <AppBar {...props} />
+	        <Switch>
+	        	<Route path="/login" render={() => <AppBar {...props} />} />
+          	<Route path='/' exact={true} render={() => <AppBar {...props} />} />
+	          <Route path='/:id' render={(ownProps) => <AppBar {...props} {...ownProps}  />} />
+	        </Switch>
           <Hero />
           <NavBar {...props} />
           {children}
@@ -65,7 +68,6 @@ class AppFrame extends Component {
 	          <Route path="/login" render={() => null} />
 	          <Route render={ownProps => <AppFooter />} />
 	        </Switch>
-          
         </div>
     	</div>
   	)
@@ -81,6 +83,7 @@ AppFrame.propTypes = {
 export default compose(
   withStyles(styles),
   connect(state => ({
+  	auth: state.auth,
     drawer: state.settings.drawer,
     navDocked: state.settings.navDocked,
     loading: !allDone(state),

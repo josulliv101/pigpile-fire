@@ -45,15 +45,19 @@ class Pile extends Component {
 
   getDonations = (items) => items.map((d, i) => <li key={i}>{d.name} / ${d.amount}</li>)
 
+  getDraftEditorState = fieldId => {
+  	const {pile = {}} = this.props;
+  	const raw = pile[fieldId] && typeof pile[fieldId] === 'string' ? JSON.parse(pile[fieldId]) : pile[fieldId]
+		const contentState = pile[fieldId] && convertFromRaw(raw)
+		return pile[fieldId] && EditorState.createWithContent(contentState)
+  }
+
+  
+
   render() {
     const {classes: cls, className, donations = [], match, pile = {}} = this.props;
     console.log('getPile', this.props)
     console.log('pile', pile)
-
-	  const rawStory = typeof pile.story === 'string' ? JSON.parse(pile.story) : pile.story
-	  const contentState = pile.story && convertFromRaw(rawStory)
-	  const editorState = pile.story && EditorState.createWithContent(contentState)
-
   	return (
   		[
 	      <section className={classNames(cls.full)}>
@@ -61,14 +65,11 @@ class Pile extends Component {
 			      <Grid container spacing={24}>
 			      	<Grid className={cls.gridMain} item xs={8}>
 			          <LogoCard title="Overview">
-			          	{pile.overview}
+			          	{ pile.overview && <Editor editorState={this.getDraftEditorState('overview')} readOnly/> }
 			          </LogoCard>
 			         	<PromoInsert />
 			         	<LogoCard title="The Story">
-			          {
-			          	pile.story && 
-			          	<Editor editorState={editorState} readOnly/>
-			          }
+			          { pile.story && <Editor editorState={this.getDraftEditorState('story')} readOnly/> }
 			          </LogoCard>
 			          <LogoCard title="Updates">
 			          	...

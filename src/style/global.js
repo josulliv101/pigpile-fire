@@ -12,7 +12,8 @@ export default function globalStyle(theme) {
 	      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
 	      fontSize: '14px',
 	      padding: '15px',
-	      height: 'calc(100% - 40px)',
+	      height: 'calc(100% - 140px)',
+	      marginBottom: 8,
 	    },
 
 	    '.RichEditor-editor': {
@@ -28,7 +29,7 @@ export default function globalStyle(theme) {
 	    },
 
 	    '.RichEditor-editor .public-DraftEditor-content': {
-	      minHeight: '100px',
+	      minHeight: '300px',
 	    },
 	    '.public-DraftEditorPlaceholder-root': {
 	      position: 'absolute',

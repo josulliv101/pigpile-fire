@@ -123,7 +123,7 @@ function* workSignOut(api) {
   try {
     yield call([firebaseAuth, firebaseAuth.signOut])
     yield put(authSignOutSuccess())
-    yield call([api, api.post], '/cookie')
+    // yield call([api, api.post], '/cookie')
   }
   catch (error) {
     yield put(authSignOutFailure(error))
@@ -160,7 +160,7 @@ function* workRefreshToken(api, {payload: {authUser}}) {
   // getIdToken returns a promise
   const jwt = yield call(() => authUser.getIdToken())
   console.log('authData.user', jwt)
-  yield call([api, api.post], '/cookie', {jwt})
+  // yield call([api, api.post], '/cookie', {jwt})
 
   // TODO Add error handling
 }

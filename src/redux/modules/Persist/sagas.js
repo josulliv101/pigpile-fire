@@ -13,7 +13,7 @@ function* workPersistUpdate(api, {payload: {id, update}}) {
   	const data = yield call(updatePile, api, id, update)
   	console.log('data', data)
   	yield put(persistUpdateSuccess(id, true))
-  	yield delay(800)
+  	yield delay(1600)
   	yield put(persistUpdateSuccess(id, false))
   } catch (error) {
     console.log('error', error)

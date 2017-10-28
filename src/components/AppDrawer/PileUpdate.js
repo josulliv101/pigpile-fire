@@ -14,6 +14,8 @@ import {Subheading} from '../Text'
 import ContentForm from './ContentForm'
 import ThemeForm from './ThemeForm'
 import {setting} from '../../redux/modules/Settings'
+import withSubscriptionToPile from '../../hocs/withSubscriptionToPile'
+import delaySubscriptionUntilOpen from '../../hocs/delaySubscriptionUntilOpen'
 
 const styles = (theme) => ({
   root: {
@@ -57,21 +59,11 @@ const styles = (theme) => ({
 class PileUpdate extends Component {
 
   state = {
-  	enable: false,
     value: 0,
   };
 
   handleChange = (event, value) => {
     this.setState({ value });
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-  	// Avoid rendering any content until user indicates interest in the drawer. 
-  	// Also don't want content to disappear as soon as drawer shuts.
-  	// Nicer if it remains while shutting.
-  	if (!this.props.open && nextProps.open && !this.state.enable ) {
-  		this.setState({enable: true})
-  	}
   }
 
   render() {
@@ -88,20 +80,18 @@ class PileUpdate extends Component {
             <Close className={cls.icon} />
           </IconButton>
       	</div>
-        
         <Tabs
           classes={{root: cls.tabsRoot}}
           value={this.state.value}
           onChange={this.handleChange}
           indicatorColor="primary"
-          textColor="primary"
-        >
+          textColor="primary">
           <Tab classes={{root: cls.tabRoot}} label="Content" />
           <Tab classes={{root: cls.tabRoot}} label="Theme" />
           <Tab classes={{root: cls.tabRoot}} label="Advanced" />
         </Tabs>
-        {enable && value === 0 && pile.id && <ContentForm pileId={idParam} pile={pile} />}
-        {enable && value === 1 && pile.id && <ThemeForm userLayout={pile.layout} activeThemeId={pile.theme} pileId={idParam} />}
+        {value === 0 && pile.id && <ContentForm pileId={idParam} pile={pile} />}
+        {value === 1 && pile.id && <ThemeForm userLayout={pile.layout} activeThemeId={pile.theme} pileId={idParam} />}
       </div>
     )
   }
@@ -118,4 +108,5 @@ export default compose(
   	idParam: params.id,
     pile: params.id && state.settings && state.settings[`pile-${params.id}`],
   }), {setting}),
+  delaySubscriptionUntilOpen(withSubscriptionToPile),
 )(PileUpdate)

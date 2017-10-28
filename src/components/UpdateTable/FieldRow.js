@@ -38,8 +38,9 @@ const styles = (theme, {unit: u} = theme.spacing) => ({
     },
   },
   field: {
-    backgroundColor: theme.palette.common.faintBlack,
+    backgroundColor: 'rgba(195, 195, 195, 0.1)',
     marginRight: u * 2,
+    minWidth: 112,
     width: 112,
     padding: `${u}px ${u * 2}px ${u}px ${u}px`,
     textTransform: 'capitalize',

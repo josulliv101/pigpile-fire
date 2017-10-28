@@ -52,7 +52,7 @@ class AppFrame extends Component {
         <Switch>
           <Route path="/login" render={() => null} />
           <Route path='/' exact={true} render={() => null} />
-          <Route path='/:id' render={({match = {}}) => <AppDrawer open={props.drawer} {...match} />} />
+          <Route path='/:id' render={({match = {}}) => <AppDrawer open={props.drawer} {...match} match={match} />} />
         </Switch>
         <div className={classNames(cls.bd)}>
           <BgImage {...props} />

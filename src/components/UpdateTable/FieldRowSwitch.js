@@ -36,11 +36,6 @@ const styles = (theme, {unit: u} = theme.spacing) => ({
         opacity: .5,
       },
     },
-  	'&$switch $icon': {
-  		marginRight: u * 1,
-  		marginTop: u * -3,
-  		opacity: 1,
-  	},
   },
   field: {
     backgroundColor: 'rgba(195, 195, 195, 0.1)',
@@ -62,29 +57,22 @@ const styles = (theme, {unit: u} = theme.spacing) => ({
   	width: 40,
   },
   success: {},
-  switch: {
-
-  },
   value: {},
 })
 
 class FieldRow extends PureComponent {
 
   handleClick = (ev) => {
-    const {controlValue, editor, id, label, isSwitch, modal} = this.props
-    console.log('row handleClick', this.props, !isSwitch,)
+    const {editor, id, label, modal} = this.props
+    console.log('row handleClick', this.props)
     // `this` within setParentState fn refers to parent
     this.props.setParentState({
       anchorEl: !modal ? ev.currentTarget : null, 
-
-      // Switches don't need a popup. They just toggle. Open popup everything else.
-      open: true, // !isSwitch, 
+      open: true, 
 
       // Add other props here if needed. These all get passed to popup editor.
-      controlValue,
       editor, 
       id,
-      isSwitch,
       label,
       modal,
     })
@@ -96,10 +84,8 @@ class FieldRow extends PureComponent {
       active,
       classes: cls, 
       className, 
-      controlValue: checked,
       id,
-      isSwitch = false, 
-      
+      isSwitch = false,
       label, 
       modal,
       success,
@@ -110,7 +96,7 @@ class FieldRow extends PureComponent {
     return (
       <ListItem 
         button 
-        classes={{container: classNames(cls.container, {[cls.switch]: isSwitch})}}
+        classes={{container: cls.container}}
         className={classNames(cls.root, {[cls.success]: active && success}, className)}
         // disableGutters
         divider
@@ -119,7 +105,7 @@ class FieldRow extends PureComponent {
         <Subheading className={cls.value} heavy noWrap>{value}</Subheading>
         <ListItemSecondaryAction className={cls.icon}>
           <IconButton className={cls.iconBtn} tabIndex="-1">
-            <Icon {...(isSwitch ? {checked} : {})} />
+            <Icon />
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>

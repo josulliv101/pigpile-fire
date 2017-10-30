@@ -15,6 +15,7 @@ import PopupEditor from './PopupEditor'
 import Title from './SectionTitle'
 import {Subheading} from '../Text'
 import Row from './FieldRow'
+import RowSwitch from './FieldRowSwitch'
 import InputField from '../../forms/InputField' // default popup editor
 import {persistUpdate} from '../../redux/modules/Persist'
 import ButtonWithSpinner from '../../forms/ButtonWithSpinner'
@@ -25,7 +26,14 @@ const TextEditor = (props) => <Field {...props} component={InputField} fullWidth
 
 const styles = (theme) => ({
   root: {
+  	backgroundColor: '#fafafa',
+  	opacity: 1,
   	padding: 0,
+  	transition: theme.transitions.create(['background-color', 'opacity']),
+  	'&$disable': {
+  		backgroundColor: '#eee',
+  		opacity: .7,
+  	},
   },
   bd: {
   	padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 1}px`,
@@ -46,8 +54,12 @@ const styles = (theme) => ({
   		width: 600,
   	},
   },
+  disable: {},
   form: {
   	margin: 0,
+  },
+  hide: {
+  	visibility: 'hidden',
   },
   popup: {},
 
@@ -68,7 +80,7 @@ class Table extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-
+  	console.log('table componentWillReceiveProps', nextProps)
     // Detect an update success, then close dialog
     if (this.props.persist.inprocess === true && nextProps.persist.inprocess === false && nextProps.persist.done === true) {
       this.setState({open: false})
@@ -101,7 +113,7 @@ class Table extends Component {
   handlePersistData = (values) => {
   	const {dispatch, pileId} = this.props
   	const {id, stringify} = this.state
-  	console.log('handlePersistData...', values[id])
+  	console.log('handlePersistData...', this, this.state.id, values[id])
 
   	// Move any stringify or merge ect to saga?
   	let update = {[id]: typeof values[id] === 'object' && stringify ? JSON.stringify(values[id]) : values[id]} 
@@ -117,6 +129,15 @@ class Table extends Component {
   	// existing properties that are not involved in update.
   	// try , { merge: true } option
   	dispatch(persistUpdate(pileId, update))
+  }
+
+  onEditorEntered = (node) => {
+  	const {controlValue, id, isSwitch} = this.state
+  	console.log('onEnter', id, isSwitch, controlValue)
+  	if (id && isSwitch) {
+  		// this.props.change(id, !controlValue)
+  		this.dispatchSubmit()
+  	}
   }
 
   // Avoid having to use arrow-function or use bind in onClick handler
@@ -148,31 +169,34 @@ class Table extends Component {
 
 	  return (
 	    <List 
-	    	className={classNames(cls.root, className)}
+	    	className={classNames(cls.root, {[cls.disable]: this.state.open}, className)}
 	    	dense
 	    	disableGutters>
 	    	{
 	    		rows.map(
-	    			item => item.type === 'title' 
+	    			(item, i, arg, RowCmp = item.switch ? Row : Row) => item.type === 'title' 
 	    				? <Title key={item.id} {...item} /> 
-	    				: <Row 
+	    				: <RowCmp 
 	    						active={this.state.id === item.id} 
 	    						key={item.id} 
 	    						{...item} 
 	    						setParentState={this.setTableState} 
 	    						success={persist.successUi === true} 
+	    						// Needed for Switches since they don't have a popup editor
+	    						handlePersistData={this.handlePersistData}
 	    					/>
 	    		)
 	    	}
         {
           this.state.open && this.state.id && 
           <EditorFrame 
-          	className={classNames({[cls.dialog]: modal}, {[cls.popup]: !modal})}
+          	className={classNames({[cls.hide]: this.state.isSwitch}, {[cls.dialog]: modal}, {[cls.popup]: !modal})}
           	key={`editor-${!modal ? 'popup' : 'dialog'}`}
           	// {...(!modal ? {anchorEl} : {})}
           	// dispatchSubmit={this.dispatchSubmit}
             // handleUpdate={this.handlePersistData}
             onRequestClose={this.handleClose} 
+            onEntering={this.onEditorEntered}
             // persistStatus={persist}
             {...state}>
 			    	<Form 

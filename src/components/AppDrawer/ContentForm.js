@@ -19,10 +19,22 @@ import SelectTheme from '../../forms/SelectTheme'
 // import SelectTags from '../../forms/Tags'
 import SelectList from '../../forms/SelectList'
 import DraftJsEditor from '../../forms/Editor'
+import CheckboxField from '../../forms/CheckboxField'
 
 const ListEditor = (props) => <Field {...props} component={SelectList} />
 const ThemeEditor = (props) => <Field {...props} component={SelectTheme} />
 const ContentEditor = (props) => <Field {...props} component={DraftJsEditor} />
+
+class SwitchEditor extends Component {
+
+	componentDidMount = () => {
+		console.log('onMount')
+	}
+
+	render() {
+		return <Field {...this.props} component={CheckboxField} autoToggle={true} />
+	}
+}
 
 const styles = (theme) => ({
   root: {},
@@ -89,6 +101,8 @@ class ContentForm extends Component {
 				value: pileTags, 
 				editor: (props) => <ListEditor {...props} items={tagsAll} multi={true} />,
 			},
+			// This is a modal because the Popup isn't firing the onEnter callback, but modal works properly.
+			{ id: 'isPrivate', modal: true, label: 'Private', controlValue: pile.isPrivate, value: pile.isPrivate ? 'true' : 'false', editor: SwitchEditor, switch: true, isSwitch: true },
 		]
 	}
 
@@ -121,7 +135,7 @@ ContentForm.propTypes = {
   className: PropTypes.string,
 }
 
-const pick = ({title, goal, overview, organizer, beneficiary, story, tags, location}) => ({title, goal, overview, organizer, beneficiary, story, tags, location})
+const pick = ({title, goal, overview, organizer, beneficiary, story, tags, location, isPrivate}) => ({title, goal, overview, organizer, beneficiary, story, tags, location, isPrivate})
 
 export default compose(
   withStyles(styles),

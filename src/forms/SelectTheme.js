@@ -19,10 +19,10 @@ const styles = (theme) => ({
   root: {
   	backgroundColor: 'rgba(0,0,0,.04)',
   },
-  icon: {
+  iconItem: {
   	marginRight: 0,
   },
-  radio: {
+  radioItem: {
   	height: 20,
 		width: 20, 
   },
@@ -129,12 +129,12 @@ class SelectTheme extends Component {
 
   	return [
   		<Cmp key={item.id} {...item} active={active} cls={classes} dense={!isRoot} onClick={handler} />,
-  		children.length ? <Collapse in={active} transitionDuration="auto" >{children}</Collapse>: null
+  		children.length ? <Collapse key={`collapse-${item.id}`} in={active} transitionDuration="auto" >{children}</Collapse>: null
   	]
   }
 
   render(list) {
-    const {input, items = [], merge, setParentState, ...props} = this.props
+    const {classes, input, items = [], merge, setParentState, ...props} = this.props
     console.log('SelectTheme', items, props, input)
     return (
       <List {...props}>
@@ -148,7 +148,7 @@ class SelectTheme extends Component {
 
 function ThemeItem({cls, ...props}) {
 	return(
-	  <ListItem button dense={props.dense} divider key={props.id} onClick={props.onClick}>
+	  <ListItem button dense={props.dense} divider key={`theme-${props.id}`} onClick={props.onClick}>
       {	
       	// Only real themes can have a swatch color
       	props.swatch && <Button raised style={{minWidth: 24, minHeight: 24, padding: 0,background: props.swatch, marginRight: 0, height: 24, width: 24, border: '2px #fff solid'}}> </Button>
@@ -157,13 +157,13 @@ function ThemeItem({cls, ...props}) {
 	    {
 	    	props.active === true && props.tags && props.tags.root && 
 	      <ListItemIcon>
-	        <Check className={classNames(cls.icon)} />
+	        <Check className={classNames(cls.iconItem)} />
 	      </ListItemIcon>
 	    }
 	    {
 	    	props.swatch && 
 	      <ListItemIcon>
-	        {props.active ? <RadioOn className={classNames(cls.icon, cls.radio)} /> : <RadioOff className={classNames(cls.icon, cls.radio)} />}
+	        {props.active ? <RadioOn className={classNames(cls.iconItem, cls.radioItem)} /> : <RadioOff className={classNames(cls.iconItem, cls.radioItem)} />}
 	      </ListItemIcon>
 	    }
 	  </ListItem>
@@ -172,12 +172,12 @@ function ThemeItem({cls, ...props}) {
 
 function PseudoThemeItem({cls, ...props}) {
 	return(
-	  <ListItem button divider key={props.id} onClick={props.onClick}>
+	  <ListItem button divider key={`pseudo-${props.id}`} onClick={props.onClick}>
 	    <ListItemText primary={props.name} />
 	    {
 	    	props.active === true && 
 	      <ListItemIcon>
-	        <Check className={classNames(cls.icon)} />
+	        <Check className={classNames(cls.iconItem)} />
 	      </ListItemIcon>
 	    }
 	  </ListItem>
@@ -190,7 +190,7 @@ function ContainerItem({cls, ...props}) {
 	    <ListItemText primary={props.name} />
 	    {
 	      <ListItemIcon>
-	        {props.active === true ? <ExpandLess className={classNames(cls.icon)} /> : <ExpandMore className={classNames(cls.icon)} />}
+	        {props.active === true ? <ExpandLess className={classNames(cls.iconItem)} /> : <ExpandMore className={classNames(cls.iconItem)} />}
 	      </ListItemIcon>
 	    }
 	  </ListItem>

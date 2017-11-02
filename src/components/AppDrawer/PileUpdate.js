@@ -91,7 +91,7 @@ class PileUpdate extends Component {
           <Tab classes={{root: cls.tabRoot}} label="Advanced" />
         </Tabs>
         {value === 0 && pile.id && <ContentForm pileId={idParam} pile={pile} />}
-        {value === 1 && pile.id && <ThemeForm userLayout={pile.layout} activeThemeId={pile.theme} pileId={idParam} />}
+        {value === 1 && pile.id && <ThemeForm pileId={idParam} pile={pile} />}
       </div>
     )
   }

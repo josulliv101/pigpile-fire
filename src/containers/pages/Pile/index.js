@@ -60,7 +60,7 @@ class Pile extends Component {
     console.log('pile', pile)
   	return (
   		[
-	      <section className={classNames(cls.full)}>
+	      <section key="main" className={classNames(cls.full)}>
 	        <main className={classNames(cls.root, className)}>
 			      <Grid container spacing={24}>
 			      	<Grid className={cls.gridMain} item xs={8}>
@@ -95,7 +95,7 @@ class Pile extends Component {
 			      </Grid>
 	        </main>
 	      </section>,
-	      <MeetChesterSection />
+	      <MeetChesterSection key="meetChester" />
       ]
   	)
   }

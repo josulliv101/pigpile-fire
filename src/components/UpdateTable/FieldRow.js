@@ -35,6 +35,9 @@ const styles = (theme, {unit: u} = theme.spacing) => ({
       '& $icon': {
         opacity: .5,
       },
+	  	'&$switch $icon': {
+	  		opacity: 1,
+	  	},
     },
   	'&$switch $icon': {
   		marginRight: u * 1,

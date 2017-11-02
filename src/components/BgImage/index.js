@@ -6,9 +6,9 @@ import {connect} from 'react-redux'
 import {Route, Switch} from 'react-router-dom'
 import {withStyles, withTheme} from 'material-ui/styles'
 //
-import * as appThemes from '../../style/appThemes/'
-
-const styles = (theme, appThemes = transformAppThemes(theme), {black} = theme.palette.common, {hero} = theme.components, {up, values} = theme.breakpoints) => ({
+// import * as appThemes from '../../style/appThemes/'
+// appThemes = transformAppThemes(theme),
+const styles = (theme, {black} = theme.palette.common, {hero} = theme.components, {up, values} = theme.breakpoints) => ({
   root: {
     backgroundColor: black,
     position: 'absolute',
@@ -49,7 +49,7 @@ const styles = (theme, appThemes = transformAppThemes(theme), {black} = theme.pa
   	// opacity: 0,
   },
   withDrawer: {},
-  ...appThemes,
+  // ...appThemes,
   [up(values.md)]: {
     root: {
       height: '100%',
@@ -61,7 +61,7 @@ const styles = (theme, appThemes = transformAppThemes(theme), {black} = theme.pa
 	    },
     },
     bg: {},
-    ...appThemes,
+    // ...appThemes,
   },
 });
 
@@ -81,7 +81,7 @@ function LoginBg(props) {
   const {classes: cls, className} = props;
   return (
     <div className={classNames(cls.root, cls.pageLogin, className)}>
-     <img className={classNames(cls.bg)} src={appThemes.pageLogin.img} />
+     {/*<img className={classNames(cls.bg)} src={appThemes.pageLogin.img} />*/}
     </div>
   )
 }
@@ -90,7 +90,7 @@ function HomeBg(props) {
   const {classes: cls, className} = props;
   return (
     <div className={classNames(cls.root, cls.pageHome, className)}>
-     <img className={classNames(cls.bg)} src={appThemes.pageHome.img} />
+     {/*<img className={classNames(cls.bg)} src={appThemes.pageHome.img} />*/}
     </div>
   )
 }
@@ -109,7 +109,8 @@ class PileBg extends Component {
   componentDidMount = () => this.img && this.img.complete && this.handleLoaded()
 
 	render() {
-		const {
+	  const {
+		appThemes = [],
 	  	classes: cls, 
 	  	className, 
 	  	pile = {}, 
@@ -120,7 +121,7 @@ class PileBg extends Component {
 
 	  
 	  const themeId = themePreview || pile.theme || themeProp.layout.appTheme.default
-	  const theme = appThemes[themeId]
+	  const theme = appThemes && appThemes[themeId]
 
 	  console.log('PileBg', themeId, theme)
 	  if (!theme) return null
@@ -165,6 +166,7 @@ BgImage.propTypes = {
   className: PropTypes.string,
 };
 
+/*
 // Grab all themes and prepare them so they can be added to style
 function transformAppThemes(th) {
   return Object.keys(appThemes).reduce(
@@ -174,6 +176,7 @@ function transformAppThemes(th) {
     }
   , {})
 }
+*/
 
 export default compose(
   withStyles(styles),

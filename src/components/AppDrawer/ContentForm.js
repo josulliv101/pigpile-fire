@@ -102,7 +102,15 @@ class ContentForm extends Component {
 				editor: (props) => <ListEditor {...props} items={tagsAll} multi={true} />,
 			},
 			// This is a modal because the Popup isn't firing the onEnter callback, but modal works properly.
-			{ id: 'isPrivate', modal: true, label: 'Private', controlValue: pile.isPrivate, value: pile.isPrivate ? 'true' : 'false', editor: SwitchEditor, switch: true, isSwitch: true },
+			{ 
+				id: 'isPrivate', 
+				modal: true, 
+				label: 'Private', 
+				controlValue: pile.isPrivate, 
+				value: pile.isPrivate ? '' : '', 
+				editor: SwitchEditor, 
+				switch: true, 
+				isSwitch: true },
 		]
 	}
 
@@ -145,5 +153,5 @@ export default compose(
   	// pile: dot.pick(`pile.pile-${pileId}`, state),
   })),
   withGetAllTags('tagsAll'),
-  withGetAllThemes('themes'),
+  // withGetAllThemes('themes'),
 )(ContentForm)

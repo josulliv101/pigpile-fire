@@ -4,13 +4,12 @@ import classNames from 'classnames'
 import {connect} from 'react-redux'
 import {Field} from 'redux-form'
 import dot from 'dot-object'
-import numeral from 'numeral'
 import compose from 'recompose/compose'
 import {withStyles} from 'material-ui/styles'
-import {convertFromRaw} from 'draft-js'
 //
 import withGetAllThemes from '../../hocs/withGetAllThemes'
 import withGetAllTags from '../../hocs/withGetAllTags'
+
 import Table from '../UpdateTable/Table'
 import Row from '../UpdateTable/FieldRow'
 import Title from '../UpdateTable/SectionTitle'
@@ -19,23 +18,11 @@ import SelectTheme from '../../forms/SelectTheme'
 // import SelectTags from '../../forms/Tags'
 import SelectList from '../../forms/SelectList'
 import DraftJsEditor from '../../forms/Editor'
-import CheckboxField from '../../forms/CheckboxField'
 
 const ListEditor = (props) => <Field {...props} component={SelectList} />
 const ThemeEditor = (props) => <Field {...props} component={SelectTheme} />
 const ContentEditor = (props) => <Field {...props} component={DraftJsEditor} />
- 
-class SwitchEditor extends Component {
 
-	componentDidMount = () => {
-		console.log('onMount')
-	}
-
-	render() {
-		return <Field {...this.props} component={CheckboxField} autoToggle={true} />
-	}
-}
-// 
 const styles = (theme) => ({
   root: {},
 })
@@ -43,17 +30,6 @@ const styles = (theme) => ({
 function capitalizeFirstLetter(s) {
 		if (!s) return ''
     return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
-const getDraftPlainText = (value) => {
-	if (!value) return ''
-	const raw = typeof value === 'string' ? JSON.parse(value) : value
-	const contentState = convertFromRaw(raw)
-	return contentState.getPlainText()
-}
-
-const getLocationLabel = (loc = {}) => {
-	return `${loc.city}, ${loc.state}`
 }
 
 class ThemeForm extends Component {
@@ -64,37 +40,50 @@ class ThemeForm extends Component {
 		return capitalizeFirstLetter(label)		
 	}
 
-	themeRows = () => {
-		const {pile = {}, themes = []} = this.props
-		// const pileTags = Object.keys(pile.tags || {}).join(', ')
-		console.log('themerows', themes)
+	themeRows = (activeTheme) => {
+		const {name = ''} = activeTheme
+		const {pile = {}, tags = {}, themes} = this.props
+		const tagsLabel = Object.keys(pile.tags || {}).join(', ')
+
 		return [
-			{id: 'theme-settings', label: 'Change theme settings.', type: 'title'},
-			{id: 'theme', label: 'Theme', value: pile.theme, editor: (props) => <ThemeEditor {...props} items={themes} />},
+			{id: 'subhead1', label: 'Change the theme.', type: 'title'},
+			{id: 'theme', label: 'Theme', value: name, editor: (props) => <ThemeEditor {...props} items={themes} />},
+			{id: 'subheadTags', label: 'Update tags.', type: 'title'},
+			{id: 'tags', label: 'Tags', value: tagsLabel, editor: (props) => <ListEditor {...props} items={tags} multi={true} />},
+			{id: 'story', label: 'Story', value: pile.story, modal: true, editor: (props) => <ContentEditor {...props} stringify={true} />},
+			{id: 'subhead2', label: `Config options for ${name}.`, type: 'title'},
 		]
 	}
+
+	configRows = (config = {}, userLayout = {}) => Object.keys(config).map(id =>({
+		id: `layout.${id}`,
+		label: this.camelCaseToLabel(id),
+		value: userLayout[id],
+	}))
 
   render() {
 
     const {
+    	activeThemeId,
     	className, 
     	classes: cls, 
     	initialValues = {},
     	pileId,
+    	userLayout,
     	// handleSubmit = f => f,
     	persist = {},
     	pile = {},
+    	themes = [],
+    	rootThemes = themes.filter(({tags}) => tags && tags.root),
+    	activeTheme = activeThemeId && themes.find(th => th.id === activeThemeId) || {},
+    	config = activeTheme.config,
     } = this.props
 
-    console.log('THEME FORM props', this.props)
+    console.log('ownprops test', this.props)
+    if (!activeTheme) return null
 
-  	return <Table 
-  					form="pile-update-theme" 
-  					rows={this.themeRows()} 
-  					persist={persist} 
-  					pileId={pileId} 
-  					initialValues={initialValues} 
-  				 />
+    const rows = this.themeRows(activeTheme).concat(this.configRows(config, userLayout))
+  	return <Table form="pile-update-theme" rows={rows} persist={persist} pileId={pileId} initialValues={initialValues} />
   }
 }
 
@@ -103,14 +92,15 @@ ThemeForm.propTypes = {
   className: PropTypes.string,
 }
 
-const pick = ({theme}) => ({theme})
+const pick = ({theme, layout, location, tags}) => ({theme, layout, location, tags})
 
 export default compose(
   withStyles(styles),
-  connect((state, {pileId, pile = {}}) => ({
-  	initialValues: pick(pile),
+  connect((state, {pileId}) => ({
+  	initialValues: pick(dot.pick(`pile.pile-${pileId}`, state)),
   	persist: dot.pick(`persist.${pileId}`, state),
-  	// pile: dot.pick(`pile.pile-${pileId}`, state),
+  	pile: dot.pick(`pile.pile-${pileId}`, state),
   })),
+  withGetAllTags('tags'),
   withGetAllThemes('themes'),
 )(ThemeForm)

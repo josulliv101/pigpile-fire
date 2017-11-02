@@ -58,7 +58,7 @@ class SelectList extends Component {
 
 
   render() {
-    const {input, items = [], multi, setParentState, ...props} = this.props
+    const {input, items = [], merge, multi, setParentState, ...props} = this.props
     console.log('SelectList', items, props, input)
     return (
       <List {...props}>

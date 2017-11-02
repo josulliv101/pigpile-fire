@@ -171,7 +171,7 @@ class Table extends Component {
 	    <List 
 	    	className={classNames(cls.root, {[cls.disable]: this.state.open}, className)}
 	    	dense
-	    	disableGutters>
+	    	>
 	    	{
 	    		rows.map(
 	    			(item, i, arg, RowCmp = item.switch ? Row : Row) => item.type === 'title' 

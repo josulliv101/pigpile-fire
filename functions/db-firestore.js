@@ -28,6 +28,18 @@ function getTrending({api}) {
     .get()
 }
 
+function getTheme({api, id}) {
+
+  if (!api || !id) return
+
+  return api
+    .firestore()
+    .collection("themes")
+    .doc(id)
+    .get()
+    .then(doc => doc.data())
+}
+
 function getPile({api, id}) {
 
   if (!api || !id) return
@@ -37,6 +49,22 @@ function getPile({api, id}) {
     .collection("piles")
     .doc(id)
     .get()
+}
+
+function getPileWithTheme({api, id}) {
+
+  if (!api || !id) return
+
+  return api
+    .firestore()
+    .collection("piles")
+    .doc(id)
+    .get()
+    .then(doc => {
+    	const pile = doc.data()
+    	const themeId = pile.theme || 'wave-dark'
+    	return getTheme({api, id: themeId}).then(themeDoc => Object.assign({}, pile, {themeObj: themeDoc}))
+    })
 }
 
 function getPileDonations(firebase, id) {
@@ -63,6 +91,7 @@ const updatePile = (api, id, update = {}) => {
     .collection("piles")
     .doc(id)
     .update(update)
+    .then(() => getPileWithTheme({api, id}))
 }
 
 const subscribeToPile = ({api, id, onSuccess = noop, onError = noop}) => {
@@ -117,6 +146,8 @@ module.exports = {
   getAllThemes,
   getPile,
   getPileDonations,
+  getPileWithTheme,
+  getTheme,
   getTrending,
   subscribeToPile,
   subscribeToPileDonations,

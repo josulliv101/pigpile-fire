@@ -5,7 +5,7 @@ import {gets, getting as getIt, gettingSuccess, gettingError} from './index'
 function* workGet(api, {type, payload: {getting, onSuccess, onError, ...rest}}) { // , ...rest
 
   console.log('workGet', getting, api)
-  console.log('action type', type)
+  console.log('action type', type, rest)
 
   // console.log('workSubscription', api, instance, subscription, onSuccess, onError, rest)
   if (!api || !getting) return;

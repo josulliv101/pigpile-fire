@@ -1,10 +1,11 @@
 import withGet from './withGet'
 import {setting} from '../redux/modules/Settings'
+import {setTheme} from '../redux/modules/Theme'
 import {getPile as getOnce} from '../redux/modules/Get'
-import {getPile} from '../../functions/db-firestore'
+import {getPileWithTheme as getPile} from '../../functions/db-firestore'
 
 export default (key = 'pile') => withGet({
-  actions: {getOnce, setting},
+  actions: {getOnce, setTheme, setting},
   onError,
   onSuccess,
   mapStateToProps: (state, {match}) => ({
@@ -18,8 +19,10 @@ export default (key = 'pile') => withGet({
 
 // Avoid arrow-function here to avoid auto binding for 'this'
 function onSuccess(props, doc) {
-  console.log('!@#!@# onSuccess', props, doc.data())
-  props.setting(`pile-${props.id}`, doc && doc.data())
+  console.log('!@#!@# onSuccess', props, doc)
+  props.setTheme(doc.themeObj)
+  props.setting(`pile-${props.id}`, doc)
+
 }
 
 function onError(e) {

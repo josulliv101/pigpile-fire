@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import {Field} from 'redux-form'
+import {connect} from 'react-redux'
 import compose from 'recompose/compose'
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -14,6 +15,7 @@ import RadioOff from 'material-ui-icons/RadioButtonUnchecked';
 import ExpandMore from 'material-ui-icons/ExpandMore';
 import ExpandLess from 'material-ui-icons/ExpandLess';
 //
+import {preview, unsetPreview} from '../redux/modules/Theme'
 
 const styles = (theme) => ({
   root: {
@@ -42,7 +44,7 @@ class SelectTheme extends Component {
 
   handleThemeChange = (item) => {
     console.log('handleThemeChange', item)
-    const {input, themes} = this.props
+    const {input, preview, themes} = this.props
 
   	// If item at root, there's no container
   	if (item.tags && item.tags.root) {
@@ -50,11 +52,12 @@ class SelectTheme extends Component {
   	}
 
   	input.onChange(item.id)
+  	preview(item.id)
   }
 
   handleContainerChange = (item) => {
     console.log('handleContainerChange', item)
-    const {input, themes} = this.props
+    const {input, preview, themes} = this.props
 
     // True containers have toggle ability. Pseudo-themes act like radios
     if (item.pseudoTheme !== true) {
@@ -75,6 +78,7 @@ class SelectTheme extends Component {
     	if (!this.hasActiveChild(item.id)) {
     		const defaultTheme = this.getDefaultThemeForTag(item.id)
     		input.onChange(defaultTheme && defaultTheme.id)
+    		preview(defaultTheme && defaultTheme.id)
     	}
     }
   }
@@ -95,6 +99,7 @@ class SelectTheme extends Component {
   	if (this.props.setParentState) {
   		this.props.setParentState({merge: null})
   	}
+  	this.props.unsetPreview()
   }
 
   hasActiveChild = (themeId) => {
@@ -134,7 +139,7 @@ class SelectTheme extends Component {
   }
 
   render(list) {
-    const {classes, input, items = [], merge, setParentState, ...props} = this.props
+    const {classes, input, items = [], merge, preview, unsetPreview, setParentState, ...props} = this.props
     console.log('SelectTheme', items, props, input)
     return (
       <List {...props}>
@@ -209,4 +214,5 @@ SelectTheme.defaultProps = {
 
 export default compose(
   withStyles(styles),
+  connect(null, {preview, unsetPreview}),
 )(SelectTheme)

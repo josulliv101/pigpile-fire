@@ -1,17 +1,23 @@
 import { delay } from 'redux-saga'
 import { takeEvery, call, put } from 'redux-saga/effects'
 import {persistUpdate, persistUpdateSuccess, persistUpdateError} from './index'
+import {setTheme} from '../Theme'
 import {updatePile} from '../../../../functions/db-firestore'
 
 // Doing in saga to extract any reference to ajax or db layer from components.
 function* workPersistUpdate(api, {payload: {id, update}}) {
 
   console.log('workPersistUpdate', api, id, update)
+
   if (!api || !id || !update) return;
 
   try {
   	const data = yield call(updatePile, api, id, update)
-  	console.log('data', data)
+  	console.log('workPersistUpdate data', data)
+
+  	// Update active theme in case it changed
+  	if (data.themeObj) yield put(setTheme(data.themeObj))
+
   	yield put(persistUpdateSuccess(id, true))
   	yield delay(1600)
   	yield put(persistUpdateSuccess(id, false))

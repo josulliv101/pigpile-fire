@@ -63,8 +63,11 @@ class HeroPile extends Component {
   componentWillUnmount = () => this.props.setting('drawer', false)
 
   render() {
-    const {classes: cls, className, pile: {goal, imageUrl, layout = {}, title} = {}, sidebarTypePreview: sidebarTypePreviewProp, textPositionPreview: textPositionPreviewProp, textStylePreview: textStylePreviewProp, themePreview} = this.props;
-    const currentThemeId = themePreview || layout.theme
+    const {classes: cls, className, theme, pile: {goal, imageUrl, layout = {}, themeObj,  title} = {}, sidebarTypePreview: sidebarTypePreviewProp, textPositionPreview: textPositionPreviewProp, textStylePreview: textStylePreviewProp, themePreview} = this.props;
+    console.log('HeroPile...',  theme)
+    if (!theme) return null
+
+    const currentThemeId = theme.id // themePreview || layout.theme
     const textStylePreview = textStylePreviewProp && textStylePreviewProp > 0 && {[`textStyle-${textStylePreviewProp}`]: true}
 
     const textPositionPreview = textPositionPreviewProp && textPositionPreviewProp > 0 && {[cls[`textPosition${textPositionPreviewProp}`]]: true}
@@ -81,7 +84,7 @@ class HeroPile extends Component {
 		      <Grid className={cls.gridRoot} container spacing={24}>
 		      	<Grid className={classNames(...textPosition)} item xs={8}>
 		        	<Title {...(textStylePreview || textStyleAppTheme || layout)}>{title}</Title>
-		 					{currentThemeId !== 'layoutImage' && <Media imageUrl={imageUrl} />}
+		 					{currentThemeId !== 'panoramic' && <Media imageUrl={imageUrl} />}
 		        </Grid>
 		        <Grid className={classNames(cls.sidebar, ...sidebar)} item xs={4}>
 		        	<DonateButton to="/" />
@@ -103,6 +106,8 @@ export default compose(
 	withStyles(styles),
 	connect( (state, ownProps) => ({
   	pile: state.settings && state.settings[`pile-${ownProps.pileId}`],
+  	// theme: state.theme && state.theme.active,
+  	theme: state.theme && (state.theme.preview || state.theme.active),
   	themePreview: state.settings && state.settings.themePreview,
   	textStylePreview: state.settings && state.settings.textStylePreview,
   	textPositionPreview: state.settings && state.settings.textPositionPreview,

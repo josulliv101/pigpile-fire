@@ -8,14 +8,14 @@ import {withStyles, withTheme} from 'material-ui/styles'
 //
 // import * as appThemes from '../../style/appThemes/'
 // appThemes = transformAppThemes(theme),
-const styles = (theme, {black} = theme.palette.common, {hero} = theme.components, {up, values} = theme.breakpoints) => ({
+const styles = (theme, {black, transparent} = theme.palette.common, {hero} = theme.components, {up, values} = theme.breakpoints) => ({
   root: {
-    backgroundColor: black,
+    backgroundColor: transparent,
     position: 'absolute',
     width: '100%',
     // willChange: 'transform',
     zIndex: 1,
-    '&:after': {
+    '&>$gradient': {
       // backgroundImage: 'linear-gradient(180deg,#4180d7,hsla(0,0%,48%,.7))', // linear-gradient(180deg,rgb(33, 150, 243),hsl(207, 83%, 71%))',
       bottom: 0,
       content: '" "',
@@ -37,10 +37,12 @@ const styles = (theme, {black} = theme.palette.common, {hero} = theme.components
       width: `calc(100% - ${theme.components.drawer.width}px)`,
     },
   },
+  
   bg: {
   	// backgroundColor: theme.palette.common.transparent,
   	// transition: theme.transitions.create(['opacity']),
   },
+  gradient: {},
   loaded: {
   	// opacity: 1,
   },
@@ -53,7 +55,7 @@ const styles = (theme, {black} = theme.palette.common, {hero} = theme.components
   [up(values.md)]: {
     root: {
       height: '100%',
-      '&:after': {
+      '&>$gradient': {
         height: hero.height,
       },
 	    '&>$bg': {
@@ -61,6 +63,7 @@ const styles = (theme, {black} = theme.palette.common, {hero} = theme.components
 	    },
     },
     bg: {},
+    gradient: {},
     // ...appThemes,
   },
 });
@@ -115,32 +118,38 @@ class PileBg extends Component {
 	  	className, 
 	  	pile = {}, 
 	  	layout = pile.layout || {}, 
-	  	theme: themeProp, 
-	  	themePreview
+	  	theme, 
+	  	// themePreview
 	  } = this.props;
 
-	  
-	  const themeId = themePreview || pile.theme || themeProp.layout.appTheme.default
-	  const theme = appThemes && appThemes[themeId]
+	  // const themeId = themePreview || pile.themeObj || themeProp.layout.appTheme.default
+	  // const theme = pile.themeObj // appThemes && appThemes[themeId]
 
-	  console.log('PileBg', themeId, theme)
+	  console.log('PileBg', theme)
+	  console.log('PileBg;props', this.props)
+
 	  if (!theme) return null
-	  const src = theme.img || pile.imageUrl
-	  console.log('theme', theme, src)
+
+	  const {jss: {bg, gradient, root: rootStyle}} = theme
+
+	  const src = theme.image || pile.imageUrl
+	  console.log('theme', src)
 	  return (
-	    <div className={classNames(
+	    <div style={rootStyle} className={classNames(
 	      cls.root,
-	      {[cls.image]: themeId === 'panoramic'},
-	      cls[themeId],
+	      // {[cls.image]: theme.id === 'panoramic'},
+	      // cls[theme.id],
 	      // {[cls[idThemeDefault]]: !layout['type-image']},
 	      {[cls.withDrawer]: this.props.drawer},
 	      className
 	    )}>
+	    	<div style={gradient} className={cls.gradient} />
 	     {
-	     		src && 
+	     		theme && src && 
 	     		<img 
 	     			ref={this.ref} 
 	     			onLoad={this.handleLoaded} 
+	     			style={bg}
 	     			className={classNames(
 	     				cls.bg, 
 	     				// {[cls.loaded]: this.state.loaded},
@@ -152,13 +161,12 @@ class PileBg extends Component {
 	    </div>
 	  )	
 	}
-
 }
 
-
 PileBg = connect((state, {match: {params: {id}}}) => ({
-  pile: state.pile[`pile-${id}`],
-  themePreview: state.settings && state.settings.themePreview,
+  pile: state.settings && state.settings[`pile-${id}`],
+  theme: state.theme && (state.theme.preview || state.theme.active),
+  // themePreview: state.settings && state.settings.themePreview,
 }))(PileBg)
 
 BgImage.propTypes = {

@@ -3,7 +3,7 @@ import { createAction, handleActions } from 'redux-actions'
 export const change = createAction('@pigpile/THEME_CHANGE', (id) => ({id}))
 export const preview = createAction('@pigpile/THEME_PREVIEW', (id) => ({id}))
 export const error = createAction('@pigpile/THEME_ERROR', (error) => ({error}))
-export const previewDone = createAction('@pigpile/THEME_PREVIEW_DONE')
+export const unsetPreview = createAction('@pigpile/THEME_UNSET_PREVIEW')
 export const setTheme = createAction('@pigpile/THEME_SET', (theme) => ({theme}))
 export const setThemePreview = createAction('@pigpile/THEME_SET_PREVIEW', (theme) => ({theme}))
 
@@ -25,7 +25,7 @@ export const reducer = handleActions({
     preview: payload.theme,
   }),
 
-  [previewDone]: (state) => ({
+  [unsetPreview]: (state) => ({
     ...state,
     preview: null,
   }),

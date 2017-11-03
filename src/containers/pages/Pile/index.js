@@ -8,6 +8,7 @@ import DraftEditorContents from 'draft-js/lib/DraftEditorContents.react'
 import DefaultDraftBlockRenderMap from 'draft-js/lib/DefaultDraftBlockRenderMap'
 //
 import withGetPile from '../../../hocs/withGetPile'
+import withGetTheme from '../../../hocs/withGetTheme'
 import LogoCard from '../../../components/LogoCard'
 import {Subheading} from '../../../components/Text'
 import Stats from '../../../components/Hero/HeroPile/Stats'
@@ -80,12 +81,9 @@ class Pile extends Component {
 	              <ShareBar />
 	              <Organizer />
 	              <TshirtEnabledCallout />
-
 	              <div>
 	              	<Subheading>Want to create your own pigpile? Easily update your campaign & change themes. Try the demo!</Subheading>
 	              </div>
-
-			          
 			          <ul>
 		            {
 		            	// donations.length ? this.getDonations(donations) : <li>no donations yet</li><hr/>
@@ -105,6 +103,7 @@ class Pile extends Component {
 // Pass a custom key to 'withSubscriptionToPile' if needed.
 export default compose(
   withStyles(styles),
+  // withGetTheme(),
   withGetPile(),
   // withSubscriptionToPileDonations(),
 )(Pile);

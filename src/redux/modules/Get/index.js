@@ -6,6 +6,7 @@ export const gettingError = createAction('@pigpile/GETTING_ERROR', (id, error) =
 
 // Helpful to have individual actions while in development
 export const getPile = createAction('@pigpile/GET_PILE')
+export const getTheme = createAction('@pigpile/GET_THEME')
 export const getTrending = createAction('@pigpile/GET_TRENDING')
 export const getAllTags = createAction('@pigpile/GET_ALL_TAGS')
 export const getAllThemes = createAction('@pigpile/GET_ALL_THEMES')
@@ -15,6 +16,7 @@ export const gets = [
   getAllTags,
   getAllThemes,
   getPile,
+  getTheme,
   getTrending,
 ];
 

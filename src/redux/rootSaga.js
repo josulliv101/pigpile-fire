@@ -6,6 +6,7 @@ import authWatchers from './modules/Auth/sagas'
 import subscriptionWatchers from './modules/Subscription/sagas'
 import getWatchers from './modules/Get/sagas'
 import persistWatchers from './modules/Persist/sagas'
+import themeWatchers from './modules/Theme/sagas'
 
 export default function* rootSaga(api) {
   console.log('rootSaga received api', api)
@@ -15,5 +16,6 @@ export default function* rootSaga(api) {
     ...subscriptionWatchers.map(fn => fn(api)),
     ...getWatchers.map(fn => fn(api)),
     ...persistWatchers.map(fn => fn(api)),
+    ...themeWatchers.map(fn => fn(api)),
   ])
 }

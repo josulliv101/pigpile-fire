@@ -23,16 +23,16 @@ app.get('/:userId?', (req, res) => {
   		return
   	}
     Promise.all([
-      db.getPile({api: admin, id}),
+      db.getPileWithTheme({api: admin, id}),
       db.getPileDonations(admin, id),
     ]).then(
-      function ([doc, snapshot]) {
-        render(req.url, res, {
-          pile: {
-            [`pile-${id}`]: doc.data(),
-            [`pile-${id}-donations`]: snapshot.docs.map(doc => doc.data()),
-          }
-        });
+      function ([pile, snapshot]) {
+	    render(req.url, res, {
+	      settings: {
+	        [`pile-${id}`]: pile,
+	        [`pile-${id}-donations`]: snapshot.docs.map(d => d.data()),
+	      }
+	    });
       },
       function(e) {
         console.log('err', e)

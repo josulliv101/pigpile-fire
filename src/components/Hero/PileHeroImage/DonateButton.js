@@ -12,7 +12,6 @@ const styles = (theme) => ({
     fontSize: 24,
     fontWeight: 400,
     height: 64,
-    // marginBottom: theme.spacing.unit * 2,
     width: '100%',
   },
   [theme.breakpoints.up(948)]: {

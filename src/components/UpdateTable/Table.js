@@ -113,7 +113,7 @@ class Table extends Component {
   handlePersistData = (values) => {
   	const {dispatch, pileId} = this.props
   	const {id, stringify} = this.state
-  	console.log('handlePersistData...', this, this.state.id, values[id])
+  	console.log('handlePersistData...', id, values)
 
   	// Move any stringify or merge ect to saga?
   	let update = {[id]: typeof values[id] === 'object' && stringify ? JSON.stringify(values[id]) : values[id]} 

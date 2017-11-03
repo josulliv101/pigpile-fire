@@ -62,7 +62,7 @@ function getPileWithTheme({api, id}) {
     .get()
     .then(doc => {
     	const pile = doc.data()
-    	const themeId = pile.theme || 'wave-dark'
+    	const themeId = pile.theme && pile.theme.id || 'wave-dark'
     	return getTheme({api, id: themeId}).then(themeDoc => Object.assign({}, pile, {themeObj: themeDoc}))
     })
 }

@@ -6,6 +6,7 @@ import compose from 'recompose/compose'
 import Grid from 'material-ui/Grid'
 import { withStyles } from 'material-ui/styles'
 import Fade from 'material-ui/transitions/Fade';
+import dot from 'dot-object'
 //
 import * as appThemes from '../../../style/appThemes/'
 import {setting} from '../../../redux/modules/Settings'
@@ -41,13 +42,13 @@ const styles = (theme, {unit} = theme.spacing, {up, values} = theme.breakpoints)
   	alignSelf: 'flex-end',
   },
 
-  textPosition1: {
+  titlePosition1: {
   	// default
   },
-  textPosition2: {
+  titlePosition2: {
   	alignSelf: 'flex-end',
   },
-  textPosition3: {
+  titlePosition3: {
   	justifyContent: 'flex-end',
   },
   [up(values.md)]: {
@@ -63,32 +64,37 @@ class HeroPile extends Component {
   componentWillUnmount = () => this.props.setting('drawer', false)
 
   render() {
-    const {classes: cls, className, theme, pile: {goal, imageUrl, layout = {}, themeObj,  title} = {}, sidebarTypePreview: sidebarTypePreviewProp, textPositionPreview: textPositionPreviewProp, textStylePreview: textStylePreviewProp, themePreview} = this.props;
+    const {classes: cls, className, theme, pile = {}, themeConfig = {}} = this.props;
     console.log('HeroPile...',  theme)
-    if (!theme) return null
+    if (!theme || !pile) return null
 
-    const currentThemeId = theme.id // themePreview || layout.theme
-    const textStylePreview = textStylePreviewProp && textStylePreviewProp > 0 && {[`textStyle-${textStylePreviewProp}`]: true}
+    const {
+    	config = {}, 
+    	id: currentThemeId,
+    	configKeys = Object.keys(config),
+    } = theme // themePreview || layout.theme
 
-    const textPositionPreview = textPositionPreviewProp && textPositionPreviewProp > 0 && {[cls[`textPosition${textPositionPreviewProp}`]]: true}
+    // Loop over only the keys that the theme defines as being present for this theme.
+    // But take the actual value from the user's config object.
+  	const configClasses = configKeys.reduce((sum, key) => {
+  		console.log(key, themeConfig[key])
+  		sum[key] = cls[`${key}${themeConfig[key]}`]
+  		return sum
+  	}, {})
 
-    const sidebarTypePreview = sidebarTypePreviewProp && sidebarTypePreviewProp > 0 && {[cls[`sidebarType${sidebarTypePreviewProp}`]]: true}
-    const sidebar = (sidebarTypePreview && [sidebarTypePreview]) || [1,2,3].map(n => ({[cls[`sidebarType${n}`]]: layout[`sidebarType-${n}`]}))
+  	console.log('sum cls', configClasses, themeConfig)
 
-    const textPosition = (textPositionPreview && [textPositionPreview]) || [1,2,3].map(n => ({[cls[`textPosition${n}`]]: layout[`textPosition-${n}`]}))
-    const {textStyle: textStyleAppTheme} =  appThemes[currentThemeId] || {}
-    console.log('sidebar..', sidebar)
   	return (
   		<Fade in={true}>
 	  		<div className={classNames(cls.root, className)}>
 		      <Grid className={cls.gridRoot} container spacing={24}>
-		      	<Grid className={classNames(...textPosition)} item xs={8}>
-		        	<Title {...(textStylePreview || textStyleAppTheme || layout)}>{title}</Title>
-		 					{currentThemeId !== 'panoramic' && <Media imageUrl={imageUrl} />}
+		      	<Grid className={configClasses.titlePosition} item xs={8}>
+		        	<Title>{pile.title}</Title>
+		 					{currentThemeId !== 'panoramic' && <Media imageUrl={pile.imageUrl} />}
 		        </Grid>
-		        <Grid className={classNames(cls.sidebar, ...sidebar)} item xs={4}>
+		        <Grid className={classNames(cls.sidebar, configClasses.sidebarType)} item xs={4}>
 		        	<DonateButton to="/" />
-		        	{sidebarTypePreviewProp !== 3 && <Stats goal={goal} />}
+		        	{<Stats goal={pile.goal} />}
 		        </Grid>
 		      </Grid>
 	  		</div>
@@ -108,9 +114,7 @@ export default compose(
   	pile: state.settings && state.settings[`pile-${ownProps.pileId}`],
   	// theme: state.theme && state.theme.active,
   	theme: state.theme && (state.theme.preview || state.theme.active),
-  	themePreview: state.settings && state.settings.themePreview,
-  	textStylePreview: state.settings && state.settings.textStylePreview,
-  	textPositionPreview: state.settings && state.settings.textPositionPreview,
-  	sidebarTypePreview: state.settings && state.settings.sidebarTypePreview,
+  	themeConfig: dot.pick('form.pile-update-theme.values.theme.config', state) || 
+  							 dot.pick(`settings.pile-${ownProps.pileId}.theme.config`, state)
   }), {setting}),
 )(HeroPile)

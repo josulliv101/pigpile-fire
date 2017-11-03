@@ -10,12 +10,15 @@ import Button from 'material-ui/Button';
 import Collapse from 'material-ui/transitions/Collapse'
 import {withStyles} from 'material-ui/styles'
 import Check from 'material-ui-icons/Check';
+import InputField from './InputField'
 import RadioOn from 'material-ui-icons/RadioButtonChecked';
 import RadioOff from 'material-ui-icons/RadioButtonUnchecked';
 import ExpandMore from 'material-ui-icons/ExpandMore';
 import ExpandLess from 'material-ui-icons/ExpandLess';
 //
 import {preview, unsetPreview} from '../redux/modules/Theme'
+
+const TextEditor = (props) => <Field {...props} component={InputField} fullWidth />
 
 const styles = (theme) => ({
   root: {
@@ -34,6 +37,22 @@ const styles = (theme) => ({
     },
   },
 })
+
+class ThemeFields extends Component {
+
+  render() {
+    return [
+      <Field 
+        key="themeId"
+      	name="theme.id" 
+      	component={SelectTheme} 
+      	type="hidden"
+      	{...this.props}
+      />,
+    ]
+  }
+
+}
 
 class SelectTheme extends Component {
 
@@ -124,6 +143,11 @@ class SelectTheme extends Component {
 
   normalizeId = (id) => typeof id === 'string' && id.replace('-container', '')
 
+  renderConfig = (config) => {
+  	const items = Object.keys(config)
+  	return items.map(key => <TextEditor onChange={(e) => console.log('change...', e)} key={key} label={key} margin="normal" name={`theme.config.${key}`} type="number" />)
+  }
+
   renderItem = (item) => {
   	const {classes, input} = this.props
   	const Cmp = this.getItemCmp(item)
@@ -131,10 +155,10 @@ class SelectTheme extends Component {
   	const active = item.id === input.value || item.id === this.state.container || this.hasActiveChild(item.id)
   	const handler = item.theme ? this.handleThemeChange.bind(this, item) : this.handleContainerChange.bind(this, item)
   	const children = this.getThemesWithTag(item.id).map(childItem => this.renderItem(childItem))
-
+  	const childrenWithConfig = children.concat(item.config ? this.renderConfig(item.config) : [])
   	return [
   		<Cmp key={item.id} {...item} active={active} cls={classes} dense={!isRoot} onClick={handler} />,
-  		children.length ? <Collapse key={`collapse-${item.id}`} in={active} transitionDuration="auto" >{children}</Collapse>: null
+  		childrenWithConfig.length ? <Collapse key={`collapse-${item.id}`} in={active} transitionDuration="auto" >{childrenWithConfig}</Collapse>: null
   	]
   }
 
@@ -215,4 +239,4 @@ SelectTheme.defaultProps = {
 export default compose(
   withStyles(styles),
   connect(null, {preview, unsetPreview}),
-)(SelectTheme)
+)(ThemeFields)

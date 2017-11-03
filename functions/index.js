@@ -31,7 +31,8 @@ app.get('/:userId?', (req, res) => {
 	      settings: {
 	        [`pile-${id}`]: pile,
 	        [`pile-${id}-donations`]: snapshot.docs.map(d => d.data()),
-	      }
+	      },
+	      theme: { active: pile.themeObj}
 	    });
       },
       function(e) {

@@ -70,7 +70,7 @@ class ThemeForm extends Component {
 		console.log('themerows', themes)
 		return [
 			{id: 'theme-settings', label: 'Change theme settings.', type: 'title'},
-			{id: 'theme', label: 'Theme', value: pile.theme, editor: (props) => <ThemeEditor {...props} items={themes} />},
+			{id: 'theme', label: 'Theme', value: pile.theme && pile.theme.id, editor: (props) => <SelectTheme items={themes} />},
 		]
 	}
 

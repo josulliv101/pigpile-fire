@@ -15,7 +15,7 @@ import DonateButton from './DonateButton'
 import Media from './Media'
 import Stats from './Stats'
 
-const styles = (theme, {unit} = theme.spacing, {up, values} = theme.breakpoints) => ({
+const styles = (theme, {lightBlack, lightWhite} = theme.palette.common, {unit} = theme.spacing, {up, values} = theme.breakpoints) => ({
   root: {
     height: '100vh',
     margin: '0 auto',
@@ -32,14 +32,40 @@ const styles = (theme, {unit} = theme.spacing, {up, values} = theme.breakpoints)
   		marginBottom: unit * 3,
   	},
   },
+  
   sidebarType1: {
   	// default
   },
+
   sidebarType2: {
   	alignSelf: 'flex-end',
   },
+
   sidebarType3: {
   	alignSelf: 'flex-end',
+  },
+
+  // Light text, no bg
+  titleStyle1: {
+  	// the default
+  }, 
+
+  // Light text on dark bg
+  titleStyle2: {
+  	background: lightBlack,
+  	padding: `0 ${unit}px`,
+  },
+
+  // Dark text, no bg
+  titleStyle3: {
+		color: lightBlack,
+  },
+
+  // Dark text on light bg
+  titleStyle4: {
+  	background: lightWhite,
+		color: lightBlack,
+		padding: `0 ${unit}px`,
   },
 
   titlePosition1: {
@@ -89,7 +115,7 @@ class HeroPile extends Component {
 	  		<div className={classNames(cls.root, className)}>
 		      <Grid className={cls.gridRoot} container spacing={24}>
 		      	<Grid className={configClasses.titlePosition} item xs={8}>
-		        	<Title>{pile.title}</Title>
+		        	<Title className={configClasses.titleStyle}>{pile.title}</Title>
 		 					{currentThemeId !== 'panoramic' && <Media imageUrl={pile.imageUrl} />}
 		        </Grid>
 		        <Grid className={classNames(cls.sidebar, configClasses.sidebarType)} item xs={4}>

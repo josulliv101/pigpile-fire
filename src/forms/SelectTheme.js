@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import compose from 'recompose/compose'
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+import MenuItem from 'material-ui/Menu/MenuItem';
 import Button from 'material-ui/Button';
 import Collapse from 'material-ui/transitions/Collapse'
 import {withStyles} from 'material-ui/styles'
@@ -37,6 +38,34 @@ const styles = (theme) => ({
     },
   },
 })
+
+const themeConfigOptions = {
+	titleStyle: {
+		items: [
+			'light', 
+			'light on bg',
+			'dark', 
+			'dark on bg',
+		],
+		menuItemPrefix: 'Title style',
+	},
+	titlePosition: {
+		items: [
+			'top', 
+			'bottom', 
+		],
+		menuItemPrefix: 'Title position',
+	},
+	sidebarType: {
+		items: [
+			'default', 
+			'bottom', 
+			'bottom-small'
+		],
+		menuItemPrefix: 'Sidebar',
+	}
+}
+
 
 class ThemeFields extends Component {
 
@@ -145,7 +174,27 @@ class SelectTheme extends Component {
 
   renderConfig = (config) => {
   	const items = Object.keys(config)
-  	return items.map(key => <TextEditor onChange={(e) => console.log('change...', e)} key={key} label={key} margin="normal" name={`theme.config.${key}`} type="number" />)
+  	return items.map((key, index) => {
+  		// The definition
+  		const def = themeConfigOptions[key]
+  		if (!def) return null
+  		return (
+  			<div style={{height: 48, paddingTop: index === 0 ? 16 : 0, display: 'flex', alignItems: 'center'}}>
+  				<label style={{lineHeight: '48px', backgroundColor: 'rgba(0,0,0,.04)', textAlign: 'right', flex: '1 0 40%', paddingRight: 16, marginRight: 16, marginBottom: 16}}>{def.menuItemPrefix}</label>
+		  		<TextEditor 
+		  			select={true} 
+		  			key={key} 
+		  			margin="none" 
+		  			name={`theme.config.${key}`}>
+		        {def.items.map((item, n) => (
+		          <MenuItem key={n+1} value={n+1}>
+		            {item}
+		          </MenuItem>
+		        ))}
+		  		</TextEditor>
+		  	</div>
+  		)
+  	})
   }
 
   renderItem = (item) => {

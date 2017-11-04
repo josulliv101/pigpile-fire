@@ -96,7 +96,12 @@ class ThemeForm extends Component {
 		const configRows = this.configRows()
 		return [
 			{id: 'theme-settings', label: 'Change theme.', type: 'title'},
-			{id: 'theme', label: 'Theme', value: pile.theme && pile.theme.id, editor: (props) => <SelectTheme items={themes} themeConfig={themeConfig} />},
+			{
+				id: 'theme', 
+				label: 'Theme', 
+				value: activeTheme && activeTheme.name || activeTheme.id, 
+				editor: (props) => <SelectTheme items={themes} themeConfig={themeConfig} />,
+			},
 			{id: 'theme-config', label: !configRows.length ? 'This theme has no settings.' : 'Change settings for this theme.', type: 'title'},
 			...configRows
 		]

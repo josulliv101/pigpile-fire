@@ -29,6 +29,9 @@ const styles = (theme, {unit: u} = theme.spacing) => ({
       '& $field': {
       	backgroundColor: '#9bce9f',
       },
+      '& $value': {
+      	color: 'green',
+      },
     },
     '&:hover': {
       backgroundColor: theme.palette.common.transparent,
@@ -119,7 +122,7 @@ class FieldRow extends PureComponent {
         divider
         onClick={this.handleClick}>
         <Subheading align={active && success ? 'center' : 'right'} className={cls.field} heavy>{active && success ? <Check className={cls.check} /> : label}</Subheading>
-        <Subheading className={cls.value} heavy noWrap>{value}</Subheading>
+        <Subheading className={cls.value} heavy noWrap>{active && success ? 'Saved' : value}</Subheading>
         <ListItemSecondaryAction className={cls.icon}>
           <IconButton className={cls.iconBtn} tabIndex="-1">
             <Icon {...(isSwitch ? {checked} : {})} />

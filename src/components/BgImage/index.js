@@ -25,17 +25,44 @@ const styles = (theme, {black, transparent} = theme.palette.common, {hero} = the
       position: 'absolute',
       right: 0,
       top: 0,
+      zIndex: 1,
     },
     '&>$bg': {
       height: '100%',
       objectFit: 'cover',
       opacity: 1, // Use with .root backgroundColor to darken/lighten the image
+      position: 'relative',
       transition: theme.transitions.create(['width']),
       width: '100%',
+      zIndex: 0,
     },
     '&$withDrawer>$bg': {
       width: `calc(100% - ${theme.components.drawer.width}px)`,
     },
+		'&$pageHome': {
+			backgroundColor: black,
+			'&>$gradient': {
+			  backgroundImage: 'linear-gradient(180deg,#4180d7,hsla(0,0%,48%,.7))',
+			  opacity: .84,
+			},
+			'&>$bg': {
+			  opacity: 1,
+			},
+		},
+		'&$pageLogin': {
+	    backgroundColor: black,
+	    '&>$gradient': {
+	      backgroundImage: 'linear-gradient(180deg,#4180d7,hsla(0,0%,48%,.7))',
+	      height: '100vh',
+	      opacity: .84,
+	    },
+	    '&>$bg': {
+	      filter: 'blur(6px)',
+	      height: '100vh',
+	      objectPosition: 'left',
+	      opacity: 1,
+	    },
+		},
   },
   
   bg: {
@@ -50,6 +77,8 @@ const styles = (theme, {black, transparent} = theme.palette.common, {hero} = the
   	// backgroundColor: 'red',
   	// opacity: 0,
   },
+  pageHome: {},
+  pageLogin: {},
   withDrawer: {},
   // ...appThemes,
   [up(values.md)]: {
@@ -84,7 +113,8 @@ function LoginBg(props) {
   const {classes: cls, className} = props;
   return (
     <div className={classNames(cls.root, cls.pageLogin, className)}>
-     {/*<img className={classNames(cls.bg)} src={appThemes.pageLogin.img} />*/}
+      <div className={cls.gradient} />
+      <img className={classNames(cls.bg)} src="https://firebasestorage.googleapis.com/v0/b/pigpile-next.appspot.com/o/app%2Fbg%2Flandscape.png?alt=media&token=18711e2d-2851-40f1-9f66-e4def71702f1" />
     </div>
   )
 }
@@ -93,7 +123,8 @@ function HomeBg(props) {
   const {classes: cls, className} = props;
   return (
     <div className={classNames(cls.root, cls.pageHome, className)}>
-     {/*<img className={classNames(cls.bg)} src={appThemes.pageHome.img} />*/}
+      <div className={cls.gradient} />
+      <img className={classNames(cls.bg)} src="https://firebasestorage.googleapis.com/v0/b/pigpile-next.appspot.com/o/app%2Fbg%2Flandscape.png?alt=media&token=18711e2d-2851-40f1-9f66-e4def71702f1" />
     </div>
   )
 }

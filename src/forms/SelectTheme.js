@@ -173,22 +173,33 @@ class SelectTheme extends Component {
   normalizeId = (id) => typeof id === 'string' && id.replace('-container', '')
 
   renderConfig = (config) => {
+  	const {themeConfig} = this.props
   	const items = Object.keys(config)
   	return items.map((key, index) => {
   		// The definition
-  		const def = themeConfigOptions[key]
+  		const def = themeConfig[key]
   		if (!def) return null
   		return (
-  			<div style={{height: 48, paddingTop: index === 0 ? 16 : 0, display: 'flex', alignItems: 'center'}}>
+  			<div key={key} style={{height: 48, paddingTop: index === 0 ? 16 : 0, display: 'flex', alignItems: 'center'}}>
   				<label style={{lineHeight: '48px', backgroundColor: 'rgba(0,0,0,.04)', textAlign: 'right', flex: '1 0 40%', paddingRight: 16, marginRight: 16, marginBottom: 16}}>{def.menuItemPrefix}</label>
 		  		<TextEditor 
 		  			select={true} 
 		  			key={key} 
 		  			margin="none" 
+	          SelectProps={{
+	          	// MenuProps: {
+					    //   anchorOrigin: {vertical: 'center', horizontal: 'center'},
+					    //  transformOrigin: {vertical: 'center', horizontal: 'right'},
+	          	// },
+	            renderValue: value => {
+	            	const item = def.items.find(itm => itm.id === value)
+	            	return item && item.nameAbbr || item.name
+	            }
+	          }}
 		  			name={`theme.config.${key}`}>
-		        {def.items.map((item, n) => (
-		          <MenuItem key={n+1} value={n+1}>
-		            {item}
+		        {def.items.map((item) => (
+		          <MenuItem key={item.id} value={item.id}>
+		            {item.name}
 		          </MenuItem>
 		        ))}
 		  		</TextEditor>
@@ -212,7 +223,7 @@ class SelectTheme extends Component {
   }
 
   render(list) {
-    const {classes, input, items = [], merge, preview, unsetPreview, setParentState, ...props} = this.props
+    const {classes, input, items = [], merge, preview, unsetPreview, setParentState, themeConfig, ...props} = this.props
     console.log('SelectTheme', items, props, input)
     return (
       <List {...props}>

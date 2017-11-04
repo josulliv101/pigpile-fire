@@ -116,7 +116,7 @@ class Table extends Component {
   	console.log('handlePersistData...', id, values)
 
   	// Move any stringify or merge ect to saga?
-  	let update = {[id]: typeof values[id] === 'object' && stringify ? JSON.stringify(values[id]) : values[id]} 
+  	let update = {[id]: typeof values[id] === 'object' && stringify ? JSON.stringify(values[id]) : dot.pick(id, values) } 
 /*
   	if (this.state.stringify) {
   		update = Object.keys(values).reduce((sum, key) => {

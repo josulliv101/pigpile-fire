@@ -24,7 +24,7 @@ const styles = (theme, {unit} = theme.spacing, {palette, vendor} = theme) => ({
     width: 460,
     padding: unit * 3,
     position: 'absolute',
-    top: '50vh',
+    top: '44vh',
     transform: 'translate3d(-50%, -50%, 0)',
   },
   btnGroup: {

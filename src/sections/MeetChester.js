@@ -21,8 +21,8 @@ const styles = (theme) => ({
     top: -4,
   },
   chester: {
-    background: 'rgb(158, 162, 169)',
-    border: '14px rgb(104, 111, 122) solid',
+    background: 'rgb(94, 148, 188)', // 'rgb(158, 162, 169)',
+    border: '14px rgba(11, 77, 130, 0.15) solid', //  '14px rgb(104, 111, 122) solid',
     borderRadius: '50%',
     height: 240,
     margin: `0 auto ${theme.spacing.unit * 0}px`,
@@ -35,7 +35,7 @@ const styles = (theme) => ({
       backgroundSize: 'contain',
       backgroundPosition: 'center',
       height: 136,
-      // opacity: .9,
+      opacity: .94,
       position: 'relative',
       transform: 'translate(38%,30%)',
       width: 136,
@@ -76,7 +76,7 @@ class MeetChesterSection extends PureComponent {
               {/*<Title align="center" className={cls.tagline} xlheavy>
                 Pigpile's the trusted source in online fundraising.
               </Title>*/}
-              <div className={cls.chester}><div/><Star style={{transform: 'rotate(-154deg)', margin: '-50%',color: 'rgba(255, 255, 255, 0.15)', opacity: 1, zIndex: 0, position: 'absolute', top: 0, left: 0, height: '200%', width: '200%'}} /></div>
+              <div className={cls.chester}><div/><Star style={{transform: 'rotate(-154deg)', margin: '-50%',color: 'rgba(255, 255, 255, 0.1)', opacity: 1, zIndex: 0, position: 'absolute', top: 0, left: 0, height: '200%', width: '200%'}} /></div>
             </Grid>
           </Grid>
         </main>

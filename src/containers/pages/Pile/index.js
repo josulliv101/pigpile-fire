@@ -53,8 +53,7 @@ class Pile extends Component {
 		return pile[fieldId] && EditorState.createWithContent(contentState)
   }
 
-  
-
+ 
   render() {
     const {classes: cls, className, donations = [], match, pile = {}} = this.props;
     console.log('getPile', this.props)

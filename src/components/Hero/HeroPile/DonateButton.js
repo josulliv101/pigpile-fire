@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import {withStyles} from 'material-ui/styles'
 import Button from 'material-ui/Button'
-import {Link} from 'react-router-dom'
 //
 
 const styles = (theme) => ({
@@ -32,7 +31,7 @@ class Stats extends PureComponent {
         {...props}
         className={classNames(cls.root, className)}
         color="accent"
-        component={Link}
+        // component={Link}
         raised
         // to={{pathname: '/', state: {donateNow: true}}}
       >

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import {connect} from 'react-redux'
 import compose from 'recompose/compose'
+import {Link} from 'react-router-dom'
 import Grid from 'material-ui/Grid'
 import { withStyles } from 'material-ui/styles'
 import Fade from 'material-ui/transitions/Fade';
@@ -14,6 +15,8 @@ import Title from './Title'
 import DonateButton from './DonateButton'
 import Media from './Media'
 import Stats from './Stats'
+import Donate from '../../Donate'
+import HowMuchForm from '../../Donate/HowMuchForm'
 
 const styles = (theme, {lightBlack, lightWhite} = theme.palette.common, {unit} = theme.spacing, {up, values} = theme.breakpoints) => ({
   root: {
@@ -28,7 +31,7 @@ const styles = (theme, {lightBlack, lightWhite} = theme.palette.common, {unit} =
   },
   sidebar: {
   	marginTop: unit * 6,
-  	'&>a:first-child': {
+  	'&>button:first-child': {
   		marginBottom: unit * 3,
   	},
   },
@@ -87,13 +90,21 @@ const styles = (theme, {lightBlack, lightWhite} = theme.palette.common, {unit} =
 
 class HeroPile extends Component {
 
+	state = {
+		open: false,
+		step: 1,
+	}
+
   componentWillUnmount = () => this.props.setting('drawer', false)
+
+  handleDonate = () => this.setState({open: true})
+  requestCloseDonate = () => this.setState({open: false})
 
   render() {
     const {classes: cls, className, theme, pile = {}, themeConfig = {}} = this.props;
     console.log('HeroPile...',  theme)
     if (!theme || !pile) return null
-
+    const {open, step} = this.state
     const {
     	config = {}, 
     	id: currentThemeId,
@@ -110,8 +121,8 @@ class HeroPile extends Component {
 
   	console.log('sum cls', configClasses, themeConfig)
 
-  	return (
-  		<Fade in={true}>
+  	return [
+  		<Fade key="donate-fade" in={true}>
 	  		<div className={classNames(cls.root, className)}>
 		      <Grid className={cls.gridRoot} container spacing={24}>
 		      	<Grid className={configClasses.titlePosition} item xs={8}>
@@ -119,13 +130,21 @@ class HeroPile extends Component {
 		 					{currentThemeId !== 'panoramic' && <Media imageUrl={pile.imageUrl} />}
 		        </Grid>
 		        <Grid className={classNames(cls.sidebar, configClasses.sidebarType)} item xs={4}>
-		        	<DonateButton to="/" />
+		        	<DonateButton onClick={this.handleDonate} />
 		        	{<Stats goal={pile.goal} />}
 		        </Grid>
 		      </Grid>
 	  		</div>
-  		</Fade>
-  	)
+  		</Fade>,
+  		<Donate {...this.state} 
+  			key="donate-dialog-open" 
+  			backBtn={step === 2}
+  			handleRequestClose={this.requestCloseDonate} 
+  			title={step === 1 ? 'Donate how much?' : 'Name & Email'}
+  		>
+  			<HowMuchForm />
+  		</Donate>
+  	]
   }
 }
 

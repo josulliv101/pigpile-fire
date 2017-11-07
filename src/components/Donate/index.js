@@ -17,9 +17,10 @@ import Back from 'material-ui-icons/ChevronLeft'
 
 const styles = (theme) => ({
   paper: {
-    maxWidth: 660,
+    maxWidth: 680,
   },
   appBar: {
+  	boxShadow: theme.shadows[1],
     position: 'relative',
   },
   back: {
@@ -46,8 +47,9 @@ const styles = (theme) => ({
   [theme.breakpoints.up(948)]: {
     content: {
       height: 660,
+      // minWidth: 900,
       padding: theme.spacing.unit * 4,
-      width: 660,
+      width: '100%',
     },
   },
 })

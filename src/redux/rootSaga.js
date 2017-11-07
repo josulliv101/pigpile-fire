@@ -7,11 +7,13 @@ import subscriptionWatchers from './modules/Subscription/sagas'
 import getWatchers from './modules/Get/sagas'
 import persistWatchers from './modules/Persist/sagas'
 import themeWatchers from './modules/Theme/sagas'
+import checkoutWatchers from './modules/Checkout/sagas'
 
 export default function* rootSaga(api) {
   console.log('rootSaga received api', api)
   yield all([
   	...pileWatchers.map(fn => fn(api)),
+    ...checkoutWatchers.map(fn => fn(api)),
     ...authWatchers.map(fn => fn(api)),
     ...subscriptionWatchers.map(fn => fn(api)),
     ...getWatchers.map(fn => fn(api)),

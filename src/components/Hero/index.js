@@ -14,7 +14,7 @@ class Hero extends Component {
       <Switch>
         <Route path="/login" render={() => null} />
         <Route path="/" exact render={() => <HeroHome />} />
-        <Route path='/:id' render={({match: {params: {id}}}) => <HeroPile pileId={id} />} />
+        <Route path='/:id' render={({match: {params: {id}}, ...props}) => <HeroPile {...props} pileId={id} />} />
       </Switch>
   	)
   }

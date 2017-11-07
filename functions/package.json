@@ -9,7 +9,8 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "request": "^2.83.0",
-    "serialize-javascript": "^1.4.0"
+    "serialize-javascript": "^1.4.0",
+    "wepay": "^0.0.8"
   },
   "private": true
 }

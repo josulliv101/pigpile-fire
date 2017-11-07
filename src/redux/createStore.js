@@ -10,6 +10,7 @@ import {reducer as themeReducer} from './modules/Theme'
 import {reducer as settingsReducer} from './modules/Settings'
 import {reducer as persistReducer} from './modules/Persist'
 import {reducer as getReducer} from './modules/Get'
+import {reducer as checkoutReducer} from './modules/Checkout'
 
 export default function configureStore(initialState, ...enhancerAddOns) {
 
@@ -20,6 +21,7 @@ export default function configureStore(initialState, ...enhancerAddOns) {
 
   const reducer = combineReducers({
   	auth: authReducer,
+    checkout: checkoutReducer,
     form: formReducer,
     gettings: getReducer,
     persist: persistReducer,

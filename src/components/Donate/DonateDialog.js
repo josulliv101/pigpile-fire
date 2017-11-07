@@ -72,7 +72,7 @@ class DonateDialog extends PureComponent {
         open={open}
         transition={<Slide direction="left" onEnter={() => console.log('onEnter')} onExited={() => console.log('onExited')} />}
       >
-        <AppBar className={cls.appBar}>
+        <AppBar className={cls.appBar} elevation={1}>
           <Toolbar className={cls.toolbar}>
             <Typography type="title" color="inherit" className={cls.flex}>
               {title}

@@ -8,6 +8,10 @@
     ],
     "rewrites": [
       {
+        "source": "/checkout",
+        "function": "checkout"
+      },
+      {
         "source": "**",
         "function": "app"
       }

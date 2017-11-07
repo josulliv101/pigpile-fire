@@ -21,8 +21,8 @@ const styles = (theme) => ({
     top: -4,
   },
   chester: {
-    background: 'rgb(94, 148, 188)', // 'rgb(158, 162, 169)',
-    border: '14px rgba(11, 77, 130, 0.15) solid', //  '14px rgb(104, 111, 122) solid',
+    background: 'rgb(106, 143, 138)', //  'rgb(94, 148, 188)', // 'rgb(158, 162, 169)',
+    border: '14px rgba(75, 146, 214, 0.82) solid', //  '14px rgba(11, 77, 130, 0.15) solid', //  '14px rgb(104, 111, 122) solid',
     borderRadius: '50%',
     height: 240,
     margin: `0 auto ${theme.spacing.unit * 0}px`,

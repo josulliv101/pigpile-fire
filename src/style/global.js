@@ -96,6 +96,10 @@ export default function globalStyle(theme) {
       margin: 0,
       padding: 0,
     },
+    form: {
+    	margin: 0, 
+    	padding: 0,
+    },
     ul: {
       listStyle: 'none',
       margin: 0,

@@ -1,11 +1,53 @@
 const functions = require('firebase-functions');
 const app = require('express')();
+var wepay = require('wepay').WEPAY;
+
+var wepay_settings = {
+    'client_id'     : '128805',
+    'client_secret' : '0c60f9e692',
+    'access_token'  : 'STAGE_a016e32cdaf17aebc09006a18c8fd6ceb9fd95d5741886130d127bb90a2e70d0', // used for oAuth2
+    // 'api_version': 'API_VERSION'
+}
+
+var wp = new wepay(wepay_settings);
+wp.use_staging();
+
+const checkout = require('express')();
+
 const admin = require('firebase-admin');
 //
 const db = require('./db-firestore');
 const render = require('./render');
 
 admin.initializeApp(functions.config().firebase);
+
+checkout.get('/favicon.ico', function(req, res) {
+  res.sendStatus(204)
+});
+
+checkout.get('/checkout', (req, res) => {
+  console.log('CHECKOUT')
+  wp.call('/checkout/create',
+      {
+          'account_id': 11959731,
+          'amount': 5,
+          'currency': 'USD',
+          'short_description': 'A donation',
+          'type': 'goods',
+          'fee': {
+            'fee_payer': 'payee'
+          },
+          'hosted_checkout': {
+            'mode': 'iframe'
+          }
+      },
+      function(response) {
+          console.log('%s', response);
+          res.send(response);
+      }
+  );
+
+});
 
 app.get('/favicon.ico', function(req, res) {
   res.sendStatus(204)
@@ -54,3 +96,4 @@ app.get('/:userId?', (req, res) => {
 });
 
 exports.app = functions.https.onRequest(app);
+exports.checkout = functions.https.onRequest(checkout);

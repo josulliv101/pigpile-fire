@@ -16,6 +16,7 @@ import DonateButton from './DonateButton'
 import Media from './Media'
 import Stats from './Stats'
 import Donate from '../../Donate'
+import DetailsForm from '../../Donate/DetailsForm'
 import HowMuchForm from '../../Donate/HowMuchForm'
 
 const styles = (theme, {lightBlack, lightWhite} = theme.palette.common, {unit} = theme.spacing, {up, values} = theme.breakpoints) => ({
@@ -27,7 +28,7 @@ const styles = (theme, {lightBlack, lightWhite} = theme.palette.common, {unit} =
     zIndex: 1,
   },
   gridRoot: {
-  	height: '100%', 
+  	height: '100%',
   },
   sidebar: {
   	marginTop: unit * 6,
@@ -35,7 +36,7 @@ const styles = (theme, {lightBlack, lightWhite} = theme.palette.common, {unit} =
   		marginBottom: unit * 3,
   	},
   },
-  
+
   sidebarType1: {
   	// default
   },
@@ -51,7 +52,7 @@ const styles = (theme, {lightBlack, lightWhite} = theme.palette.common, {unit} =
   // Light text, no bg
   titleStyle1: {
   	// the default
-  }, 
+  },
 
   // Light text on dark bg
   titleStyle2: {
@@ -97,16 +98,20 @@ class HeroPile extends Component {
 
   componentWillUnmount = () => this.props.setting('drawer', false)
 
+  handleConfirm = () => this.props.history.push({
+		state: {step: 2}
+  })
+
   handleDonate = () => this.setState({open: true})
   requestCloseDonate = () => this.setState({open: false})
 
   render() {
-    const {classes: cls, className, theme, pile = {}, themeConfig = {}} = this.props;
+    const {classes: cls, className, step, theme, pile = {}, themeConfig = {}} = this.props;
     console.log('HeroPile...',  theme)
     if (!theme || !pile) return null
-    const {open, step} = this.state
+    const {open} = this.state
     const {
-    	config = {}, 
+    	config = {},
     	id: currentThemeId,
     	configKeys = Object.keys(config),
     } = theme // themePreview || layout.theme
@@ -136,13 +141,16 @@ class HeroPile extends Component {
 		      </Grid>
 	  		</div>
   		</Fade>,
-  		<Donate {...this.state} 
-  			key="donate-dialog-open" 
+  		<Donate {...this.state}
+  			key="donate-dialog-open"
   			backBtn={step === 2}
-  			handleRequestClose={this.requestCloseDonate} 
+  			handleRequestClose={this.requestCloseDonate}
   			title={step === 1 ? 'Donate how much?' : 'Name & Email'}
   		>
-  			<HowMuchForm />
+  			{step === 1 && (
+					<HowMuchForm nextStep={this.handleConfirm} />
+  			)}
+  			{step === 2 && <DetailsForm />}
   		</Donate>
   	]
   }
@@ -153,13 +161,19 @@ HeroPile.propTypes = {
   className: PropTypes.string,
 };
 
+HeroPile.defaultProps = {
+  step: 1,
+};
+
 export default compose(
 	withStyles(styles),
 	connect( (state, ownProps) => ({
+		history: ownProps.history,
   	pile: state.settings && state.settings[`pile-${ownProps.pileId}`],
+  	step: dot.pick('location.state.step', ownProps),
   	// theme: state.theme && state.theme.active,
   	theme: state.theme && (state.theme.preview || state.theme.active),
-  	themeConfig: dot.pick('form.pile-update-theme.values.theme.config', state) || 
+  	themeConfig: dot.pick('form.pile-update-theme.values.theme.config', state) ||
   							 dot.pick(`settings.pile-${ownProps.pileId}.theme.config`, state)
   }), {setting}),
 )(HeroPile)

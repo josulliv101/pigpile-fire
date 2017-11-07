@@ -1860,6 +1860,10 @@ websocket-extensions@>=0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.2.tgz#0e18781de629a18308ce1481650f67ffa2693a5d"
 
+wepay@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/wepay/-/wepay-0.0.8.tgz#9d997e1d1f3fa5671c945bb999e482bfb7d1ee24"
+
 whatwg-fetch@>=0.10.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.3.tgz#9c84ec2dcf68187ff00bc64e1274b442176e1c84"

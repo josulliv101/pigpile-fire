@@ -16,12 +16,13 @@ import InfoIcon from 'material-ui-icons/Info'
 import { fade } from 'material-ui/styles/colorManipulator'
 import { FormGroup, FormControlLabel } from 'material-ui/Form'
 import CheckIcon from 'material-ui-icons/CheckCircle'
+import Fade from 'material-ui/transitions/Fade'
 //
 // import validate from '../../validation/donationAmount'
 import TipSelection from './TipSelection'
 
 import CheckboxField from '../../forms/CheckboxField'
-import {Subheading} from '../Text'
+import {Subheading, Title} from '../Text'
 import Tshirt from '../../icons/Tshirt'
 
 const FORM_NAME = 'donate-how-much'
@@ -29,11 +30,11 @@ const green = '#7CD69F'
 
 const styles = (theme, space = theme.spacing.unit, {common: {lightBlack, white}, grey, accent, primary} = theme.palette) => ({
   root: {
-    background: 'linear-gradient(to bottom, rgb(227, 227, 227) 0%,rgb(253, 253, 253) 100%)', // theme.palette.background.default,
+    background: 'linear-gradient(to bottom, rgba(233, 233, 233, .6) 0%,rgb(255, 255, 255) 100%)', // theme.palette.background.default,
     height: '100%',
     left: 0,
     paddingTop: space * 1,
-    position: 'absolute',
+    // position: 'absolute',
     top: 0,
     width: '100%',
     zIndex: 10,
@@ -65,7 +66,7 @@ const styles = (theme, space = theme.spacing.unit, {common: {lightBlack, white},
     background: grey[100],
     display: 'inline-block',
     minWidth: 93,
-    padding: px(space, 1, 2),
+    padding: px(space, 1, 1),
     position: 'relative',
     '&$btnAccent': {
       background: grey[600],
@@ -88,7 +89,7 @@ const styles = (theme, space = theme.spacing.unit, {common: {lightBlack, white},
     // padding: `${space * 1}px ${space * 2}px 0`,
   },
   btnGroupPaper: {
-    marginBottom: space * 2,
+    marginBottom: space * 3,
     padding: px(space, 2, 2, 0),
   },
   btnShowMore: {
@@ -118,12 +119,12 @@ const styles = (theme, space = theme.spacing.unit, {common: {lightBlack, white},
     width: 20,
   },
   confirm: {
-    height: 54,
-    fontSize: 18,
-    minWidth: 140,
+    height: 48,
+    fontSize: 16,
+    minWidth: 120,
     display: 'flex',
-    margin: `${space * 3}px auto 0`,
-    opacity: 0, // .4,
+    margin: `${space * 1}px auto 0`,
+    opacity: .4,
     transition: theme.transitions.create(['opacity']),
     '&$valid': {
       opacity: 1,
@@ -200,6 +201,7 @@ const styles = (theme, space = theme.spacing.unit, {common: {lightBlack, white},
 
   promo: {
     backgroundColor: grey[400],
+    boxShadow: theme.shadows[1],
     height: 160,
     overflow: 'hidden',
     position: 'relative',
@@ -313,11 +315,12 @@ const styles = (theme, space = theme.spacing.unit, {common: {lightBlack, white},
   valid: {},
   [theme.breakpoints.up(708)]: {
     root: {
-      padding: px(space, 2, 3, 3),
+      padding: 0, // px(space, 3, 3, 3),
     },
     boxTip: {
       backgroundColor: fade(primary[100], .32),
       border: px(1, 1, 'solid', primary[100]),
+      boxShadow: theme.shadows[1],
       display: 'flex',
       marginBottom: space * 2,
       padding: space * 2,
@@ -341,6 +344,7 @@ const styles = (theme, space = theme.spacing.unit, {common: {lightBlack, white},
     promo: {
       backgroundColor: fade(grey[400], .3),
       border: px(1, 1, 'solid', grey[400]),
+
       display: 'inline-block',
       justifyContent: 'space-between',
       width: '100%',
@@ -360,7 +364,7 @@ const styles = (theme, space = theme.spacing.unit, {common: {lightBlack, white},
     },
     total: {
       fontWeight: 400,
-      padding: px(space, 1, 0, 0),
+      padding: px(space, 3, 0, 0),
     },
     tshirt: {
       right: 0,
@@ -476,100 +480,102 @@ class HowMuchForm extends PureComponent {
     ))
 
     return (
-      <div className={cls.root}>
-        <form onSubmit={ handleSubmit } autoComplete="off">
-          <Paper className={classNames(cls.btnGroupPaper)} elevation={1}>
-            <div className={classNames(cls.btnGroup)}>{items}</div>
-            <div className={cls.row}>
+      <Fade in={true}>
+	      <div className={cls.root}>
+	        <form onSubmit={ handleSubmit } autoComplete="off">
+	          <Paper className={classNames(cls.btnGroupPaper)} elevation={6}>
+	            <div className={classNames(cls.btnGroup)}>{items}</div>
+	            <div className={cls.row}>
 
-              <div className={classNames(cls.grow)}>
-                <Text align="center" color="inherit" className={classNames(cls.btnAmount, {[cls.hide]: !amountProp}, {[cls.btnAccent]: accentSelectedAmount})} type="subheading">
-                  Ok, ${numeral(amountProp).format('0,0')}.
-                  { accentSelectedAmount &&
-                    <div className={classNames(cls.icon)}>
-                      <CheckIcon className={classNames(cls.svg)} />
-                    </div>
-                  }
+	              <div className={classNames(cls.grow)}>
+	                <Text align="center" color="inherit" className={classNames(cls.btnAmount, {[cls.hide__]: !amountProp}, {[cls.btnAccent]: accentSelectedAmount})} type="subheading">
+	                  ${numeral(amountProp).format('0,0.00')}
+	                  { accentSelectedAmount &&
+	                    <div className={classNames(cls.icon)}>
+	                      <CheckIcon className={classNames(cls.svg)} />
+	                    </div>
+	                  }
 
-                </Text>
-              </div>
+	                </Text>
+	              </div>
 
-              <Button className={classNames(cls.btnShowMore)} dense onClick={() => this.setState({moreBtns: !this.state.moreBtns})}>
-                {!moreBtns ? 'more' : 'less'} options
-              </Button>
-              <Button
-                className={classNames(cls.custom)}
-                dense
-                // onClick={this.handleConfirm}
-              >
-                Custom Amount
-              </Button>
+	              <Button className={classNames(cls.btnShowMore)} dense onClick={() => this.setState({moreBtns: !this.state.moreBtns})}>
+	                {!moreBtns ? 'more' : 'less'} options
+	              </Button>
+	              <Button
+	                className={classNames(cls.custom)}
+	                dense
+	                onClick={this.handleConfirm}
+	              >
+	                Custom Amount
+	              </Button>
 
-            </div>
-          </Paper>
-          <Divider className={cls.divide} />
-          <div className={cls.boxTip}>
-            <div className={cls.tip}>
-              <Text className={cls.tipTitle} type="subheading">{WHY_TIP_SMALL}</Text>
-              <TipSelection
-                amount={amountProp}
-                change={change}
-                handleChange={this.handleTipChange}
-                showCustomTip={showCustomTip}
-                tip={tip}
-              />
-            </div>
-            <Text className={cls.tipBlurb} type="body1">{WHY_TIP_BLURB}</Text>
-          </div>
-          <Divider className={cls.divide} />
-          <div className={cls.promo}>
-            <InfoIcon className={cls.info} />
-            <div className={cls.promoTextPosition}>
-              <Text className={cls.promoTitle} type="subheading" color="inherit">Free T-shirt Give Away</Text>
-              <div className={cls.tshirtTitle}>
-                <Avatar className={cls.tshirtIcon}>
-                  <Tshirt  />
-                </Avatar>
-                <Text className={cls.promoSubtitle} type="body1" color="inherit">If atleast 100 people donate, Pigpile sends a free t-shirt to a lucky, randomly-selected person.</Text>
-              </div>
+	            </div>
+	          </Paper>
+	          <Divider className={cls.divide} />
+	          <div className={cls.boxTip}>
+	            <div className={cls.tip}>
+	              <Text className={cls.tipTitle} type="subheading">{WHY_TIP_SMALL}</Text>
+	              <TipSelection
+	                amount={amountProp}
+	                change={change}
+	                handleChange={this.handleTipChange}
+	                showCustomTip={showCustomTip}
+	                tip={tip}
+	              />
+	            </div>
+	            <Text className={cls.tipBlurb} type="body1">{WHY_TIP_BLURB}</Text>
+	          </div>
+	          <Divider className={cls.divide} />
+	          <div className={cls.promo}>
+	            <InfoIcon className={cls.info} />
+	            <div className={cls.promoTextPosition}>
+	              <Text className={cls.promoTitle} type="subheading" color="inherit">Free T-shirt Give Away</Text>
+	              <div className={cls.tshirtTitle}>
+	                <Avatar className={cls.tshirtIcon}>
+	                  <Tshirt  />
+	                </Avatar>
+	                <Text className={cls.promoSubtitle} type="body1" color="inherit">If atleast 100 people donate, Pigpile sends a free t-shirt to a lucky, randomly-selected person.</Text>
+	              </div>
 
-            </div>
-            <img className={cls.tshirt} src="https://firebasestorage.googleapis.com/v0/b/pigpile-next.appspot.com/o/app%2Ftshirt.png?alt=media&token=b2164cc9-8ccb-4ae6-b2c6-3d4044a66b39" />
-            <FormGroup className={cls.promoText} row>
-              <FormControlLabel
-                classes={{label: cls.formLabel, root: cls.formLabelRoot}}
-                control={
-                  <Field
-                    classes={{
-                      checked: cls.checked,
-                      default: cls.checkboxRoot,
-                    }}
-                    name="tshirt"
-                    component={CheckboxField}
-                    label=""
-                  />
-                }
-                label="Yes, consider me for free t-shirt give away."
-              />
-            </FormGroup>
-          </div>
+	            </div>
+	            <img className={cls.tshirt} src="https://firebasestorage.googleapis.com/v0/b/pigpile-next.appspot.com/o/app%2Ftshirt.png?alt=media&token=b2164cc9-8ccb-4ae6-b2c6-3d4044a66b39" />
+	            <FormGroup className={cls.promoText} row>
+	              <FormControlLabel
+	                classes={{label: cls.formLabel, root: cls.formLabelRoot}}
+	                control={
+	                  <Field
+	                    classes={{
+	                      checked: cls.checked,
+	                      default: cls.checkboxRoot,
+	                    }}
+	                    name="tshirt"
+	                    component={CheckboxField}
+	                    label=""
+	                  />
+	                }
+	                label="Yes, consider me for free t-shirt give away."
+	              />
+	            </FormGroup>
+	          </div>
 
-          <div className={cls.total}>
-            <Subheading heavy>Total Donation: {numeral(grandTotal).format('$0,0.00')}</Subheading>
-          </div>
+	          <div className={cls.total}>
+	            <Title heavy>Total Donation: {numeral(grandTotal).format('$0,0.00')}</Title>
+	          </div>
 
-        </form>
+	        </form>
 
-        <Button
-          className={classNames(cls.confirm, {[cls.valid]: isValid})}
-          color="accent"
-          disabled={showCustomTip && (typeof customTipAmount !== 'number' || customTipAmount < 0)}
-          onClick={this.handleConfirm}
-          raised
-        >
-          Confirm
-        </Button>
-      </div>
+	        <Button
+	          className={classNames(cls.confirm, {[cls.valid]: isValid})}
+	          color="accent"
+	          disabled={showCustomTip && (typeof customTipAmount !== 'number' || customTipAmount < 0)}
+	          onClick={this.handleConfirm}
+	          raised
+	        >
+	          Confirm
+	        </Button>
+	      </div>
+      </Fade>
     )
   }
 }
@@ -577,7 +583,7 @@ class HowMuchForm extends PureComponent {
 HowMuchForm.propTypes = {
   classes: PropTypes.object.isRequired,
   nextStep: PropTypes.func.isRequired,
-  pid: PropTypes.string.isRequired,
+  // pid: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = (state = {}, ownProps, values = getFormValues(FORM_NAME)(state)) => ({

@@ -13,7 +13,7 @@ import Slide from 'material-ui/transitions/Slide'
 import Cancel from 'material-ui-icons/Close'
 import Back from 'material-ui-icons/ChevronLeft'
 //
-
+// import withSubscriptionToCheckout from '../../hocs/withSubscriptionToCheckout'
 
 const styles = (theme) => ({
   paper: {
@@ -64,13 +64,13 @@ class DonateDialog extends PureComponent {
   }
 
   render() {
-    const { children, classes: cls, handleBack, handleRequestClose, open, showDetails, title } = this.props
+    const { children, classes: cls, handleBack, handleRequestClose, onExited = noop, open, showDetails, title } = this.props
     console.log('DonateDialog props', this.props)
     return (
       <ResponsiveDialog
         classes={{paper: cls.paper}}
         className={classNames({[cls.hide]: this.state.amountSelected})}
-
+        onExited={onExited}
         onRequestClose={handleRequestClose}
         open={open}
         transition={<Slide direction="left" onEnter={() => console.log('onEnter')} onExited={() => console.log('onExited')} />}
@@ -102,7 +102,7 @@ class DonateDialog extends PureComponent {
 DonateDialog.propTypes = {
   classes: PropTypes.object.isRequired,
 }
-
+function noop(){}
 const mapStateToProps = () => ({
 
 })
@@ -110,4 +110,5 @@ const mapStateToProps = () => ({
 export default compose(
   withStyles(styles),
   connect(mapStateToProps),
+  // withSubscriptionToCheckout(),
 )(DonateDialog)

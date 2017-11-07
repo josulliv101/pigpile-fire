@@ -11,6 +11,7 @@ import dot from 'dot-object'
 //
 import * as appThemes from '../../../style/appThemes/'
 import {setting} from '../../../redux/modules/Settings'
+
 import Title from './Title'
 import DonateButton from './DonateButton'
 import Media from './Media'
@@ -98,12 +99,18 @@ class HeroPile extends Component {
 
   componentWillUnmount = () => this.props.setting('drawer', false)
 
-  handleConfirm = () => this.props.history.push({
-		state: {step: 2}
-  })
+  handleConfirm = () => {
+    this.props.history.push({
+  		state: {step: 2}
+    })
+  }
 
+  handleOnExited = () => this.props.history.push({state: null})
   handleDonate = () => this.setState({open: true})
-  requestCloseDonate = () => this.setState({open: false})
+  requestCloseDonate = () => {
+    this.setState({open: false})
+
+  }
 
   render() {
     const {classes: cls, className, step, theme, pile = {}, themeConfig = {}} = this.props;
@@ -145,6 +152,7 @@ class HeroPile extends Component {
   			key="donate-dialog-open"
   			backBtn={step === 2}
   			handleRequestClose={this.requestCloseDonate}
+        onExited={this.handleOnExited}
   			title={step === 1 ? 'Donate how much?' : 'Name & Email'}
   		>
   			{step === 1 && (

@@ -13,6 +13,7 @@ import Text from 'material-ui/Typography'
 // import validate from '../../validation/donationDetails'
 import TextField from '../../forms/TextField'
 // import creditcards from './creditcards.png'
+import withSubscriptionToCheckout from '../../hocs/withSubscriptionToCheckout'
 
 const FORM_NAME = 'donor-details'
 
@@ -71,7 +72,7 @@ const styles = (theme) => ({
 class DonorDetails extends PureComponent {
 
   componentDidMount = () => {
-    const {url = 'https://stage.wepay.com/api/iframe/1434650793/a7b841bc/api_checkout?iframe=1'} = this.props
+    const {url} = this.props
     if (!WePay || !url) return
     WePay.iframe_checkout("wepay_checkout", url);
   }
@@ -107,4 +108,5 @@ export default compose(
   withStyles(styles),
   connect(mapStateToProps),
   reduxForm({form: FORM_NAME, onSubmit: noop => noop, enableReinitialize: false, destroyOnUnmount: false}),
+  withSubscriptionToCheckout(),
 )(DonorDetails)

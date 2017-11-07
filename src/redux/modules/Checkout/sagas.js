@@ -1,27 +1,44 @@
 // import { delay } from 'redux-saga'
 import { takeEvery, call, put } from 'redux-saga/effects'
 import {error, initCheckout, setIframe} from './index'
-import {getTheme} from '../../../../functions/db-firestore'
+import {setCheckout} from '../../../../functions/db-firestore'
 
 
-function* workCheckoutInit(api) {
+function* workCheckoutInit(api, {payload: {amount}}) {
 
-  console.log('workCheckoutInit', api)
+  console.log('workCheckoutInit', api, amount)
 
-  if (!api) return;
-/*
+  if (!api || !amount) return;
+
   try {
-  	const theme = yield call(getTheme, {api, id})
 
-  	console.log('workThemePreview theme', theme)
+    const firebaseAuth = api.auth()
 
-  	yield put(setThemePreview(theme))
+    let authData;
+
+    // User should at the very least be anonymously logged in
+    if (!firebaseAuth.currentUser) return
+
+    console.log('workCheckoutInit currentUser', authData)
+
+  	const data = yield call(setCheckout, {
+      api,
+      id: firebaseAuth.currentUser.uid,
+      update: {
+        amount,
+        createdAt: api.firestore.FieldValue.serverTimestamp(),
+        uid: firebaseAuth.currentUser.uid,
+      },
+    })
+
+  	console.log('workCheckoutInit data', data)
+
+  	// yield put(setThemePreview(theme))
 
   } catch (e) {
     console.log('error', e)
-    yield put(error(id, error))
+    yield put(error(e))
   }
-  */
 }
 
 //=====================================

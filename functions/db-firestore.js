@@ -94,6 +94,35 @@ const updatePile = (api, id, update = {}) => {
     .then(() => getPileWithTheme({api, id}))
 }
 
+
+const setCheckout = ({api, id, update = {}}) => {
+
+  if (!api || !id) return;
+
+  console.log('updateCheckout', api, id, update);
+
+  return api
+    .firestore()
+    .collection("checkouts")
+    .doc(id)
+    .set(update)
+}
+
+const subscribeToCheckout = ({api, id, onSuccess = noop, onError = noop}) => {
+
+  if (!api || !id) return;
+
+  console.log('subscribeToCheckout', id, api);
+
+  const unsubscribe = api
+    .firestore()
+    .collection("checkouts")
+    .doc(id)
+    .onSnapshot(onSuccess, onError)
+
+  return Promise.resolve(unsubscribe)
+}
+
 const subscribeToPile = ({api, id, onSuccess = noop, onError = noop}) => {
 
   if (!api || !id) return;
@@ -149,6 +178,8 @@ module.exports = {
   getPileWithTheme,
   getTheme,
   getTrending,
+  setCheckout,
+  subscribeToCheckout,
   subscribeToPile,
   subscribeToPileDonations,
   subscribeToTrendingPiles,

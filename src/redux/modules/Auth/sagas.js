@@ -1,14 +1,14 @@
 import { takeLatest, call, put } from 'redux-saga/effects'
 // import { firebaseAuth } from 'redux/modules/Firebase'
 import {
-	authenticate, 
-	authHandleRedirect, 
-	authRefreshToken, 
-	authSignInSuccess, 
-	authSignInFailure, 
-	authSignIn, 
-	authSignOut, 
-	authSignOutSuccess, 
+	authenticate,
+	authHandleRedirect,
+	authRefreshToken,
+	authSignInSuccess,
+	authSignInFailure,
+	authSignIn,
+	authSignOut,
+	authSignOutSuccess,
 	authSignOutFailure
 } from './'
 import {setting} from '../Settings'
@@ -58,7 +58,7 @@ function* workAuthRedirect(api) {
     // If redirect returned no user, we're done
     if (!user) return
 
-    
+
     const {displayName, photoURL, uid} = user.toJSON()
     // const userExists = yield call(insert, uid, email, {displayName, photoURL, uid})
 
@@ -137,6 +137,11 @@ function* workAuthenticate(api, {payload: {user, error}}) {
   // Should be already loaded at this point
   // const {firebaseAuth} = yield call(() => import(/* webpackChunkName: "Firebase" */ '../Firebase'))
   const firebaseAuth = api.auth()
+
+
+  if (!firebaseAuth.currentUser) {
+    yield call([firebaseAuth, firebaseAuth.signInAnonymously])
+  }
 
   console.log('firebaseAuth currentUser', firebaseAuth.currentUser)
 

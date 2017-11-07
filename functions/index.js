@@ -95,5 +95,46 @@ app.get('/:userId?', (req, res) => {
 
 });
 
+
+exports.createCheckout = functions.firestore.document('checkouts/{userId}').onCreate(event => {
+    // Get an object representing the document
+    // e.g. {'name': 'Marie', 'age': 66}
+    var newValue = event.data.data();
+    console.log('EVENT createCheckout', event.params)
+    // access a particular field as you would any JS property
+    var amount = newValue.amount || 0;
+
+    const prom = new Promise(function (resolve) {
+
+      wp.call('/checkout/create',
+          {
+              'account_id': 11959731,
+              'amount': amount,
+              'currency': 'USD',
+              'short_description': 'A donation',
+              'type': 'goods',
+              'fee': {
+                'fee_payer': 'payee'
+              },
+              'hosted_checkout': {
+                'mode': 'iframe'
+              }
+          },
+          function(resp) {
+              console.log('%s', resp);
+              var checkout_uri = resp  && resp.hosted_checkout && resp.hosted_checkout.checkout_uri
+              event.data.ref.update({
+                checkout_uri: checkout_uri
+              });
+              resolve({success: true, checkout_uri: checkout_uri})
+          }
+      );
+    })
+
+    // Then return a promise of a set operation to update the count
+    return prom
+});
+
+
 exports.app = functions.https.onRequest(app);
 exports.checkout = functions.https.onRequest(checkout);

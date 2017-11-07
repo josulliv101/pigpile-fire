@@ -24,6 +24,7 @@ import TipSelection from './TipSelection'
 import CheckboxField from '../../forms/CheckboxField'
 import {Subheading, Title} from '../Text'
 import Tshirt from '../../icons/Tshirt'
+import {initCheckout} from '../../redux/modules/Checkout'
 
 const FORM_NAME = 'donate-how-much'
 const green = '#7CD69F'
@@ -423,8 +424,11 @@ class HowMuchForm extends PureComponent {
   }
 
   handleConfirm = () => {
-    const {isValid, nextStep} = this.props
-    if (isValid) nextStep()
+    const {amount, initCheckout, isValid, nextStep} = this.props
+    if (amount && isValid) {
+      initCheckout(amount)
+      nextStep()
+    }
   }
 
   handleTipChange = event => {
@@ -437,6 +441,10 @@ class HowMuchForm extends PureComponent {
     if (tip === -1) return change('showCustomTip', true)
 
     change('tip', tip)
+  }
+
+  componentDidMount = () => {
+    this.props.initCheckout(this.props.amount)
   }
 
   render() {
@@ -594,7 +602,7 @@ const mapStateToProps = (state = {}, ownProps, values = getFormValues(FORM_NAME)
     tip: .15,
     tshirt: true,
   },
-  amount: values && values.amount,
+  amount: values && values.amount || -1,
   customTipAmount: values && values.customTipAmount,
   isValid: state.form && state.form[FORM_NAME] && !state.form[FORM_NAME].syncErrors,
   showCustomTip: values && values.showCustomTip,
@@ -604,7 +612,7 @@ const mapStateToProps = (state = {}, ownProps, values = getFormValues(FORM_NAME)
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps),
+  connect(mapStateToProps, {initCheckout}),
   reduxForm({form: FORM_NAME, onSubmit: noop => noop, enableReinitialize: false, destroyOnUnmount: true}),
 )(HowMuchForm)
 

@@ -8,13 +8,14 @@ import DraftEditorContents from 'draft-js/lib/DraftEditorContents.react'
 import DefaultDraftBlockRenderMap from 'draft-js/lib/DefaultDraftBlockRenderMap'
 //
 import withGetPile from '../../../hocs/withGetPile'
-import withGetTheme from '../../../hocs/withGetTheme'
+import withSubscriptionToPileDonations from '../../../hocs/withSubscriptionToPileDonations'
 import LogoCard from '../../../components/LogoCard'
 import {Subheading} from '../../../components/Text'
 import Stats from '../../../components/Hero/HeroPile/Stats'
 import PromoInsert from './PromoInsert'
 import ShareBar from './ShareBar'
 import Organizer from './Organizer'
+import Donations from './Donations'
 import TshirtEnabledCallout from './TshirtEnabledCallout'
 import MeetChesterSection from '../../../sections/MeetChester'
 
@@ -53,7 +54,7 @@ class Pile extends Component {
 		return pile[fieldId] && EditorState.createWithContent(contentState)
   }
 
- 
+
   render() {
     const {classes: cls, className, donations = [], match, pile = {}} = this.props;
     console.log('getPile', this.props)
@@ -80,6 +81,7 @@ class Pile extends Component {
 	              <ShareBar />
 	              <Organizer />
 	              <TshirtEnabledCallout />
+                <Donations donations={this.props.donations} />
 	              <div>
 	              	<Subheading>Want to create your own pigpile? Easily update your campaign & change themes. Try the demo!</Subheading>
 	              </div>
@@ -104,5 +106,5 @@ export default compose(
   withStyles(styles),
   // withGetTheme(),
   withGetPile(),
-  // withSubscriptionToPileDonations(),
+  withSubscriptionToPileDonations(),
 )(Pile);

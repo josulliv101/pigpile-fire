@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import { withStyles } from 'material-ui/styles'
 import IconButton from 'material-ui/IconButton'
-import Dialog, {DialogContent, withResponsiveFullScreen} from 'material-ui/Dialog'
+import Dialog, {DialogContent, withMobileDialog} from 'material-ui/Dialog'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
 import Typography from 'material-ui/Typography'
@@ -13,7 +13,6 @@ import Slide from 'material-ui/transitions/Slide'
 import Cancel from 'material-ui-icons/Close'
 import Back from 'material-ui-icons/ChevronLeft'
 //
-// import withSubscriptionToCheckout from '../../hocs/withSubscriptionToCheckout'
 
 const styles = (theme) => ({
   paper: {
@@ -54,7 +53,7 @@ const styles = (theme) => ({
   },
 })
 
-const ResponsiveDialog = withResponsiveFullScreen()(Dialog)
+const ResponsiveDialog = withMobileDialog()(Dialog)
 
 
 class DonateDialog extends PureComponent {
@@ -73,7 +72,7 @@ class DonateDialog extends PureComponent {
         onExited={onExited}
         onRequestClose={handleRequestClose}
         open={open}
-        transition={<Slide direction="left" onEnter={() => console.log('onEnter')} onExited={() => console.log('onExited')} />}
+        // transition={<Slide direction="left" onEnter={() => console.log('onEnter')} onExited={() => console.log('onExited')} />}
       >
         <AppBar className={cls.appBar}>
           <Toolbar className={cls.toolbar}>
@@ -110,5 +109,4 @@ const mapStateToProps = () => ({
 export default compose(
   withStyles(styles),
   connect(mapStateToProps),
-  // withSubscriptionToCheckout(),
 )(DonateDialog)

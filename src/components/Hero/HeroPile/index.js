@@ -156,9 +156,9 @@ class HeroPile extends Component {
   			title={step === 1 ? 'Donate how much?' : 'Name & Email'}
   		>
   			{step === 1 && (
-					<HowMuchForm nextStep={this.handleConfirm} />
+					<HowMuchForm nextStep={this.handleConfirm} pid={pile.id} />
   			)}
-  			{step === 2 && <DetailsForm />}
+  			{step === 2 && <DetailsForm pid={pile.id}  />}
   		</Donate>
   	]
   }

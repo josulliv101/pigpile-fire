@@ -8,17 +8,17 @@ export default (key = 'donations') => withSubscription({
   onError,
   onSuccess,
   mapStateToProps: (state, {match}) => ({
-    id: match && match.params && match.params.id,
+    pid: match && match.params && match.params.id,
     [key]: state.pile && state.pile[`pile-${match && match.params && match.params.id}-donations`],
   }),
-  passedOnProps: props => ({id: props.id}),
+  passedOnProps: props => ({pid: props.pid}),
   subscription: subscribeToPileDonations,
 })
 
 // Avoid arrow-function here to avoid auto binding for 'this'
 function onSuccess(props, snapshot) {
-  console.log('args', props, snapshot)
-  props.update(`pile-${props.id}-donations`, snapshot.docs.map(doc => doc.data()))
+  console.log('donations!!!', props, snapshot)
+  props.update(`pile-${props.pid}-donations`, snapshot.docs.map(doc => doc.data()))
 }
 
 function onError(e) {

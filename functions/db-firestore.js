@@ -40,6 +40,17 @@ function getTheme({api, id}) {
     .then(doc => doc.data())
 }
 
+function getPayment({api, pid}) {
+
+  if (!api || !pid) return
+  console.log('getPayment', pid)
+  return api
+    .firestore()
+    .collection("payment")
+    .doc(pid)
+    .get()
+}
+
 function getPile({api, id}) {
 
   if (!api || !id) return
@@ -95,29 +106,50 @@ const updatePile = (api, id, update = {}) => {
 }
 
 
-const setCheckout = ({api, id, update = {}}) => {
+const setCheckout = ({api, uid, pid, update = {}}) => {
 
-  if (!api || !id) return;
+  if (!api || !uid || !pid) return;
 
-  console.log('updateCheckout', api, id, update);
+  console.log('updateCheckout', api, uid, pid, update);
 
   return api
     .firestore()
+    .collection("piles")
+    .doc(pid)
     .collection("checkouts")
-    .doc(id)
+    .doc(uid)
     .set(update)
 }
 
-const subscribeToCheckout = ({api, id, onSuccess = noop, onError = noop}) => {
+const addDonation = ({api, checkout_id, pid, update = {}}) => {
 
-  if (!api || !id) return;
+  console.log('addDonation...', checkout_id, pid, update);
 
-  console.log('subscribeToCheckout', id, api);
+  if (!api || !pid || !checkout_id) return;
+
+  console.log('addDonation', checkout_id);
+
+  return api
+    .firestore()
+    .collection("piles")
+    .doc(pid)
+    .collection("donations")
+    .doc(String(checkout_id))
+    .set(update)
+}
+
+const subscribeToCheckout = ({api, pid, uid, onSuccess = noop, onError = noop}) => {
+
+  if (!api || !pid ||  !uid) return;
+
+  console.log('subscribeToCheckout', uid, pid, api);
 
   const unsubscribe = api
     .firestore()
+    .collection("piles")
+    .doc(pid)
     .collection("checkouts")
-    .doc(id)
+    .doc(uid)
     .onSnapshot(onSuccess, onError)
 
   return Promise.resolve(unsubscribe)
@@ -138,17 +170,18 @@ const subscribeToPile = ({api, id, onSuccess = noop, onError = noop}) => {
   return Promise.resolve(unsubscribe)
 }
 
-const subscribeToPileDonations = ({api, id, onSuccess = noop, onError = noop}) => {
+const subscribeToPileDonations = ({api, pid, limit = 5, onSuccess = noop, onError = noop}) => {
 
   if (!api) return;
 
-  console.log('subscribeToPileDonations', id, api);
+  console.log('subscribeToPileDonations', pid, api);
 
   const unsubscribe = api
     .firestore()
     .collection("piles")
-    .doc(id)
+    .doc(pid)
     .collection("donations")
+    .limit(limit)
     .onSnapshot(onSuccess, onError)
 
   return Promise.resolve(unsubscribe)
@@ -171,8 +204,10 @@ const subscribeToTrendingPiles = ({api, onSuccess = noop, onError = noop}) => {
 function noop () {}
 
 module.exports = {
+  addDonation,
   getAllTags,
   getAllThemes,
+  getPayment,
   getPile,
   getPileDonations,
   getPileWithTheme,

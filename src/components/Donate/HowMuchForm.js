@@ -24,7 +24,7 @@ import TipSelection from './TipSelection'
 import CheckboxField from '../../forms/CheckboxField'
 import {Subheading, Title} from '../Text'
 import Tshirt from '../../icons/Tshirt'
-import {initCheckout} from '../../redux/modules/Checkout'
+import {confirmedCheckout, initCheckout} from '../../redux/modules/Checkout'
 
 const FORM_NAME = 'donate-how-much'
 const green = '#7CD69F'
@@ -424,9 +424,9 @@ class HowMuchForm extends PureComponent {
   }
 
   handleConfirm = () => {
-    const {amount, initCheckout, isValid, nextStep} = this.props
-    if (amount && isValid) {
-      initCheckout(amount)
+    const {amount, confirmedCheckout, isValid, nextStep, pid} = this.props
+    if (amount && pid && isValid) {
+      confirmedCheckout(pid, amount)
       nextStep()
     }
   }
@@ -444,7 +444,12 @@ class HowMuchForm extends PureComponent {
   }
 
   componentDidMount = () => {
-    this.props.initCheckout(this.props.amount)
+    // Amount can be 0 at this point.
+    const {amount, pid} = this.props
+    if (!pid) return
+
+    // TODO Not needed? For subscribing maybe.
+    this.props.initCheckout(pid, this.props.amount)
   }
 
   render() {
@@ -568,7 +573,7 @@ class HowMuchForm extends PureComponent {
 	          </div>
 
 	          <div className={cls.total}>
-	            <Title heavy>Total Donation: {numeral(grandTotal).format('$0,0.00')}</Title>
+	            <Subheading heavy>Total Donation: {numeral(grandTotal).format('$0,0.00')}</Subheading>
 	          </div>
 
 	        </form>
@@ -602,7 +607,7 @@ const mapStateToProps = (state = {}, ownProps, values = getFormValues(FORM_NAME)
     tip: .15,
     tshirt: true,
   },
-  amount: values && values.amount || -1,
+  amount: values && values.amount || 0,
   customTipAmount: values && values.customTipAmount,
   isValid: state.form && state.form[FORM_NAME] && !state.form[FORM_NAME].syncErrors,
   showCustomTip: values && values.showCustomTip,
@@ -612,7 +617,7 @@ const mapStateToProps = (state = {}, ownProps, values = getFormValues(FORM_NAME)
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps, {initCheckout}),
+  connect(mapStateToProps, {confirmedCheckout, initCheckout}),
   reduxForm({form: FORM_NAME, onSubmit: noop => noop, enableReinitialize: false, destroyOnUnmount: true}),
 )(HowMuchForm)
 

@@ -174,7 +174,7 @@ class ShareBar extends PureComponent {
         <div className={classNames(cls.btnGroup)}>
           {
             stage > -1 &&
-            <Grow in={true} direction="left" transitionAppear>
+            <Grow in={true} direction="left">
               <Button className={cls.fb} color={color}>
                 <Facebook /> {labels && 'Facebook'}
               </Button>
@@ -182,7 +182,7 @@ class ShareBar extends PureComponent {
           }
           {
             stage > -1 &&
-            <Grow in={true} direction="left" transitionAppear>
+            <Grow in={true} direction="left">
               <Button className={cls.twitter} color={color}>
                 <Twitter /> {labels && 'Twitter'}
               </Button>
@@ -191,7 +191,7 @@ class ShareBar extends PureComponent {
 
           {
             stage > -2 &&
-            <Grow in={true} direction="left" transitionAppear>
+            <Grow in={true} direction="left">
               <Button className={cls.google} color={color}>
                 <Google /> {labels && 'Google'}
               </Button>

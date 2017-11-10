@@ -7,11 +7,12 @@ export default (key = 'checkout') => withSubscription({
   actions: {subscribe, unsubscribe, setting},
   onError,
   onSuccess,
-  mapStateToProps: (state) => ({
-    id: state.auth && state.auth.uid,
+  mapStateToProps: (state, ownProps) => ({
+    uid: state.auth && state.auth.uid,
+    pid: ownProps.pid,
     [key]: state.settings && state.settings.checkout,
   }),
-  passedOnProps: props => ({id: props.id}),
+  passedOnProps: props => ({uid: props.uid, pid: props.pid}),
   subscription: subscribeToCheckout,
 })
 

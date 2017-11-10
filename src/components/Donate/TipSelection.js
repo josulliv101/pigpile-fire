@@ -106,7 +106,7 @@ class TipSelection extends PureComponent {
               input={<Input id="tip-simple" />}
               className={cls.select}
               MenuProps={{
-                classes: {root: cls.selectMenu},
+                classes: {paper: cls.selectMenu},
                 anchorOrigin: {
                   vertical: 'top',
                   horizontal: 'center',

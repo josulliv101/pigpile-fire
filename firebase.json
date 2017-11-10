@@ -12,6 +12,10 @@
         "function": "checkout"
       },
       {
+        "source": "/checkoutCallback",
+        "function": "checkoutCallback"
+      },
+      {
         "source": "**",
         "function": "app"
       }

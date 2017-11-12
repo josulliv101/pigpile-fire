@@ -98,20 +98,20 @@ class Stats extends PureComponent {
   }
 
   render() {
-    const {className, classes: cls, full = true, goal, justStats = false} = this.props
+    const {className, classes: cls, full = true, goal = 0, justStats = false, total = 0, totalOnPile = 0, totalShares = 0} = this.props
     return (
       <Paper elevation={6} className={classNames(cls.root, {[cls.full]: full}, className)}>
         {
           !justStats &&
           <div className={cls.bar}>
             {
-              <div className={classNames(cls.countup)}>{numeral(22005).format('$0,0')}</div>
+              <div className={classNames(cls.countup)}>{numeral(total).format('$0,0')}</div>
             }
 
-            <LinearProgress classes={{bar: cls.barProgress, determinateBar1: cls.determinateBar1}} color="primary" mode="determinate" value={this.state.progress} />
+            <LinearProgress classes={{bar: cls.barProgress, determinateBar1: cls.determinateBar1}} color="primary" mode="determinate" value={total/goal*100} />
             <div className={classNames(cls.raisedBar)}>
-              <Text type="subheading" color="inherit">{goal} MINIMUM GOAL </Text>
-              <Text className={classNames(cls.raisedMin, {[cls.show]: true})} type="subheading" color="inherit">35% RAISED</Text>
+              <Text type="subheading" color="inherit">{numeral(goal).format('$0,0')} {total>goal?'MINIMUM':''} GOAL </Text>
+              <Text className={classNames(cls.raisedMin, {[cls.show]: true})} type="subheading" color="inherit">{numeral(total/goal).format('0%')} RAISED</Text>
             </div>
 
 
@@ -123,11 +123,11 @@ class Stats extends PureComponent {
           <div className={cls.stats}>
             <div>
               <Text className={cls.uppercase} type="subheading" color="inherit">On the Pigpile</Text>
-              <Text className={cls.stat} type="display1" color="inherit">124</Text>
+              <Text className={cls.stat} type="display1" color="inherit">{totalOnPile}</Text>
             </div>
             <div>
               <Text className={cls.uppercase} type="subheading" color="inherit">Shares</Text>
-              <Text className={cls.stat} type="display1" color="inherit">452</Text>
+              <Text className={cls.stat} type="display1" color="inherit">{totalShares}</Text>
 
             </div>
             <div style={{display: 'none'}}>

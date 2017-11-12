@@ -106,7 +106,7 @@ const updatePile = (api, id, update = {}) => {
 }
 
 
-const setCheckout = ({api, uid, pid, update = {}}) => {
+const setCheckout = ({api, uid, pid, update = {}, options = {}}) => {
 
   if (!api || !uid || !pid) return;
 
@@ -118,7 +118,7 @@ const setCheckout = ({api, uid, pid, update = {}}) => {
     .doc(pid)
     .collection("checkouts")
     .doc(uid)
-    .set(update)
+    .set(update, options)
 }
 
 const addDonation = ({api, checkout_id, pid, update = {}}) => {
@@ -181,7 +181,24 @@ const subscribeToPileDonations = ({api, pid, limit = 5, onSuccess = noop, onErro
     .collection("piles")
     .doc(pid)
     .collection("donations")
+    .orderBy("createdAt")
     .limit(limit)
+    .onSnapshot(onSuccess, onError)
+
+  return Promise.resolve(unsubscribe)
+}
+
+const subscribeToPileShards = ({api, pid, onSuccess = noop, onError = noop}) => {
+
+  if (!api || !pid) return;
+
+  console.log('subscribeToPileShards', pid, api);
+
+  const unsubscribe = api
+    .firestore()
+    .collection("piles")
+    .doc(pid)
+    .collection("shards")
     .onSnapshot(onSuccess, onError)
 
   return Promise.resolve(unsubscribe)
@@ -217,6 +234,7 @@ module.exports = {
   subscribeToCheckout,
   subscribeToPile,
   subscribeToPileDonations,
+  subscribeToPileShards,
   subscribeToTrendingPiles,
   updatePile,
 }

@@ -449,7 +449,7 @@ class HowMuchForm extends PureComponent {
     if (!pid) return
 
     // TODO Not needed? For subscribing maybe.
-    this.props.initCheckout(pid, this.props.amount)
+    // this.props.initCheckout(pid, this.props.amount)
   }
 
   render() {

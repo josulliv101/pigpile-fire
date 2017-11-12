@@ -6,6 +6,7 @@ import { createAction, handleActions } from 'redux-actions'
 export const subscribeToCheckout = createAction('@pigpile/SUBSCRIBE_CHECKOUT')
 export const subscribeToPile = createAction('@pigpile/SUBSCRIBE_PILE')
 export const subscribeToPileDonations = createAction('@pigpile/SUBSCRIBE_PILE_DONATIONS')
+export const subscribeToPileShards = createAction('@pigpile/SUBSCRIBE_PILE_SHARDS')
 export const subscribeToTrending = createAction('@pigpile/SUBSCRIBE_TRENDING')
 
 export const unsubscribe = createAction('@pigpile/UNSUBSCRIBE')
@@ -15,6 +16,7 @@ export const subscribes = [
   subscribeToCheckout,
   subscribeToPile,
   subscribeToPileDonations,
+  subscribeToPileShards,
   subscribeToTrending,
 ];
 

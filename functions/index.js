@@ -28,12 +28,12 @@ checkoutCallback.post('/checkoutCallback', (req, res) => {
   var uid = req.param('uid')
   var pid = req.param('pid')
 
-  console.log('checkoutCallback...', uid, pid)
-  console.log('checkoutCallback...', req)
+  console.log('called by wepay with uid %s pid %', uid, pid)
+  // console.log('checkoutCallback...', req)
 
   if (req.method === 'POST') {
     // const body = JSON.parse(req.body);
-    console.log('POST checkoutCallback', req.body && req.body.checkout_id)
+    // console.log('POST checkoutCallback', req.body && req.body.checkout_id)
 
     if (req.body && req.body.checkout_id) {
       wp.call('/checkout',
@@ -41,8 +41,8 @@ checkoutCallback.post('/checkoutCallback', (req, res) => {
               'checkout_id': req.body.checkout_id
           },
           function(response) {
-              console.log('/checkout', response.state, pid);
-              if (pid && (response.state === 'authorized' || response.state === 'released')) {
+              console.log('wp.call checkout : callback success.', response.state, response.checkout_id);
+              if (pid && (response.state === 'released')) {
                 try {
                   db.addDonation({
                     api: admin,
@@ -52,14 +52,17 @@ checkoutCallback.post('/checkoutCallback', (req, res) => {
                       pid: pid,
                       uid: uid,
                       amount: response.amount,
-                      checkout_id: response.checkout_id,
+                      // checkout_id: response.checkout_id,
                       createdAt: admin.firestore.FieldValue.serverTimestamp(),
                     },
                   })
+
+                  res.send('200');
                 }
 
                 catch(e) {
                   console.log('caught', e)
+                  res.send('error');
                 }
 
               }
@@ -69,7 +72,7 @@ checkoutCallback.post('/checkoutCallback', (req, res) => {
     }
   }
 
-  res.send('200');
+
 });
 
 
@@ -106,23 +109,31 @@ checkout.get('/checkout', (req, res) => {
                 'fee_payer': 'payee'
               },
               'hosted_checkout': {
-                'mode': 'iframe'
+                'mode': 'iframe',
+                'prefill_info': {
+                    'email': 'josulliv101@gmail.com',
+                    'address': {
+                      'postal_code': '02138'
+                    }
+                 }
               },
               'callback_uri': `https://pigpile-next.firebaseapp.com/checkoutCallback?pid=${pid}&uid=${uid}`
           },
           function(response) {
               console.log('WEPAY Checkout <CREATED>', response);
-
+              res.send({checkout_uri: response  && response.hosted_checkout && response.hosted_checkout.checkout_uri});
               db.setCheckout({api: admin, pid: pid, uid: uid, update: {
                 status: 'amountConfirmed',
                 createdAt: admin.firestore.FieldValue.serverTimestamp(),
                 amount,
                 pid,
                 uid,
-                checkout_uri: response  && response.hosted_checkout && response.hosted_checkout.checkout_uri
+                // Need to cancel callbacks for old wepay checkouts if new one created
+                // checkout_id: response.checkout_id,
+                // checkout_uri: response  && response.hosted_checkout && response.hosted_checkout.checkout_uri
               }})
               // {checkout_uri: response  && response.hosted_checkout && response.hosted_checkout.checkout_uri}
-              res.send('200');
+
           }
       );
 

@@ -13,7 +13,7 @@ import { CircularProgress } from 'material-ui/Progress'
 //
 // import validate from '../../validation/donationDetails'
 import TextField from '../../forms/TextField'
-import {setIframe, iframeLoaded} from '../../redux/modules/Checkout/'
+import {completeCheckout, setIframe, iframeLoaded} from '../../redux/modules/Checkout/'
 
 import withSubscriptionToCheckout from '../../hocs/withSubscriptionToCheckout'
 
@@ -94,14 +94,52 @@ const styles = (theme) => ({
 
 class DonorDetails extends Component {
 
-  componentDidUpdate = (prevProps) => {
-    const {url, iframeLoaded, iframeCalledback = false} = this.props
-    console.log('DonorDetails componentDidUpdate', WePay, url, prevProps.url)
-    if (!WePay || !url || prevProps.url === url) return
-    WePay.listen("iframe_window_title", function(arg) {
-      console.log('iframe_window_title', document.getElementById('payment-new'))
+  state = {
+    complete: false,
+  }
+
+  msgHandler = (e, arg) => {
+    //console.log('msgHandler', e, this.props)
+    const {pid} = this.props
+    if (e.origin !== 'https://stage.wepay.com')
+      return
+
+    if (e.data && typeof e.data === 'string') {
+      const data = WePay.JSON.parse(e.data)
+      if (data.wepay_message_type === 'iframe_checkout_complete' && data.checkout_id) {
+        console.log('msgHandler data', data, this.props)
+        this.props.completeCheckout(pid, data.checkout_id)
+        // this.setState({complete: true})
+
+      }
+
+    }
+  }
+
+  shouldComponentUpdate = (nextProps) => {
+    if (
+      (nextProps.url && nextProps.url !== this.props.url) ||
+      (nextProps.iframeCalledback === true && !this.props.iframeCalledback) ||
+      (nextProps.checkoutSuccess === true && !this.props.checkoutSuccess)
+    )
+      return true
+    return false
+  }
+
+  componentDidMount = () => {
+    const {iframeLoaded, iframeCalledback = false} = this.props
+    window && window.addEventListener('message', this.msgHandler);
+    WePay.listen("iframe_window_title", (arg) => {
+      console.log("cb iframe_window_title", iframeCalledback)
       if (!iframeCalledback) iframeLoaded(true)
     })
+  }
+
+  componentDidUpdate = (prevProps) => {
+    const {url} = this.props
+    console.log('DonorDetails::componentDidUpdate', WePay, url, prevProps.url)
+    if (!WePay || !url || prevProps.url === url) return
+
     WePay.iframe_checkout("wepay_checkout", url);
   }
 
@@ -110,15 +148,16 @@ class DonorDetails extends Component {
     this.props.iframeLoaded(false)
   }
   render() {
-    const { amount: amountProp, classes: cls, handleSubmit, iframeCalledback, isValid, pid, showDetails, url } = this.props
+    const { amount: amountProp, checkoutSuccess = false, classes: cls, handleSubmit, iframeCalledback = false, isValid, pid, showDetails, url } = this.props
 
     // An amount is always needed.
     // if (showDetails && !amountProp) return <Redirect to={{pathname:`/pile-${pid}`, state: null}} />
-    console.log('iframeCalledback', iframeCalledback)
+    console.log('DonorDetails::render', url, iframeCalledback, checkoutSuccess)
     return (
 	    <div className={cls.root}>
         {!iframeCalledback && <CircularProgress mode="indeterminate" className={cls.progress} size={100} thickness={4} />}
-        <div id="wepay_checkout" className={classNames(cls.checkoutContainer, {[cls.loaded]: iframeCalledback})} style={{position: 'relative', zIndex: 4, width: '100%', height: '100%'}} />
+        <div key="wepay_checkout" id="wepay_checkout" className={classNames(cls.checkoutContainer, {[cls.loaded]: iframeCalledback})} style={{position: 'relative', zIndex: 4, width: '100%', height: '100%'}} />
+        {checkoutSuccess ? 'checkout Success!!!' : 'in process'}
       </div>
     )
   }
@@ -132,9 +171,10 @@ const mapStateToProps = (state, ownProps, values = getFormValues(FORM_NAME)(stat
   initialValues: {
     ...values,
   },
-  // url: state.checkout && state.checkout.iframe,
-  iframeCalledback: state.checkout && state.checkout.loaded,
-  url: state.settings && state.settings.checkout && state.settings.checkout.checkout_uri,
+  checkoutSuccess: state.settings && state.settings.checkout && state.settings.checkout.done === true,
+  url: state.checkout && state.checkout.iframe,
+  iframeCalledback: state.checkout && state.checkout.loaded === true,
+  // url: state.settings && state.settings.checkout && state.settings.checkout.checkout_uri,
   isValid: state.form && state.form[FORM_NAME] && !state.form[FORM_NAME].syncErrors,
   ...values,
   ...getFormValues('donate-how-much')(state),
@@ -142,7 +182,7 @@ const mapStateToProps = (state, ownProps, values = getFormValues(FORM_NAME)(stat
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps, {iframeLoaded, setIframe}),
-  reduxForm({form: FORM_NAME, onSubmit: noop => noop, enableReinitialize: false, destroyOnUnmount: false}),
+  connect(mapStateToProps, {completeCheckout, iframeLoaded, setIframe}),
+  // reduxForm({form: FORM_NAME, onSubmit: noop => noop, enableReinitialize: false, destroyOnUnmount: false}),
   withSubscriptionToCheckout(),
 )(DonorDetails)

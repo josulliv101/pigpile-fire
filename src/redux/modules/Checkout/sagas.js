@@ -1,6 +1,6 @@
 // import { delay } from 'redux-saga'
 import { takeEvery, call, put } from 'redux-saga/effects'
-import {error, confirmedCheckout, initCheckout, setIframe} from './index'
+import {error, completeCheckout, confirmedCheckout, initCheckout, setIframe} from './index'
 import {setCheckout} from '../../../../functions/db-firestore'
 
 
@@ -34,12 +34,14 @@ function* workCheckoutConfirm(api, {type, payload: {amount, pid}}) {
   */
     const url = `/checkout?pid=${pid}&uid=${uid}&amount=${amount}`
 
-    console.log('foobar', setIframe('checkout_uri'))
-
+    // console.log('foobar', setIframe('checkout_uri'))
+    console.time("concatenation");
     const data = yield call(fetch, url)
-    // const {checkout_uri} = yield call([data, data.json])
+    console.timeEnd("concatenation");
+
+    const {checkout_uri} = yield call([data, data.json])
     // const {checkout_uri} = data.then(resp => resp.json())
-    // if (checkout_uri) yield put(setIframe(checkout_uri))
+    if (checkout_uri) yield put(setIframe(checkout_uri))
     // console.log('IFRAME data', checkout_uri)
 
   } catch (e) {
@@ -49,6 +51,45 @@ function* workCheckoutConfirm(api, {type, payload: {amount, pid}}) {
 
 
 }
+
+
+function* workCheckoutComplete(api, {type, payload: {checkout_id, pid}}) {
+
+  console.log('workCheckoutComplete', pid, checkout_id)
+
+  if (!api || !pid || !checkout_id) return;
+
+  try {
+
+    const firebaseAuth = api.auth()
+
+    // User should at the very least be anonymously logged in
+    if (!firebaseAuth.currentUser || !firebaseAuth.currentUser.uid) return
+
+    const data = yield call(setCheckout, {
+      api,
+      uid: firebaseAuth.currentUser.uid,
+      pid,
+      update: {
+        doneAt: api.firestore.FieldValue.serverTimestamp(),
+        type: 'complete', // new, amount, complete
+        done: true,
+      },
+      options: { merge: true },
+    })
+
+    console.log('workCheckoutInit data', data)
+
+    // yield put(setThemePreview(theme))
+
+  } catch (e) {
+    console.log('error', e)
+    yield put(error(e))
+  }
+
+
+}
+
 
 function* workCheckoutInit(api, {type, payload: {amount, pid}}) {
 
@@ -97,6 +138,7 @@ function* workCheckoutInit(api, {type, payload: {amount, pid}}) {
 export default [
   watchCheckoutInit,
   watchCheckoutConfirm,
+  watchCheckoutComplete,
 ]
 
 function* watchCheckoutInit(...args) {
@@ -109,3 +151,7 @@ function* watchCheckoutConfirm(...args) {
   yield takeEvery(confirmedCheckout, workCheckoutConfirm, ...args)
 }
 
+function* watchCheckoutComplete(...args) {
+  console.log('init watchCheckoutComplete')
+  yield takeEvery(completeCheckout, workCheckoutComplete, ...args)
+}

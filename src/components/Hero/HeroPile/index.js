@@ -11,7 +11,7 @@ import dot from 'dot-object'
 //
 import * as appThemes from '../../../style/appThemes/'
 import {setting} from '../../../redux/modules/Settings'
-
+import withSubscriptionToPileShards from '../../../hocs/withSubscriptionToPileShards'
 import Title from './Title'
 import DonateButton from './DonateButton'
 import Media from './Media'
@@ -114,7 +114,7 @@ class HeroPile extends Component {
 
   render() {
     const {classes: cls, className, step, theme, pile = {}, themeConfig = {}} = this.props;
-    console.log('HeroPile...',  theme)
+    console.log('HeroPile...',  this.props)
     if (!theme || !pile) return null
     const {open} = this.state
     const {
@@ -143,7 +143,7 @@ class HeroPile extends Component {
 		        </Grid>
 		        <Grid className={classNames(cls.sidebar, configClasses.sidebarType)} item xs={4}>
 		        	<DonateButton onClick={this.handleDonate} />
-		        	{<Stats goal={pile.goal} />}
+		        	{<Stats  goal={pile.goal} total={this.props.total} totalOnPile={this.props.totalOnPile} totalShares={this.props.totalShares} />}
 		        </Grid>
 		      </Grid>
 	  		</div>
@@ -173,15 +173,30 @@ HeroPile.defaultProps = {
   step: 1,
 };
 
+const getShardsTotalForType = (type) => (shards = []) => {
+  return shards.filter(sh => sh.type === type).reduce((sum, sh) => {
+    if (typeof sh.value === 'number') sum = sum + sh.value
+    return sum
+  }, 0)
+}
+
+const getDonationTotal = getShardsTotalForType('donations')
+const getShareTotal = getShardsTotalForType('shares')
+const getOnPileTotal = getShardsTotalForType('onpile')
+
 export default compose(
 	withStyles(styles),
 	connect( (state, ownProps) => ({
 		history: ownProps.history,
   	pile: state.settings && state.settings[`pile-${ownProps.pileId}`],
   	step: dot.pick('location.state.step', ownProps),
+    total: getDonationTotal(dot.pick('settings.shards', state)),
+    totalShares: getShareTotal(dot.pick('settings.shards', state)),
+    totalOnPile: getOnPileTotal(dot.pick('settings.shards', state)),
   	// theme: state.theme && state.theme.active,
   	theme: state.theme && (state.theme.preview || state.theme.active),
   	themeConfig: dot.pick('form.pile-update-theme.values.theme.config', state) ||
   							 dot.pick(`settings.pile-${ownProps.pileId}.theme.config`, state)
   }), {setting}),
+  withSubscriptionToPileShards(),
 )(HeroPile)

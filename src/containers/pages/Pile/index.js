@@ -8,6 +8,7 @@ import DraftEditorContents from 'draft-js/lib/DraftEditorContents.react'
 import DefaultDraftBlockRenderMap from 'draft-js/lib/DefaultDraftBlockRenderMap'
 //
 import withGetPile from '../../../hocs/withGetPile'
+// import withSubscriptionToPileShards from '../../../hocs/withSubscriptionToPileShards'
 import withSubscriptionToPileDonations from '../../../hocs/withSubscriptionToPileDonations'
 import LogoCard from '../../../components/LogoCard'
 import {Subheading} from '../../../components/Text'
@@ -106,5 +107,6 @@ export default compose(
   withStyles(styles),
   // withGetTheme(),
   withGetPile(),
+  // withSubscriptionToPileShards(),
   withSubscriptionToPileDonations(),
 )(Pile);

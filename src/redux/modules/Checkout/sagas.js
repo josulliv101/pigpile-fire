@@ -34,6 +34,7 @@ function* workCheckoutConfirm(api, {type, payload: {amount, pid}}) {
   */
     const url = `/checkout?pid=${pid}&uid=${uid}&amount=${amount}`
 
+    return
     // console.log('foobar', setIframe('checkout_uri'))
     console.time("concatenation");
     const data = yield call(fetch, url)
@@ -93,7 +94,7 @@ function* workCheckoutComplete(api, {type, payload: {checkout_id, pid}}) {
 
 function* workCheckoutInit(api, {type, payload: {amount, pid}}) {
 
-  console.log('workCheckoutInit', api, type, pid, amount)
+  console.log('workCheckoutInit', api, type, pid)
 
   if (!api || !pid) return;
 
@@ -101,23 +102,19 @@ function* workCheckoutInit(api, {type, payload: {amount, pid}}) {
 
     const firebaseAuth = api.auth()
 
-    let authData;
-
     // User should at the very least be anonymously logged in
     if (!firebaseAuth.currentUser) return
-
-    console.log('workCheckoutInit currentUser', authData)
 
   	const data = yield call(setCheckout, {
       api,
       uid: firebaseAuth.currentUser.uid,
       pid,
       update: {
-        amount,
+        // amount,
         createdAt: api.firestore.FieldValue.serverTimestamp(),
         pid,
         uid: firebaseAuth.currentUser.uid,
-        type: type, // new, amount, complete
+        type: 'init', // new, amount, complete
       },
     })
 

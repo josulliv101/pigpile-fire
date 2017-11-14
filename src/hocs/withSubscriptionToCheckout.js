@@ -18,6 +18,7 @@ export default (key = 'checkout') => withSubscription({
 
 // Avoid arrow-function here to avoid auto binding for 'this'
 function onSuccess(props, doc) {
+  if (!doc.exists) return
   console.log('SUBSCRIBETOPILE', props, doc.data())
   props.setting('checkout', doc.data())
 }

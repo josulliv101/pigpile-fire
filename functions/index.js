@@ -187,6 +187,54 @@ app.get('/:userId?', (req, res) => {
   }
 
 });
+
+exports.createCheckout = functions.firestore.document('piles/{pileId}/checkouts/{userId}').onCreate(event => {
+    const pid = event.params.pileId;
+    const uid = event.params.userId;
+    const newValue = event.data.data();
+    const choices = [5, 10, 15, 20, 25, 30, 35, 40, 50, 75, 100, 150, 200, 300, 400, 500, 750, 1000]
+
+    console.log('...batch', pid, uid)
+
+    if (!pid || !uid) return
+
+    const timestamp = Date.now()
+    const options = {
+      "client_id": "128805",
+      "client_secret": "0c60f9e692",
+      "calls":  choices.map(ch => ({
+        "call": "/checkout/create",
+        "authorization": "STAGE_a016e32cdaf17aebc09006a18c8fd6ceb9fd95d5741886130d127bb90a2e70d0",
+        "reference_id": `pp-${timestamp}-${ch}`,
+        "parameters": {
+          "account_id": 11959731,
+          "amount": ch,
+          "currency": "USD",
+          "short_description": "test batch",
+          "type": "goods",
+          "hosted_checkout": {
+            "mode": "iframe"
+          }
+        }
+      }))
+    }
+
+    return new Promise(function (resolve) {
+      wp.call(
+        '/batch/create',
+        options,
+        json => {
+          console.log('json', json)
+          const urls = json.calls.map((call) => ({
+            amount: call.response  && call.response.amount,
+            checkout_uri: call.response  && call.response.hosted_checkout && call.response.hosted_checkout.checkout_uri
+          }))
+          db.setCheckout({api: admin, pid, uid, update: {urls}, options: {merge: true}}) // , {merge: true}
+          return resolve(urls)
+        }
+      )
+    })
+});
 /*
 exports.createCheckout = functions.firestore.document('piles/{pileId}/checkouts/{userId}').onWrite(event => {
     // Get an object representing the document

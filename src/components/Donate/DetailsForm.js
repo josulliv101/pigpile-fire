@@ -56,7 +56,7 @@ const styles = (theme) => ({
     },
   },
   checkoutContainer: {
-    opacity: 0,
+    opacity: 1, // 0,
     transition: theme.transitions.create(['opacity']),
     transitionDuration: '1s',
     '&$loaded': {
@@ -115,7 +115,7 @@ class DonorDetails extends Component {
 
     }
   }
-
+/*
   shouldComponentUpdate = (nextProps) => {
     if (
       (nextProps.url && nextProps.url !== this.props.url) ||
@@ -125,7 +125,7 @@ class DonorDetails extends Component {
       return true
     return false
   }
-
+*/
   componentDidMount = () => {
     const {iframeLoaded, iframeCalledback = false} = this.props
     window && window.addEventListener('message', this.msgHandler);
@@ -136,11 +136,13 @@ class DonorDetails extends Component {
   }
 
   componentDidUpdate = (prevProps) => {
-    const {url} = this.props
-    console.log('DonorDetails::componentDidUpdate', WePay, url, prevProps.url)
-    if (!WePay || !url || prevProps.url === url) return
+    const {amount = 10, urls} = this.props
+    if (!urls) return
+    const url = urls.find(item => item.amount === amount)
+    console.log('DonorDetails::componentDidUpdate', amount, url, prevProps.url)
+    if (!WePay || !url || prevProps.urls) return //  || prevProps.url === url
 
-    WePay.iframe_checkout("wepay_checkout", url);
+    WePay.iframe_checkout("wepay_checkout", url.checkout_uri);
   }
 
   componentWillUnmount = () => {
@@ -172,7 +174,7 @@ const mapStateToProps = (state, ownProps, values = getFormValues(FORM_NAME)(stat
     ...values,
   },
   checkoutSuccess: state.settings && state.settings.checkout && state.settings.checkout.done === true,
-  url: state.checkout && state.checkout.iframe,
+  urls: state.settings.checkout && state.settings.checkout.urls,
   iframeCalledback: state.checkout && state.checkout.loaded === true,
   // url: state.settings && state.settings.checkout && state.settings.checkout.checkout_uri,
   isValid: state.form && state.form[FORM_NAME] && !state.form[FORM_NAME].syncErrors,

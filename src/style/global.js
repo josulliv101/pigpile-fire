@@ -11,9 +11,10 @@ export default function globalStyle(theme) {
 	      border: '1px solid #ddd',
 	      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
 	      fontSize: '14px',
-	      padding: '15px',
-	      height: 'calc(100% - 140px)',
 	      marginBottom: 8,
+	      minHeight: 300, // height 'calc(100% - 140px)',
+	      overflow: 'auto',
+        padding: '15px',
 	    },
 
 	    '.RichEditor-editor': {
@@ -97,7 +98,7 @@ export default function globalStyle(theme) {
       padding: 0,
     },
     form: {
-    	margin: 0, 
+    	margin: 0,
     	padding: 0,
     },
     ul: {

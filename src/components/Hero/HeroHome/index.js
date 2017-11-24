@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import {connect} from 'react-redux'
+import { Link } from 'react-router-dom'
 import compose from 'recompose/compose'
 import {withStyles} from 'material-ui/styles'
 import Button from 'material-ui/Button'
@@ -60,6 +61,7 @@ const styles = (theme, {up, values} = theme.breakpoints, {unit} = theme.spacing,
   posTitles: {
     position: 'absolute',
     left: 'calc(50% - 45vw)',
+    textAlign: 'center',
     top: '14%',
     width: '90vw',
     zIndex: 2,
@@ -75,7 +77,7 @@ const styles = (theme, {up, values} = theme.breakpoints, {unit} = theme.spacing,
   },
   startFundraiser: {
     border: `1px ${white} solid`,
-    display: 'block',
+    display: 'inline-flex',
     height: 50,
     margin: `${unit*3.5}px auto`,
     padding: `0 ${unit*4}px`,
@@ -171,7 +173,13 @@ function HeroHome(props) {
       <div className={cls.posTitles}>
         <Display1 align="center" gutterBottom lite>Be kind. Pigpile on good causes.</Display1>
         <Headline align="center" lite>Free Online Fundraising. No 5% fee.</Headline>
-        <Button className={cls.startFundraiser} color="contrast">Start a Fundraiser</Button>
+        <Button
+          className={cls.startFundraiser}
+          component={Link}
+          color="contrast"
+          to="/express/create">
+          Start a Fundraiser
+        </Button>
       </div>
       <div className={cls.chester} />
       <div className={cls.arrowText}>Chester</div>

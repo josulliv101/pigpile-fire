@@ -1,5 +1,8 @@
 import React, {Component} from 'react'
 import {Editor, EditorState, RichUtils, convertToRaw, convertFromRaw} from 'draft-js'
+import punycode from 'punycode'
+import classNames from 'classnames'
+import { withStyles } from 'material-ui/styles'
 
 class RichEditorExample extends React.Component {
 
@@ -10,9 +13,11 @@ class RichEditorExample extends React.Component {
     this.onChange = (editorState) => props.onEditorStateChange(editorState) // this.setState({editorState})
 
     this.handleKeyCommand = (command) => this._handleKeyCommand(command)
+    this.handleBeforeInput = () => this._handleBeforeInput()
     this.onTab = (e) => this._onTab(e)
     this.toggleBlockType = (type) => this._toggleBlockType(type)
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style)
+
 
   }
 
@@ -49,8 +54,81 @@ class RichEditorExample extends React.Component {
     )
   }
 
+  _handleBeforeInput() {
+    const {count, limit} = this.props
+
+    console.log('_handleBeforeInput', count, limit)
+
+    if (!limit || !count) return
+
+    if (count > limit - 1) {
+      console.log('you can type max ten characters')
+
+      return 'handled'
+    }
+  }
+
+  _getLengthOfSelectedText = () => {
+    const currentSelection = this.props.editorState.getSelection();
+    const isCollapsed = currentSelection.isCollapsed();
+
+    let length = 0;
+
+    if (!isCollapsed) {
+      const currentContent = this.props.editorState.getCurrentContent();
+      const startKey = currentSelection.getStartKey();
+      const endKey = currentSelection.getEndKey();
+      const isBackward = currentSelection.getIsBackward();
+      const blockMap = currentContent.getBlockMap();
+      const startBlock = currentContent.getBlockForKey(startKey);
+      const endBlock = currentContent.getBlockForKey(endKey);
+      const isStartAndEndBlockAreTheSame = startKey === endKey;
+      const startBlockTextLength = startBlock.getLength();
+      const endBlockTextLength = endBlock.getLength();
+      const startSelectedTextLength = startBlockTextLength - currentSelection.getStartOffset();
+      const endSelectedTextLength = currentSelection.getEndOffset();
+      const keyAfterEnd = currentContent.getKeyAfter(endKey);
+
+      if (isStartAndEndBlockAreTheSame) {
+        length += currentSelection.getEndOffset() - currentSelection.getStartOffset();
+      } else {
+        let currentKey = startKey;
+        let counter = 0;
+
+        while (currentKey && currentKey !== keyAfterEnd) {
+          if (currentKey === startKey) {
+            length += startSelectedTextLength + 1;
+          } else if (currentKey === endKey) {
+            length += endSelectedTextLength;
+          } else {
+            length += currentContent.getBlockForKey(currentKey).getLength() + 1;
+          }
+
+          currentKey = currentContent.getKeyAfter(currentKey);
+        };
+      }
+    }
+
+    return length;
+  }
+
+
+  handlePastedText = (pastedText) => {
+    const {count, limit} = this.props
+    const currentContent = this.props.editorState.getCurrentContent();
+    const currentContentLength = count;
+    const selectedTextLength = this._getLengthOfSelectedText();
+
+
+    if (currentContentLength + pastedText.length - selectedTextLength > limit) {
+      console.log('you can type max ten characters');
+
+      return 'handled';
+    }
+  }
+
   render() {
-    const {editorState} = this.props
+    const {editorState, handleBlur = noop, handleFocus = noop, placeholder = 'Tell people about your fundraiser...'} = this.props
 
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
@@ -64,10 +142,10 @@ class RichEditorExample extends React.Component {
 
     return (
       <div className="RichEditor-root">
-        <BlockStyleControls
-          editorState={editorState}
-          onToggle={this.toggleBlockType}
-        />
+        {/*<BlockStyleControls
+                  editorState={editorState}
+                  onToggle={this.toggleBlockType}
+                />*/}
         <InlineStyleControls
           editorState={editorState}
           onToggle={this.toggleInlineStyle}
@@ -77,10 +155,14 @@ class RichEditorExample extends React.Component {
             blockStyleFn={getBlockStyle}
             customStyleMap={styleMap}
             editorState={editorState}
+            handleBeforeInput={this.handleBeforeInput}
+            handlePastedText={this.handlePastedText}
             handleKeyCommand={this.handleKeyCommand}
             onChange={this.onChange}
             onTab={this.onTab}
-            placeholder="Tell people about your fundraiser..."
+            onBlur={handleBlur}
+            onFocus={handleFocus}
+            placeholder={placeholder}
             ref="editor"
             spellCheck={true}
           />
@@ -230,27 +312,77 @@ export default class EditorField extends Component {
   	}
   }
 
+  getCharCount(editorState) {
+    const decodeUnicode = (str) => punycode.ucs2.decode(str); // func to handle unicode characters
+    const plainText = editorState.getCurrentContent().getPlainText('');
+    const regex = /(?:\r\n|\r|\n)/g;  // new line, carriage return, line feed
+    const cleanString = plainText.replace(regex, '').trim();  // replace above characters w/ nothing
+    return decodeUnicode(cleanString).length;
+  }
+
   onChange = (editorState) => {
     console.log('onChange', editorState)
-    const { input } = this.props
+    const { input, handleCountChange } = this.props
 
     console.log('!!!', editorState.getCurrentContent().getBlocksAsArray())
 
     // converting to the raw JSON on change
     input.onChange(convertToRaw(editorState.getCurrentContent()))
+
+    const count = this.getCharCount(editorState);
+
     // Set it on the state
-    this.setState({ editorState })
+    this.setState({ count, editorState })
+
+    if (handleCountChange) handleCountChange(count)
   }
 
   render() {
-    const {input} = this.props // field
+    const {input, limit, showCharactersLeft, ...props} = this.props // field
     // const {value, ...input} = inputProp
-    console.log('input', input)
-    return (
-      <RichEditorExample {...input}
+
+    console.log('count...', this.state.count)
+    return [
+      <RichEditorExample key="editor-overview" {...input}
         onEditorStateChange={this.onChange}
         editorState={this.state.editorState}
-      />
-    )
+        count={this.state.count}
+        limit={limit}
+        {...props}
+      />,
+      <Count
+        key="count"
+        current={this.state.count}
+        limit={limit}
+        showCharactersLeft={showCharactersLeft}
+        />
+    ]
   }
 }
+
+const styles = (theme) => ({
+  root: {
+    color: theme.palette.grey[500],
+  },
+  at: {
+    color: theme.palette.primary[500],
+  },
+});
+
+function CountBase({
+  classes,
+  current,
+  limit,
+  separator = ':',
+  showCharactersLeft = false,
+  label = !showCharactersLeft ? 'total characters' : 'characters left',
+  ...domProps}) {
+  const at = showCharactersLeft === true && limit && limit > 0 ? limit - current : current
+  return (
+    current ? <div className={classNames(classes.root)} {...domProps}>{label}{separator} <span className={classes.at}>{at}</span></div> : null
+  )
+}
+
+const Count = withStyles(styles)(CountBase)
+
+function noop() {}

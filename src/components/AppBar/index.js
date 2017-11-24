@@ -134,13 +134,13 @@ class AppBar extends Component {
         <Brand className={classNames(cls.brand, cls.transformOriginLeft, clsShrink)} />
         <Tagline className={classNames(cls.tagline, cls.transformOriginLeft, {[cls.shrinkTagline]: navDocked})} />
         <Logo {...props} className={classNames(cls.logo, {[cls.shrinkLogo]: navDocked})} />
-				{auth && auth.authenticated
-					? <AccountButton 
+				{ auth && auth.authenticated && !auth.isAnonymous
+					? <AccountButton
 							className={classNames(cls.login, {[cls.shrinkLogin]: navDocked})}
 							drawer={drawer}
 							edit={auth && auth.uid === pile.createdBy}
 							setting={this.props.setting}
-							user={auth.user} 
+							user={auth.user}
 							/>
 					: <LoginButton className={classNames(cls.login, {[cls.shrinkLogin]: navDocked})} />}
       </div>

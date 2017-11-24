@@ -43,13 +43,14 @@ class NavBar extends Component {
   render() {
     const {classes: cls, className} = this.props;
   	return (
-  		<Observer 
+  		<Observer
   			className={classNames(cls.nav, className)}
-  			threshold={1} 
+  			threshold={1}
   			onChange={ this.setSticky }>
 	        <main>
 	          <Switch>
 	            <Route path="/login" render={() => null} />
+              <Route path="/express/create" render={() => null} />
 	            <Route path='/' exact={true} component={HomeNav} />
 	            <Route path='/:id' component={PileNav} />
 	          </Switch>

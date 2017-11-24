@@ -1,7 +1,18 @@
-import { takeLatest, call, put } from 'redux-saga/effects'
-import {unwatchTrendingPiles, update, watchTrendingPiles} from './index'
+import { takeLatest, call, put, select } from 'redux-saga/effects'
+import {create, unwatchTrendingPiles, update, watchTrendingPiles} from './index'
 
 let unsubscribeWatchTrending = null;
+
+
+function* workCreate(api) {
+
+  if (!api) return;
+
+  console.log('workCreate', api)
+
+}
+
+
 
 function* workWatchTrending(firebase) {
 
@@ -48,7 +59,13 @@ function* workUnwatchTrending(firebase) {
 export default [
   unwatchTrending,
   watchTrending,
+  watchCreate,
 ]
+
+function* watchCreate(...args) {
+  console.log('init watchCreate')
+  yield takeLatest(create, workCreate, ...args)
+}
 
 function* watchTrending(...args) {
   console.log('init watchTrending')

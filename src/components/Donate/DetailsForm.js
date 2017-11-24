@@ -24,7 +24,7 @@ const styles = (theme) => ({
     // background: theme.palette.background.default,
     height: '100%',
     left: 0, // '100%',
-    // opacity: 0,
+    opacity: 1,
     padding: 0, // theme.spacing.unit * 2,
     position: 'relative',
     top: 0,
@@ -66,6 +66,9 @@ const styles = (theme) => ({
       height: 360,
       width: 600,
     },
+  },
+  hide: {
+    opacity: 0,
   },
   loaded: {},
   progress: {
@@ -136,13 +139,15 @@ class DonorDetails extends Component {
   }
 
   componentDidUpdate = (prevProps) => {
-    const {amount = 10, urls} = this.props
-    if (!urls) return
-    const url = urls.find(item => item.amount === amount)
+    const {amount = 10, url, urls} = this.props
+    // if (!url) return
+    // const url = urls.find(item => item.amount === amount)
     console.log('DonorDetails::componentDidUpdate', amount, url, prevProps.url)
-    if (!WePay || !url || prevProps.urls) return //  || prevProps.url === url
+    if (!WePay || !url || prevProps.url || this.state.iframeRequested) return //  || prevProps.url === url
 
-    WePay.iframe_checkout("wepay_checkout", url.checkout_uri);
+
+    WePay.iframe_checkout("wepay_checkout", url);
+    this.setState({iframeRequested: true})
   }
 
   componentWillUnmount = () => {
@@ -150,13 +155,13 @@ class DonorDetails extends Component {
     this.props.iframeLoaded(false)
   }
   render() {
-    const { amount: amountProp, checkoutSuccess = false, classes: cls, handleSubmit, iframeCalledback = false, isValid, pid, showDetails, url } = this.props
+    const { amount: amountProp, checkoutSuccess = false, classes: cls, handleSubmit, iframeCalledback = false, isValid, pid, show, showDetails, url } = this.props
 
     // An amount is always needed.
     // if (showDetails && !amountProp) return <Redirect to={{pathname:`/pile-${pid}`, state: null}} />
-    console.log('DonorDetails::render', url, iframeCalledback, checkoutSuccess)
+    console.log('DonorDetails::render', this.props)
     return (
-	    <div className={cls.root}>
+	    <div className={classNames(cls.root, {[cls.hide]: !show})}>
         {!iframeCalledback && <CircularProgress mode="indeterminate" className={cls.progress} size={100} thickness={4} />}
         <div key="wepay_checkout" id="wepay_checkout" className={classNames(cls.checkoutContainer, {[cls.loaded]: iframeCalledback})} style={{position: 'relative', zIndex: 4, width: '100%', height: '100%'}} />
         {checkoutSuccess ? 'checkout Success!!!' : 'in process'}
@@ -175,6 +180,7 @@ const mapStateToProps = (state, ownProps, values = getFormValues(FORM_NAME)(stat
   },
   checkoutSuccess: state.settings && state.settings.checkout && state.settings.checkout.done === true,
   urls: state.settings.checkout && state.settings.checkout.urls,
+  url: state.checkout && state.checkout.iframe,
   iframeCalledback: state.checkout && state.checkout.loaded === true,
   // url: state.settings && state.settings.checkout && state.settings.checkout.checkout_uri,
   isValid: state.form && state.form[FORM_NAME] && !state.form[FORM_NAME].syncErrors,

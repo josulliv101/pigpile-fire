@@ -124,7 +124,7 @@ const styles = (theme, space = theme.spacing.unit, {common: {lightBlack, white},
     fontSize: 16,
     minWidth: 120,
     display: 'flex',
-    margin: `${space * 1}px auto 0`,
+    margin: `${space * 0}px auto 0`,
     opacity: .4,
     transition: theme.transitions.create(['opacity']),
     '&$valid': {
@@ -383,8 +383,8 @@ const data = [
   {amount: 20},
   {amount: 50},
   {amount: 100, hidden: {xsDown: true}},
-  {amount: 500, hidden: {xsDown: true}},
-  {amount: 1000, hidden: {xsDown: true}},
+  {amount: 200, hidden: {xsDown: true}},
+  {amount: 300, hidden: {xsDown: true}},
 ]
 
 const moreData = [
@@ -392,8 +392,8 @@ const moreData = [
   {amount: 30},
   {amount: 40},
   {amount: 75, hidden: {xsDown: true}},
-  {amount: 200, hidden: {xsDown: true}},
-  {amount: 300, hidden: {xsDown: true}},
+  {amount: 500, hidden: {xsDown: true}},
+  {amount: 1000, hidden: {xsDown: true}},
   {amount: 400},
   {amount: 35},
   {amount: 750},

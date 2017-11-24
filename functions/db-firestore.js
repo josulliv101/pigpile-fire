@@ -90,6 +90,18 @@ function getPileDonations(firebase, id) {
     .get()
 }
 
+function getCheckout({api, pid, uid}) {
+
+  if (!api || !pid || !uid) return
+
+  return api
+    .firestore()
+    .collection("piles")
+    .doc(pid)
+    .collection("checkouts")
+    .doc(uid)
+    .get()
+}
 
 const updatePile = (api, id, update = {}) => {
 
@@ -125,17 +137,51 @@ const addDonation = ({api, checkout_id, pid, update = {}}) => {
 
   console.log('addDonation...', checkout_id, pid, update);
 
-  if (!api || !pid || !checkout_id) return;
+  if (!api || !pid || !checkout_id || !update.amount) return;
 
   console.log('addDonation', checkout_id);
 
-  return api
+  const ref = api.firestore().collection("piles").doc(pid)
+
+  // Add the donation
+  const p1 = api
     .firestore()
     .collection("piles")
     .doc(pid)
     .collection("donations")
     .doc(String(checkout_id))
     .set(update)
+
+  // Increase the shard totals
+  // TODO Switch to all in same transaction
+  const p2 = incrementShard(api.firestore(), ref, update.amount, 1)
+  // const p3 = incrementShard(api.firestore(), ref, 'onpile', 1)
+  return Promise.all([p1, p2])
+
+}
+
+
+function incrementShard(db, ref, amount, num_shards) {
+    // Select a shard of the counter at random
+    const shard_id = Math.floor(Math.random() * num_shards).toString();
+    const shard_ref1 = ref.collection('shards').doc(`${'donations'}-${shard_id}`);
+    const shard_ref2 = ref.collection('shards').doc(`${'onpile'}-${shard_id}`);
+
+    // Update count in a transaction
+    return db.runTransaction(t => {
+
+        const t1 = t.get(shard_ref1).then(doc => {
+            const new_count = doc.data().value + amount;
+            t.update(shard_ref1, { value: new_count });
+        });
+
+        const t2 = t.get(shard_ref2).then(doc => {
+            const new_count = doc.data().value + 1;
+            t.update(shard_ref2, { value: new_count });
+        });
+
+        return Promise.all([t1, t2])
+    });
 }
 
 const subscribeToCheckout = ({api, pid, uid, onSuccess = noop, onError = noop}) => {
@@ -224,6 +270,7 @@ module.exports = {
   addDonation,
   getAllTags,
   getAllThemes,
+  getCheckout,
   getPayment,
   getPile,
   getPileDonations,

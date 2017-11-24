@@ -1,18 +1,22 @@
 import React, {PureComponent} from 'react'
 import classNames from 'classnames'
 import {FormControl, FormHelperText} from 'material-ui/Form'
-import Input from 'material-ui/Input'
-import Popover from 'material-ui/Popover'
+import Input, { InputAdornment } from 'material-ui/Input'
 import IconButton from 'material-ui/IconButton'
 import Typography from 'material-ui/Typography'
 import Info from 'material-ui-icons/Info'
 import { withStyles } from 'material-ui/styles'
 import { common } from 'material-ui/colors'
+//
+import Hint from './TextFieldHint'
 
 const Style = (theme) => ({
   compact: {
     margin: 0,
     marginBottom: theme.spacing.unit * 2,
+  },
+  dollar: {
+    fontSize: 20,
   },
   labelFocused: {
     color: '#999',
@@ -22,55 +26,34 @@ const Style = (theme) => ({
     fontSize: 22,
     width: '100%',
     color: '#000',
-    borderTop: '1px rgba(0,0,0,0.12) solid',
-    borderLeft: '1px rgba(0,0,0,0.12) solid',
-    borderRight: '1px rgba(0,0,0,0.12) solid',
-    backgroundColor: 'rgba(0,0,0,.02)',
-    padding: 8,
+    borderTop: '1px rgba(0,0,0,0.12) none',
+    borderLeft: '1px rgba(0,0,0,0.12) none',
+    borderRight: '1px rgba(0,0,0,0.12) none',
+    backgroundColor: 'rgba(0,0,0,0)', //  'rgba(0,0,0,.02)',
+    padding: '4px 0 0',
     borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
     '&:hover': {
-      borderBottom: `1px solid ${theme.palette.primary[200]}`,
+      borderBottom: `1px solid ${theme.palette.primary[500]}`,
     },
   },
+  inputSingleline: {
+    fontSize: 20,
+    padding: '6px 0px',
+  },
   focused: {
-    borderBottom: `1px solid ${theme.palette.primary[200]}`,
+    borderBottom: `1px solid ${theme.palette.primary[500]}`,
   },
   info: {
     position: 'absolute',
-    top: '.3em',
+    top: '-.3em',
     right: 0,
     color: theme.palette.grey[400],
-  },
-  arrow_box: {
-    height: 72,
-    width: 300,
-    marginLeft: -28,
-    marginTop: -2,
-    padding: '12px 24px',
-    borderRadius: '6px 0px 0px 6px',
-    color: common.white,
-    backgroundColor: 'rgba(0,0,0,.7)', // theme.palette.primary[800],
-    position: 'relative',
-    overflow: 'visible',
-    '&:after': {
-      content: '" "',
-      position: 'absolute',
-      top: 0,
-      left: '100%',
-      width: 0,
-      height: 0,
-      borderStyle: 'solid',
-      borderWidth: '36px 0 36px 20px',
-      borderColor: `transparent transparent transparent ${'rgba(0,0,0,.7)'}`,
-    },
-  },
-  tip: {
-    lineHeight: '1.2em',
+    opacity: .7,
   },
   required: {
-    position: 'absolute',
-    top: 62,
-    left: 4,
+    // position: 'absolute',
+    // top: 62,
+    // right: 4,
     //
     fontWeight: 400,
     fontSize: 24,
@@ -89,15 +72,26 @@ const Style = (theme) => ({
 
 
 function TextField(field) {
-  const {autoFocus, classes, dense = false, placeholder, helpText, label, required, tooltip, type = 'text', input, meta: {error, touched, warning}} = field
+  const {autoFocus, classes, dense = false, placeholder, helpText, label, dollarAdornment = false, required, tooltip, type = 'text', input, meta: {error, touched, warning}} = field
   // const {value, ...input} = inputProp
   console.log('input', input)
   return (
-    <FormControl style={{marginBottom: dense ? 12 : 36, width: '100%', display: type === 'hidden' ? 'none' : 'block' }} >
-      <Input autoFocus={autoFocus} classes={{focused: classes.focused}} className={classes.input} {...input} type={type} placeholder={placeholder} fullWidth disableUnderline required />
-      <FormHelperText style={{color: touched && error ? '#F17892' : '#999', fontSize: 16, lineHeight: '1.2em', textIndent: '24px'}}>{(touched && (error || warning)) || helpText}</FormHelperText>
+    <FormControl style={{marginBottom: dense ? 12 : 18, width: '100%', display: type === 'hidden' ? 'none' : 'block' }} >
+      <Input
+        autoFocus={autoFocus}
+        classes={{inputSingleline: classes.inputSingleline, focused: classes.focused}}
+        className={classes.input}
+        {...input}
+        type={type}
+        placeholder={placeholder}
+        startAdornment={dollarAdornment && <InputAdornment classes={{root: classes.dollar}} disableTypography position="start">$</InputAdornment>}
+        fullWidth disableUnderline required />
+      <FormHelperText style={{color: touched && error ? '#F17892' : '#666', fontSize: 16, fontWeight: 300, lineHeight: '1.2em', textIndent: '0px'}}>
+        {(touched && (error || warning)) || helpText}
+        { false && required && <Typography type='body1' component='span' title='required field' className={classes.required}>*</Typography>}
+      </FormHelperText>
       {tooltip && <InfoIcon classes={classes} tip={tooltip} label={label} />}
-      {required && <Typography type='body1' component='span' title='required field' className={classes.required}>*</Typography>}
+
     </FormControl>
   )
 }
@@ -117,10 +111,11 @@ class InfoIcon extends PureComponent {
       <IconButton className={classes.info} onClick={this.handleTogglePopover}>
         <div ref={(icon) => { this.icon = icon }}>
           <Info style={{width: 24, height: 24}}/>
-          <Popover className={classNames(classes.arrow_box)} elevation={4} open={this.state.showPopover} transformOrigin={{horizontal: 'right', vertical: 'center'}} anchorOrigin={{horizontal: 'left', vertical: 'center'}} anchorEl={this.icon} onRequestClose={this.handleTogglePopover}>
-            {/*<Typography gutterBottom type="title" color="inherit">{label}</Typography>*/}
-            <Typography className={classNames(classes.tip)} type="body2" color="inherit">{tip}</Typography>
-          </Popover>
+          <Hint open={this.state.showPopover}
+            anchorEl={this.icon}
+            onRequestClose={this.handleTogglePopover}>
+            {tip}
+          </Hint>
         </div>
       </IconButton>
     )

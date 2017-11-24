@@ -17,8 +17,12 @@ import DonateButton from './DonateButton'
 import Media from './Media'
 import Stats from './Stats'
 import Donate from '../../Donate'
+import FormCC from '../../Donate/FormCC'
+import FormEmail from '../../Donate/FormEmail'
 import DetailsForm from '../../Donate/DetailsForm'
 import HowMuchForm from '../../Donate/HowMuchForm'
+import FormDone from '../../Donate/FormDone'
+import FormShowSupport from '../../Donate/FormShowSupport'
 
 const styles = (theme, {lightBlack, lightWhite} = theme.palette.common, {unit} = theme.spacing, {up, values} = theme.breakpoints) => ({
   root: {
@@ -99,9 +103,27 @@ class HeroPile extends Component {
 
   componentWillUnmount = () => this.props.setting('drawer', false)
 
-  handleConfirm = () => {
+  handleConfirmAmount = () => {
     this.props.history.push({
   		state: {step: 2}
+    })
+  }
+
+  handleConfirmEmail = () => {
+    this.props.history.push({
+      state: {step: 3}
+    })
+  }
+
+  handleCheckout = () => {
+    this.props.history.push({
+      state: {step: 4}
+    })
+  }
+
+  handleProcessCC = () => {
+    this.props.history.push({
+      state: {step: 5}
     })
   }
 
@@ -153,12 +175,16 @@ class HeroPile extends Component {
   			backBtn={step === 2}
   			handleRequestClose={this.requestCloseDonate}
         onExited={this.handleOnExited}
-  			title={step === 1 ? 'Donate how much?' : 'Name & Email'}
+        pid={pile.id}
+  			title={this.props.step === 1 ? 'Donate how much??' : (this.props.step === 2 ? 'Send Some Love' : 'Name & Email')}
   		>
   			{step === 1 && (
-					<HowMuchForm nextStep={this.handleConfirm} pid={pile.id} />
+					<HowMuchForm nextStep={this.handleConfirmAmount} pid={pile.id} />
   			)}
-  			{step === 2 && <DetailsForm pid={pile.id}  />}
+  			{step === 2 && <FormEmail nextStep={this.handleConfirmEmail} pid={pile.id}  />}
+        {step === 3 && <FormShowSupport nextStep={this.handleCheckout} pid={pile.id}  />}
+        {(step === 3 || step === 4) && <DetailsForm nextStep={this.handleProcessCC} pid={pile.id} show={step === 4}  />}
+        {step === 5 && <FormDone pid={pile.id} checkoutDone={this.props.checkoutDone}  />}
   		</Donate>
   	]
   }
@@ -188,12 +214,13 @@ export default compose(
 	withStyles(styles),
 	connect( (state, ownProps) => ({
 		history: ownProps.history,
+    checkoutDone: dot.pick('settings.checkout.done', state),
   	pile: state.settings && state.settings[`pile-${ownProps.pileId}`],
   	step: dot.pick('location.state.step', ownProps),
     total: getDonationTotal(dot.pick('settings.shards', state)),
     totalShares: getShareTotal(dot.pick('settings.shards', state)),
     totalOnPile: getOnPileTotal(dot.pick('settings.shards', state)),
-  	// theme: state.theme && state.theme.active,
+
   	theme: state.theme && (state.theme.preview || state.theme.active),
   	themeConfig: dot.pick('form.pile-update-theme.values.theme.config', state) ||
   							 dot.pick(`settings.pile-${ownProps.pileId}.theme.config`, state)

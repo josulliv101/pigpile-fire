@@ -10,6 +10,7 @@
     "react-dom": "^16.0.0",
     "request": "^2.83.0",
     "serialize-javascript": "^1.4.0",
+    "serve-favicon": "^2.4.5",
     "wepay": "^0.0.8"
   },
   "private": true

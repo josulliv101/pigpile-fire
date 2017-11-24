@@ -64,7 +64,7 @@ const styles = (theme, {black, transparent} = theme.palette.common, {hero} = the
 	    },
 		},
   },
-  
+
   bg: {
   	// backgroundColor: theme.palette.common.transparent,
   	// transition: theme.transitions.create(['opacity']),
@@ -102,6 +102,7 @@ class BgImage extends Component {
   	return (
       <Switch>
         <Route path="/login" render={() => <LoginBg {...this.props} />} />
+        <Route path="/express/create" render={() => <LoginBg {...this.props} />} />
         <Route path="/" exact render={() => <HomeBg {...this.props} />} />
         <Route path='/:id' render={(ownProps) => <PileBg {...this.props} {...ownProps} />} />
       </Switch>
@@ -145,11 +146,11 @@ class PileBg extends Component {
 	render() {
 	  const {
 		appThemes = [],
-	  	classes: cls, 
-	  	className, 
-	  	pile = {}, 
-	  	layout = pile.layout || {}, 
-	  	theme, 
+	  	classes: cls,
+	  	className,
+	  	pile = {},
+	  	layout = pile.layout || {},
+	  	theme,
 	  	// themePreview
 	  } = this.props;
 
@@ -176,21 +177,21 @@ class PileBg extends Component {
 	    )}>
 	    	<div style={gradient} className={cls.gradient} />
 	     {
-	     		theme && src && 
-	     		<img 
-	     			ref={this.ref} 
-	     			onLoad={this.handleLoaded} 
+	     		theme && src &&
+	     		<img
+	     			ref={this.ref}
+	     			onLoad={this.handleLoaded}
 	     			style={bg}
 	     			className={classNames(
-	     				cls.bg, 
+	     				cls.bg,
 	     				// {[cls.loaded]: this.state.loaded},
 	     				// {[cls.notLoaded]: !this.state.loaded},
-	     			)} 
-	     			src={src} 
+	     			)}
+	     			src={src}
 	     		/>
 	     	}
 	    </div>
-	  )	
+	  )
 	}
 }
 

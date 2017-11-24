@@ -1,5 +1,6 @@
 import { createAction, handleActions } from 'redux-actions'
 
+export const create = createAction('@pigpile/PILE_CREATE')
 export const trending = createAction('@pigpile/PILE_TRENDING')
 export const update = createAction('@pigpile/PILE_UPDATE', (id, val = null) => ({id, val}))
 export const watchTrendingPiles = createAction('@pigpile/PILE_WATCH_TRENDING')

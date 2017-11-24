@@ -76,7 +76,7 @@ class MeetChesterSection extends PureComponent {
               {/*<Title align="center" className={cls.tagline} xlheavy>
                 Pigpile's the trusted source in online fundraising.
               </Title>*/}
-              <div className={cls.chester}><div/><Star style={{transform: 'rotate(-154deg)', margin: '-50%',color: 'rgba(255, 255, 255, 0.1)', opacity: 1, zIndex: 0, position: 'absolute', top: 0, left: 0, height: '200%', width: '200%'}} /></div>
+              <div className={cls.chester}><div/><Star style={{transform: 'rotate(-154deg)', margin: '-50%',color: 'rgba(255, 255, 255, 0.1)', opacity: .4, zIndex: 0, position: 'absolute', top: 0, left: 0, height: '200%', width: '200%'}} /></div>
             </Grid>
           </Grid>
         </main>

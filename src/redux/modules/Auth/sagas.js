@@ -59,13 +59,13 @@ function* workAuthRedirect(api) {
     if (!user) return
 
 
-    const {displayName, photoURL, uid} = user.toJSON()
+    // const {displayName, photoURL, uid} = user.toJSON()
     // const userExists = yield call(insert, uid, email, {displayName, photoURL, uid})
 
     // if (userExists) console.log('user already Exists', true)
 
 
-    yield put(authSignInSuccess({displayName, photoURL, uid}))
+    yield put(authSignInSuccess(getNormalizedUser(user)))
 
     yield put(setting('handlingAuthRedirect', false))
 
@@ -172,8 +172,8 @@ function* workRefreshToken(api, {payload: {authUser}}) {
 
 function getNormalizedUser(authUser) {
   if (!authUser) return
-  const {displayName, email, photoURL, uid} = authUser.toJSON()
-  return {displayName, email, photoURL, uid}
+  const {displayName, email, photoURL, uid, isAnonymous} = authUser.toJSON()
+  return {displayName, email, photoURL, uid, isAnonymous}
 }
 
 //=====================================

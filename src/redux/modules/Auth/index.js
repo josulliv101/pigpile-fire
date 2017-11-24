@@ -26,6 +26,7 @@ export const reducer = handleActions({
 
   [authSignInSuccess]: (state, {payload: {user}}) => ({
     authenticated: true,
+    isAnonymous: user.isAnonymous,
     uid: user.uid,
     user,
   }),

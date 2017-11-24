@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
@@ -13,6 +13,8 @@ import Slide from 'material-ui/transitions/Slide'
 import Cancel from 'material-ui-icons/Close'
 import Back from 'material-ui-icons/ChevronLeft'
 //
+import {initCheckout} from '../../redux/modules/Checkout'
+import withSubscriptionToCheckout from '../../hocs/withSubscriptionToCheckout'
 
 const styles = (theme) => ({
   paper: {
@@ -56,10 +58,19 @@ const styles = (theme) => ({
 const ResponsiveDialog = withMobileDialog()(Dialog)
 
 
-class DonateDialog extends PureComponent {
+class DonateDialog extends Component {
 
   state = {
 
+  }
+
+  componentDidMount = () => {
+    // Amount can be 0 at this point.
+    const {pid} = this.props
+    if (!pid) return
+
+    // TODO Not needed? For subscribing maybe.
+    this.props.initCheckout(pid)
   }
 
   render() {
@@ -108,5 +119,6 @@ const mapStateToProps = () => ({
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps),
+  connect(mapStateToProps, {initCheckout}),
+  withSubscriptionToCheckout(),
 )(DonateDialog)

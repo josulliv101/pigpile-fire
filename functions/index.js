@@ -1,6 +1,8 @@
 const functions = require('firebase-functions');
 const app = require('express')();
 var wepay = require('wepay').WEPAY;
+const favicon = require('serve-favicon')
+const path = require('path')
 
 var wepay_settings = {
     'client_id'     : '128805',
@@ -56,15 +58,11 @@ checkoutCallback.post('/checkoutCallback', (req, res) => {
                       createdAt: admin.firestore.FieldValue.serverTimestamp(),
                     },
                   })
-
-                  res.send('200');
                 }
-
                 catch(e) {
                   console.log('caught', e)
                   res.send('error');
                 }
-
               }
               //res.send(response);
           }
@@ -72,6 +70,7 @@ checkoutCallback.post('/checkoutCallback', (req, res) => {
     }
   }
 
+  res.send('200');
 
 });
 
@@ -85,23 +84,26 @@ checkout.get('/checkout', (req, res) => {
 
   var uid = req.param('uid')
   var pid = req.param('pid')
-  var amount = parseInt(req.param('amount'), 10)
+  // var amount = parseInt(req.param('amount'), 10)
 
-  console.log('CHECKOUT...', uid, pid, amount)
+  console.log('CHECKOUT...', uid, pid)
 
-  if (!uid || !pid || amount < 5) return res.send('error');
+  if (!uid || !pid) return res.send('error');
 
-  db.getPayment({api: admin, pid: pid})
-    .then(doc => {
-      var payment = doc.data()
-      var active = payment && payment.active && payment[payment.active]
+  Promise.all([
+    db.getPayment({api: admin, pid}),
+    db.getCheckout({api: admin, pid, uid})
+  ]).then(([ payment, checkout ]) => {
+      var paymentData = payment.data()
+      var checkoutData = checkout.data()
+      var active = paymentData && paymentData.active && paymentData[paymentData.active]
 
       if (!active) return res.send('error');
 
       wp.call('/checkout/create',
           {
               'account_id': active.account_id,
-              'amount': amount,
+              'amount': checkoutData && checkoutData.amount || 5,
               'currency': 'USD',
               'short_description': 'A donation',
               'type': 'goods',
@@ -110,12 +112,7 @@ checkout.get('/checkout', (req, res) => {
               },
               'hosted_checkout': {
                 'mode': 'iframe',
-                'prefill_info': {
-                    'email': 'josulliv101@gmail.com',
-                    'address': {
-                      'postal_code': '02138'
-                    }
-                 }
+                'prefill_info': checkoutData && checkoutData.details || {}
               },
               'callback_uri': `https://pigpile-next.firebaseapp.com/checkoutCallback?pid=${pid}&uid=${uid}`
           },
@@ -125,7 +122,7 @@ checkout.get('/checkout', (req, res) => {
               db.setCheckout({api: admin, pid: pid, uid: uid, update: {
                 status: 'amountConfirmed',
                 createdAt: admin.firestore.FieldValue.serverTimestamp(),
-                amount,
+                amount: checkoutData && checkoutData.amount,
                 pid,
                 uid,
                 // Need to cancel callbacks for old wepay checkouts if new one created
@@ -142,9 +139,7 @@ checkout.get('/checkout', (req, res) => {
 
 });
 
-app.get('/favicon.ico', function(req, res) {
-  res.sendStatus(204)
-});
+app.use(favicon(path.join(__dirname, './favicon.ico')))
 
 app.get('/:userId?', (req, res) => {
 
@@ -188,6 +183,62 @@ app.get('/:userId?', (req, res) => {
 
 });
 
+exports.charge = functions.firestore.document('piles/{pileId}/checkouts/{userId}').onUpdate(event => {
+
+  const pid = event.params.pileId;
+  const uid = event.params.userId;
+
+  // Get an object representing the document
+  // e.g. {'name': 'Marie', 'age': 66}
+  var newValue = event.data.data();
+
+  // ...or the previous value before this update
+  var previousValue = event.data.previous.data();
+
+  if (!newValue.amount || !newValue.cc_id) return Promise.resolve()
+
+  const params = {
+    'account_id': 11959731,
+    'amount': newValue.amount,
+    'currency': 'USD',
+    'short_description': 'A donation',
+    'type': 'goods',
+    'fee': {
+      'fee_payer': 'payee'
+    },
+    'payment_method': {
+      'type': 'credit_card',
+      'credit_card': {
+        'id': newValue.cc_id
+      },
+    },
+    // 'unique_id': previousValue.uid,
+    // 'callback_uri': `https://pigpile-next.firebaseapp.com/checkoutCallback?pid=${pid}&uid=${uid}`
+  }
+
+  console.log('charge it', newValue, previousValue)
+  return new Promise(function (resolve) {
+    wp.call(
+      '/checkout/create',
+      params,
+      json => {
+        console.log('/checkout/create::json', json)
+        /*
+        const urls = json.calls.map((call) => ({
+          amount: call.response  && call.response.amount,
+          checkout_uri: call.response  && call.response.hosted_checkout && call.response.hosted_checkout.checkout_uri
+        }))*/
+        db.setCheckout({api: admin, pid, uid, update: {done: true, pending: false}, options: {merge: true}}) // , {merge: true}
+
+        return resolve(json)
+      }
+    )
+  })
+})
+
+
+
+/*
 exports.createCheckout = functions.firestore.document('piles/{pileId}/checkouts/{userId}').onCreate(event => {
     const pid = event.params.pileId;
     const uid = event.params.userId;
@@ -235,6 +286,7 @@ exports.createCheckout = functions.firestore.document('piles/{pileId}/checkouts/
       )
     })
 });
+*/
 /*
 exports.createCheckout = functions.firestore.document('piles/{pileId}/checkouts/{userId}').onWrite(event => {
     // Get an object representing the document

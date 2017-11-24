@@ -54,9 +54,9 @@ const styles = (theme, {unit} = theme.spacing, {palette, vendor} = theme) => ({
 })
 
 const Divider = ({children, classes: cls}) => (
-	<Subheading 
-		align="center" 
-		className={cls.lightText}  
+	<Subheading
+		align="center"
+		className={cls.lightText}
 		uppercase>
 		{children}
 	</Subheading>
@@ -100,17 +100,17 @@ class Login extends PureComponent {
     const {auth, authSignIn, classes: cls, className} = this.props;
 
     // Forward if already logged in
-    if (auth && auth.authenticated === true) {
+    if (auth && !auth.isAnonymous && auth.authenticated === true) {
       return <Redirect to="/" />
     }
 
   	return (
-    	<Paper 
+    	<Paper
     		className={classNames(cls.root, className)}
     		elevation={16} >
     		<div className={cls.btnGroup}>
 	        <Button className={cls.facebook}>Login with Facebook</Button>
-	        <Button 
+	        <Button
 	        	className={cls.github}
 	        	onClick={() => this.handleSignIn(providerIds.GITHUB)}>
 	        	Login with Github

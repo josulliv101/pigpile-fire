@@ -5,6 +5,7 @@ import { withStyles } from 'material-ui/styles'
 //
 import Home from '../pages/Home'
 import Login from '../pages/Login'
+import Express from '../pages/Express'
 import Pile from '../pages/Pile'
 
 const styles = (theme) => ({
@@ -25,6 +26,7 @@ class AppContent extends Component {
       <div className={cls.root}>
         <Switch>
           <Route path="/login" component={Login} />
+          <Route path="/express/create" component={Express} />
           <Route path='/' exact={true} component={Home} />
           <Route path='/:id' component={Pile} />
         </Switch>

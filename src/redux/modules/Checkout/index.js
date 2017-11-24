@@ -1,6 +1,8 @@
 import { createAction, handleActions } from 'redux-actions'
 
 export const initCheckout = createAction('@pigpile/CHECKOUT_INIT', (pid, amount) => ({pid, amount}))
+export const ccCheckout = createAction('@pigpile/CHECKOUT_WITH_ID', (pid, cc_id) => ({pid, cc_id}))
+export const userDetailsCheckout = createAction('@pigpile/CHECKOUT_USER_DETAILS', (pid, details) => ({pid, details}))
 export const confirmedCheckout = createAction('@pigpile/CHECKOUT_CONFIRMED', (pid, amount) => ({pid, amount}))
 export const completeCheckout = createAction('@pigpile/CHECKOUT_COMPLETE', (pid, checkout_id) => ({pid, checkout_id}))
 export const setIframe = createAction('@pigpile/CHECKOUT_SET_IFRAME', (iframe) => ({iframe}))

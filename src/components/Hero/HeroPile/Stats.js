@@ -16,7 +16,7 @@ const styles = (theme) => ({
     color: theme.palette.common.white,
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 1}px`,
     '&$full $bar': {
-      marginBottom: theme.spacing.unit * 3,
+      marginBottom: theme.spacing.unit * 0,
     },
   },
   bar: {},
@@ -48,6 +48,8 @@ const styles = (theme) => ({
   },
   raisedMin: {
     opacity: 0,
+    position: 'relative',
+    top: -44,
     transition: theme.transitions.create(['opacity']),
     transitionDelay: '.2s',
     '&$show': {
@@ -57,9 +59,10 @@ const styles = (theme) => ({
   show: {},
   stats: {
     display: 'none',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     '&>div': {
-      flex: '1 0 50%',
+      flex: '0 1 auto',
+      marginBottom: theme.spacing.unit * 1,
     },
     '&>div:first-child': {
       // marginRight: theme.spacing.unit * 5,
@@ -110,8 +113,8 @@ class Stats extends PureComponent {
 
             <LinearProgress classes={{bar: cls.barProgress, determinateBar1: cls.determinateBar1}} color="primary" mode="determinate" value={total/goal*100} />
             <div className={classNames(cls.raisedBar)}>
-              <Text type="subheading" color="inherit">{numeral(goal).format('$0,0')} {total>goal?'MINIMUM':''} GOAL </Text>
-              <Text className={classNames(cls.raisedMin, {[cls.show]: true})} type="subheading" color="inherit">{numeral(total/goal).format('0%')} RAISED</Text>
+              <Text type="subheading" color="inherit"> </Text>
+              <Text className={classNames(cls.raisedMin, {[cls.show]: true})} type="subheading" color="inherit">{numeral(goal).format('$0[.]0a')} {total>goal?'MINIMUM':''} GOAL </Text>
             </div>
 
 
@@ -122,12 +125,12 @@ class Stats extends PureComponent {
           (full || justStats) &&
           <div className={cls.stats}>
             <div>
-              <Text className={cls.uppercase} type="subheading" color="inherit">On the Pigpile</Text>
-              <Text className={cls.stat} type="display1" color="inherit">{totalOnPile}</Text>
+              <Text className={cls.uppercase} type="subheading" color="inherit">On The Pigpile</Text>
+              <Text className={cls.stat} type="display1" color="inherit">{totalOnPile} people</Text>
             </div>
             <div>
-              <Text className={cls.uppercase} type="subheading" color="inherit">Shares</Text>
-              <Text className={cls.stat} type="display1" color="inherit">{totalShares}</Text>
+              <Text className={cls.uppercase} type="subheading" color="inherit">Raised</Text>
+              <Text className={cls.stat} type="display1" color="inherit">{numeral(total/goal).format('0%')}</Text>
 
             </div>
             <div style={{display: 'none'}}>

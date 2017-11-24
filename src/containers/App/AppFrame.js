@@ -66,6 +66,7 @@ class AppFrame extends Component {
           {children}
 	        <Switch>
 	          <Route path="/login" render={() => null} />
+            <Route path="/express/create" render={() => null} />
 	          <Route render={ownProps => <AppFooter />} />
 	        </Switch>
         </div>
